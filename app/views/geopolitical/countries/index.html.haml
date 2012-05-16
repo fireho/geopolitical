@@ -1,0 +1,28 @@
+.row
+  %h3.title Countries
+  =# render "shared/filter"
+  .right.links
+    = link_to "New Country", new_country_path, :class => "blue nice small button radius"
+  .block
+    .content
+      .inner
+        %table.table
+          %thead
+            %tr
+              %th Abbr
+              %th Nome
+              %th
+          %tbody
+            - for country in @countries
+              %tr
+                %td
+                  =# image_tag country.flag.nano if country.flag?
+                  = country.abbr
+                %td= link_to country.name, country
+                %td.last
+                  =# link_to "Destroy!", country_path(country), :method => :delete
+                  = link_to "Edit!", edit_country_path(country)
+          .pagination
+          .clear
+
+    = paginate @countries

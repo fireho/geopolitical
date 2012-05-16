@@ -1,0 +1,24 @@
+.block
+  %h3.title Estados
+  .right.links
+    = link_to "+ Estado", new_province_path, :class => "small blue nice button radius" if admin?
+  .content
+    .inner
+      %ul
+        - @provinces.each do |province|
+          %li= render province
+          %hr
+      .pagination
+
+.block
+  %h3.title Cidades
+  .right.links
+    = link_to "+ Cidade", new_city_path, :class => "small blue nice button radius" if admin?
+  .content
+    .inner
+      %ul
+        - @cities.each do |city|
+          %li= render city
+          %hr
+      .pagination
+

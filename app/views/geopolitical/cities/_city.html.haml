@@ -1,0 +1,7 @@
+.city
+  %h4= link_to city.name, city
+  %span.gray
+  .right
+    = link_to "Editar", edit_city_path(city) if admin?
+  .right
+    .gray= time_ago_in_words city.created_at

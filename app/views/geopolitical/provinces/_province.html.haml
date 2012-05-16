@@ -1,0 +1,7 @@
+.province
+  %h4= link_to province.name, province
+  %span.gray
+  .right
+    .gray= time_ago_in_words province.created_at
+  .right
+    = link_to "Editar", edit_province_path(province) if admin?

@@ -1,0 +1,18 @@
+%table{:class => :table}
+  %thead
+    %tr
+      %th Nome
+      %th Sigla
+      %th{:colspan => 2} Pais
+  %tbody
+    - for province in @provinces
+      %tr{:class => cycle('par','impar')}
+        %td=h province.name
+        %td=h province.abbr
+        %td=h province.country.name
+        %td{:align => 'right'}
+          = link_to image_tag('icons/edit.png', :title => 'Editar', :border => 0), edit_province_path(province)
+
+        //%td= link_to 'Destroy', province, :confirm => 'Are you sure?', :method => :delete
+
+

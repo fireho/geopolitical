@@ -1,0 +1,11 @@
+= form_for(@country) do |f|
+  = f.error_messages
+  %p
+    = f.label :name
+    = f.text_field :name
+  %p
+    = f.label :abbr
+    = f.text_field :abbr
+
+  .forms_buttons
+    = f.submit(metodo == "post" ? "Gravar" : "Atualizar")

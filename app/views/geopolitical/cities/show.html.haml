@@ -1,0 +1,26 @@
+#showcase-panel.showcasepanel-typography-retro
+  #showcasepanel-title.showcasepanel-alignment-center
+    %span.headline
+      = @city.name
+  .container_16
+    .box.white
+      .grid_2
+        = link_to t(:edit), edit_city_path(@city), :class => "icon edit"
+
+        %p
+          = @city.province.name if @city.province
+        %p
+          = @city.country.name
+        %p
+          Souls:
+          %em= @city.souls
+        -# %p= @city.x
+        -# %p= @city.y
+      .grid_4
+        -# - @city.hoods.each do |hood|
+        -#   %p= link_to hood.name, hood
+      .grid_8
+        -# .inner= gmaps(@map, false, false)
+      = link_to t(:back), cities_path
+      .clear
+
