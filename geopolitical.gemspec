@@ -7,11 +7,11 @@ require "geopolitical/version"
 Gem::Specification.new do |s|
   s.name        = "geopolitical"
   s.version     = Geopolitical::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Geopolitical."
-  s.description = "TODO: Description of Geopolitical."
+  s.authors     = ["Marcos Piccinini"]
+  s.email       = ["x@nofxx.com"]
+  s.homepage    = "http://github.com/nofxx/geopolitical"
+  s.summary     = "Geopolitical models for mongoid."
+  s.description = "Geopolitical models for mongoid as a rails engine."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]

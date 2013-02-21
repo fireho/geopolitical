@@ -6,15 +6,9 @@ class Country
   field :abbr,   type: String
   field :code    # optional phone/whatever code
 
-  has_many :cities
-  has_many :provinces
+  has_many :provinces, :dependent => :destroy
+  has_many :cities,    :dependent => :destroy
 
-  validates :abbr, :name, presence: true
-
-  index [[:name, 1]]
-
-  scope :ordered, order_by(:name, 1)
+  validates :name, :abbr, uniqueness: true, presence: true
 
 end
-
-

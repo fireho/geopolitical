@@ -11,6 +11,8 @@ PATH
   remote: .
   specs:
     geopolitical (0.0.1)
+      mongoid
+      mongoid_geospatial
       rails (~> 3.2.3)
 
 GEM
@@ -94,7 +96,6 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.6)
     thor (0.14.6)
     tilt (1.3.3)
     treetop (1.4.10)
@@ -108,4 +109,3 @@ PLATFORMS
 DEPENDENCIES
   geopolitical!
   mongoid_geospatial!
-  sqlite3
