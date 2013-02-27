@@ -16,6 +16,7 @@ class City
   attr_writer :x, :y, :z
   belongs_to :province
   belongs_to :country
+  has_many :hoods
 
   index name: 1
 

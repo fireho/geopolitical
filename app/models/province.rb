@@ -9,7 +9,7 @@ class Province
 
   has_many :cities, :dependent => :destroy
 
-  scope :ordered, order_by(:name, 1)
+  scope :ordered, order_by(name: 1)
 
   validates_presence_of :country
   validates_presence_of :name#, :abbr
