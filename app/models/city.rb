@@ -11,6 +11,11 @@ class City
   field :souls, type: Integer
   field :geom,  type: Point, spatial: true
 
+<<<<<<< Updated upstream
+=======
+  # spatial_index :geom
+  spatial_scope :geom
+>>>>>>> Stashed changes
 
   attr_writer :x, :y, :z
   belongs_to :province
