@@ -11,7 +11,6 @@ class City
   field :souls, type: Integer
   field :geom,  type: Point, spatial: true
 
-  # spatial_index :geom
 
   attr_writer :x, :y, :z
   belongs_to :province
@@ -19,10 +18,10 @@ class City
   has_many :hoods
 
   index name: 1
+  spatial_scope :geom
 
   scope :ordered, order_by(name: 1)
 
-  before_validation :create_geom
   validates_presence_of :country
   validates_presence_of :name
   validates_presence_of :geom
