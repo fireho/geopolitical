@@ -1,4 +1,5 @@
-= Geopolitical
+GeoPolitical
+============
 
 [![Code Climate](https://codeclimate.com/github/fireho/geopolitical.png)](https://codeclimate.com/github/fireho/geopolitical)
 
