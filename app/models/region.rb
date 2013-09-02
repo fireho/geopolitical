@@ -1,8 +1,9 @@
-class Province
+class Region
   include Mongoid::Document
 
   field :gid,    type: Integer  # geonames id
-  field :name,   type: String
+  field :slug,   type: String
+  field :name,   type: String,  localize: true
   field :abbr,   type: String
 
   belongs_to :country
@@ -11,8 +12,8 @@ class Province
 
   scope :ordered, order_by(name: 1)
 
-  validates_presence_of :country
-  validates_presence_of :name#, :abbr
+  validates :country, presence: true
+  validates :name, presence: true
 
   validates_uniqueness_of :name, :abbr,  :scope => :country_id
 

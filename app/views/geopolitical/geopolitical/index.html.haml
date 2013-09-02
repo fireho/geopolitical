@@ -1,12 +1,12 @@
 .block
   %h3.title Estados
   .right.links
-    = link_to "+ Estado", new_province_path, :class => "small blue nice button radius" if admin?
+    = link_to "+ Estado", new_region_path, :class => "small blue nice button radius" if admin?
   .content
     .inner
       %ul
-        - @provinces.each do |province|
-          %li= render province
+        - @regions.each do |region|
+          %li= render region
           %hr
       .pagination
 
@@ -21,4 +21,3 @@
           %li= render city
           %hr
       .pagination
-

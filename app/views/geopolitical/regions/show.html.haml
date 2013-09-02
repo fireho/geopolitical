@@ -1,0 +1,13 @@
+%p
+  %b Pais:
+  =h @region.country.name
+%p
+  %b Nome:
+  =h @region.name
+%p
+  %b Sigla:
+  =h @region.abbr
+
+= link_to 'Edit', edit_region_path(@region)
+|
+= link_to 'Back', regions_path

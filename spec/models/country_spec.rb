@@ -4,7 +4,7 @@ describe Country do
 
 
   it { should have_many(:cities) }
-  it { should have_many(:provinces) }
+  it { should have_many(:regions) }
 
   it "should create a country" do
     blueprint_spec Country
@@ -25,4 +25,3 @@ end
 #  name :string(50)      not null
 #  abbr :string(3)       not null
 #
-

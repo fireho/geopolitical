@@ -1,15 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Province do
+describe Region do
 
   it { should belong_to(:country) }
   it { should have_many(:cities) }
 
-  it "should create a province" do
-    blueprint_spec Province
+  it "should create a region" do
+    blueprint_spec Region
   end
 
 end
-
-
-

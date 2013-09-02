@@ -1,7 +1,7 @@
 #Rails.application.routes.draw
 Geopolitical::Engine.routes.draw do
   resources :cities
-  resources :provinces
+  resources :regions
   resources :countries
 
   resource :geopolitical

@@ -10,13 +10,13 @@
       %thead
         %tr
           %th{:sort => 'name'} Nome
-          %th{:sort => 'province'} Province
+          %th{:sort => 'region'} Region
           %th{:sort => 'country', :colspan => 2} Pais
       %tbody
         - for city in @cities
           %tr{:class => cycle('par','impar')}
             %td= link_to city.name , city
-            %td= city.province.name if city.province
+            %td= city.region.name if city.region
             %td= city.country.name
             %td{:align => 'right'}
               = link_to 'Edit', edit_city_path(city)
@@ -27,5 +27,3 @@
         .actions
         .pagination=# paginate @cidades
   = link_to 'Voltar', "/", :class => 'icon back'
-
-

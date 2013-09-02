@@ -3,40 +3,37 @@ class City
   include Mongoid::Geospatial
   # include GeoHelper
 
-  field :slug
-  field :name
-  field :area
+  field :slug   type: String
+  field :name   type: String, localize: true
+  field :area   type: Integer
   field :gid,   type: Integer
   field :zip,   type: Integer
   field :souls, type: Integer
-  field :geom,  type: Point, spatial: true
+  field :geom,  type: Point,   spatial: true
 
   spatial_scope :geom
 
   attr_writer :x, :y, :z
-  belongs_to :province
+
+  belongs_to :region
   belongs_to :country
   has_many :hoods
 
   index name: 1
-  spatial_scope :geom
 
   scope :ordered, order_by(name: 1)
 
   validates_presence_of :country
-  validates_presence_of :name
-  validates_presence_of :geom
-  #validates_presence_of :province.. nao pode.
-  # validates :province, presence: true
+  validates :slug, presence: true, uniqueness: true
+  # validates_presence_of :geom
 
-  validates_uniqueness_of :name, :scope => :province_id
-
+  validates :name, uniqueness: {  :scope => :region_id  }
 
   # scope :close_to, GeoHelper::CLOSE
 
 
   def abbr
-    province ? province.abbr : country.abbr
+    region ? region.abbr : country.abbr
   end
 
   def to_s

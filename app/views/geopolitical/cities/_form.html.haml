@@ -13,8 +13,8 @@
           .forms_buttons
             .citydata
               .field{"data-role" => "fieldcontain"}
-                = f.label :province
-                = f.select :province_id, @provinces
+                = f.label :region
+                = f.select :region_id, @regions
               .group
                 = f.label :name
                 = f.text_field :name, :size => 30

@@ -1,0 +1,7 @@
+.region
+  %h4= link_to region.name, region
+  %span.gray
+  .right
+    .gray= time_ago_in_words region.created_at
+  .right
+    = link_to "Editar", edit_region_path(region) if admin?

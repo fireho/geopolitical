@@ -1,0 +1,3 @@
+class Zone
+
+end

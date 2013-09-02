@@ -3,7 +3,7 @@ class GeopoliticalController < ApplicationController
   # before_filter :require_
 
   def index
-    @provinces = Province.all
+    @regions = Region.all
     @cities = City.all
   end
 

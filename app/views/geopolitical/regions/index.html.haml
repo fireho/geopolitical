@@ -1,0 +1,16 @@
+%table{:class => :table}
+  %thead
+    %tr
+      %th Nome
+      %th Sigla
+      %th{:colspan => 2} Pais
+  %tbody
+    - for region in @regions
+      %tr{:class => cycle('par','impar')}
+        %td=h region.name
+        %td=h region.abbr
+        %td=h region.country.name
+        %td{:align => 'right'}
+          = link_to image_tag('icons/edit.png', :title => 'Editar', :border => 0), edit_region_path(region)
+
+        //%td= link_to 'Destroy', region, :confirm => 'Are you sure?', :method => :delete

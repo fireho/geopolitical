@@ -8,7 +8,7 @@
         = link_to t(:edit), edit_city_path(@city), :class => "icon edit"
 
         %p
-          = @city.province.name if @city.province
+          = @city.region.name if @city.region
         %p
           = @city.country.name
         %p
@@ -23,4 +23,3 @@
         -# .inner= gmaps(@map, false, false)
       = link_to t(:back), cities_path
       .clear
-

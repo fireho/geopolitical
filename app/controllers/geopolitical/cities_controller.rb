@@ -16,7 +16,7 @@ module Geopolitical
     end
 
     def load_relatives
-      @provinces = Province.only(:name).map {|e| [e.name,e.id]}
+      @regions = Region.only(:name).map {|e| [e.name,e.id]}
     end
   end
 end

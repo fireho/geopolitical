@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe City do
 
   it { should belong_to(:country) }
-  it { should belong_to(:province) }
+  it { should belong_to(:region) }
   it { should have_many(:tracks) }
 
   it "should create a city" do
@@ -32,7 +32,7 @@ describe City do
     end
 
   end
-#   it { should have_indices :name, :geom, :area, [:province_id, :country_id] }
+#   it { should have_indices :name, :geom, :area, [:region_id, :country_id] }
 
 
 #   it "should accept an area" do
@@ -75,34 +75,3 @@ describe City do
 #     end
 #   end
 end
-
-
-
-
-
-
-
-# == Schema Information
-#
-# Table name: cities
-#
-#  id          :integer         not null, primary key
-#  country_id  :integer         not null, indexed
-#  province_id :integer         indexed
-#  name        :string(50)      not null, indexed
-#  gid         :integer         indexed
-#  zip         :integer         indexed
-#  geom        :geometry        point, 4326, indexed
-#  area        :geometry        polygon, 4326, indexed
-#
-# Indexes
-#
-#  index_cities_on_area         (area)
-#  index_cities_on_country_id   (country_id)
-#  index_cities_on_geom         (geom)
-#  index_cities_on_gid          (gid)
-#  index_cities_on_name         (name)
-#  index_cities_on_province_id  (province_id)
-#  index_cities_on_zip          (zip)
-#
-
