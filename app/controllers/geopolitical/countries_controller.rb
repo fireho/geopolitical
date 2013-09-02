@@ -1,6 +1,5 @@
 module Geopolitical
-  class CountriesController < ApplicationController
-    inherit_resources
+  class CountriesController < GeopoliticalController
 
     def collection
       @countries = Country.ordered.page(params[:page])

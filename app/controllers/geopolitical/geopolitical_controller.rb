@@ -7,6 +7,9 @@ class GeopoliticalController < ApplicationController
     @cities = City.all
   end
 
+   private
 
+    def collection
+    end
 end
 end

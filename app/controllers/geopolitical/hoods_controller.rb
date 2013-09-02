@@ -1,6 +1,6 @@
 module Geopolitical
-  class HoodsController < ApplicationController
-    inherit_resources
+  class HoodsController < GeopoliticalController
+    # inherit_resources
     # belongs_to :city
     # respond_to :html, :xml, :json
 
