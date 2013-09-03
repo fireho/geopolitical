@@ -18,5 +18,8 @@ class Region
 
   validates :name,   uniqueness: { :scope => :nation_id }
 
+  def to_s
+    "#{name}/#{abbr}"
+  end
 
 end

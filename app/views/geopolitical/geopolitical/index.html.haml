@@ -10,8 +10,12 @@
       = link_to "+ #{klass.model_name.human}", send("new_#{klass.to_s.downcase}_path"), :class => "small blue nice button radius"
 
 
+%br
+%h4
+  Use Geonames_local to populate data easily!
+  %small= link_to "geonames_local", "http://github.com/nofxx/geonames_local"
 
 %hr
 %p Minimalist layout by NoCSS Co.
-%p= link_to "http://github.com/fireho/geopolitical", "http://github.com/fireho/geopolitical"
+%p= link_to "fireho/geopolitical", "http://github.com/fireho/geopolitical"
 %p= link_to "< Back", "/"

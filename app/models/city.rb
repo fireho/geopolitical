@@ -34,7 +34,6 @@ class City
 
   def set_defaults
     self.nation ||= region.try(:nation)
-    self.slug    ||= name.try(:downcase) # don't use slugize
   end
 
   def abbr
@@ -51,6 +50,10 @@ class City
 
   def <=> other
     self.slug <=> other.slug
+  end
+
+  def slug= txt
+    self[:slug] = txt.downcase.gsub(/\s/, '-').gsub(/\W/, '')
   end
 
 end
