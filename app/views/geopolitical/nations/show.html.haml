@@ -1,0 +1,10 @@
+%p
+  %b Nome:
+  =h @nation.name
+%p
+  %b Abbr:
+  =h @nation.abbr
+
+= link_to 'Edit', edit_nation_path(@nation)
+|
+= link_to 'Back', nations_path

@@ -1,4 +1,4 @@
-class Country
+class Nation
   include Mongoid::Document
 
   field :gid,    type: Integer  # geonames id
@@ -9,6 +9,8 @@ class Country
 
   has_many :regions, :dependent => :destroy
   has_many :cities,    :dependent => :destroy
+
+  scope :ordered, order_by(name: 1)
 
   validates :name, :abbr, uniqueness: true, presence: true
 

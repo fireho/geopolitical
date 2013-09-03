@@ -1,23 +1,17 @@
-.block
-  %h3.title Estados
-  .right.links
-    = link_to "+ Estado", new_region_path, :class => "small blue nice button radius" if admin?
-  .content
-    .inner
-      %ul
-        - @regions.each do |region|
-          %li= render region
-          %hr
-      .pagination
+%h1 Geopolitical
+%hr
 
-.block
-  %h3.title Cidades
-  .right.links
-    = link_to "+ Cidade", new_city_path, :class => "small blue nice button radius" if admin?
-  .content
-    .inner
-      %ul
-        - @cities.each do |city|
-          %li= render city
-          %hr
-      .pagination
+- [City, Region, Nation, Zone].each do |klass|
+  .block
+    %h3.title
+      = link_to klass.model_name.human.pluralize, send("#{klass.to_s.downcase.pluralize}_path")
+      %small= klass.count
+    .right.links
+      = link_to "+ #{klass.model_name.human}", send("new_#{klass.to_s.downcase}_path"), :class => "small blue nice button radius"
+
+
+
+%hr
+%p Minimalist layout by NoCSS Co.
+%p= link_to "http://github.com/fireho/geopolitical", "http://github.com/fireho/geopolitical"
+%p= link_to "< Back", "/"

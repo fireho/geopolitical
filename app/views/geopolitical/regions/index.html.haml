@@ -9,7 +9,7 @@
       %tr{:class => cycle('par','impar')}
         %td=h region.name
         %td=h region.abbr
-        %td=h region.country.name
+        %td=h region.nation.name
         %td{:align => 'right'}
           = link_to image_tag('icons/edit.png', :title => 'Editar', :border => 0), edit_region_path(region)
 

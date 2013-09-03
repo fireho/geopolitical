@@ -1,9 +1,10 @@
 class Hood
   include Mongoid::Document
 
-  field :name,  type: String
-  field :souls, type: Integer
+  field :gid,   type: Integer
   field :slug,  type: String
+  field :name,  type: String, localize: true
+  field :souls, type: Integer
   field :zip,   type: Integer
   field :rank,  type: Integer
 

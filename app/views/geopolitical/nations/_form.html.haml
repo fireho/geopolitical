@@ -1,5 +1,5 @@
-= form_for(@country) do |f|
-  = f.error_messages
+= form_for(@nation) do |f|
+  =# f.error_messages
   %p
     = f.label :name
     = f.text_field :name
@@ -8,4 +8,4 @@
     = f.text_field :abbr
 
   .forms_buttons
-    = f.submit(metodo == "post" ? "Gravar" : "Atualizar")
+    = f.submit

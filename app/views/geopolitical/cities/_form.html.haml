@@ -1,16 +1,18 @@
-#mainbody-panel.mainbodypanel-typography-retro
-  #mainbodypanel-title.mainbodypanel-alignment-center
-    %span.headline
-      = @city.new_record? ? "Nova Cidade" : "Editando Cidade"
+.container
+  .row
+    .page-header
+      %h1= @city.new_record? ? "Nova Cidade" : "Editando Cidade"
   .container_16
-    .box.white.shadow
+    .box.secondary.shadow
       = form_for(@city, :html => {:class => "form"}) do |f|
+        - f.object.errors.each do |err|
+          = err
         .grid_3
           =# hidden_field_tag 'city_geom_xy', @city.ll, :name => "city[xy]", :class => "geom_xy"
           =# hidden_field_tag 'city_geom_y', @city.y, :name => "city[y]", :class => "geom_y"
           =# hidden_field_tag 'city_geom_z', @city.z, :name => "city[z]", :class => "geom_z"
 
-          .forms_buttons
+          .forms_btns
             .citydata
               .field{"data-role" => "fieldcontain"}
                 = f.label :region
@@ -24,7 +26,6 @@
               .field
                 = f.label :souls
                 = f.text_field :souls, :size => 30
-              = save_or_cancel f
+              = f.submit
         .grid_8
           #map=# gmaps(@map, false, false)
-        .clear

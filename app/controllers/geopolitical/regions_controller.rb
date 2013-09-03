@@ -10,7 +10,8 @@ module Geopolitical
     private
 
     def get_relatives
-      @countries = Country.all
+      @nations = Nation.all
     end
+
   end
 end

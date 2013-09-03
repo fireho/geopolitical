@@ -10,18 +10,21 @@ class Address
   field :number,  type: String
   field :extra,   type: String
   field :info,    type: String
+
   field :geom,    type: Point
 
-  field :hood_name,  type: String
-  field :city_name,  type: String
-  field :region_name,  type: String
-  field :country_name,   type: String
+  field :hood_name,      type: String
+  field :city_name,      type: String
+  field :region_name,    type: String
+  field :nation_name,    type: String
 
   embedded_in :addressable, polymorphic: true
 
-  # belongs_to :country
-  # belongs_to :city
-  # belongs_to :hood
+  belongs_to :nation
+  belongs_to :region
+  belongs_to :city
+  belongs_to :hood
+
   validates :name, presence: true
 
   def print_location
@@ -29,7 +32,7 @@ class Address
   end
 
   def print_full_location
-    print_location + country_name
+    print_location + nation_name
   end
 
   def geom

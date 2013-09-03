@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe City do
 
-  it { should belong_to(:country) }
+  it { should belong_to(:nation) }
   it { should belong_to(:region) }
   it { should have_many(:tracks) }
 
@@ -32,7 +32,7 @@ describe City do
     end
 
   end
-#   it { should have_indices :name, :geom, :area, [:region_id, :country_id] }
+#   it { should have_indices :name, :geom, :area, [:region_id, :nation_id] }
 
 
 #   it "should accept an area" do

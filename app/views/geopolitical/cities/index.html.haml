@@ -11,13 +11,13 @@
         %tr
           %th{:sort => 'name'} Nome
           %th{:sort => 'region'} Region
-          %th{:sort => 'country', :colspan => 2} Pais
+          %th{:sort => 'nation', :colspan => 2} Pais
       %tbody
         - for city in @cities
           %tr{:class => cycle('par','impar')}
             %td= link_to city.name , city
             %td= city.region.name if city.region
-            %td= city.country.name
+            %td= city.nation.name
             %td{:align => 'right'}
               = link_to 'Edit', edit_city_path(city)
               = link_to 'Destroy', city, :confirm => 'Destroy city?', :method => :delete
