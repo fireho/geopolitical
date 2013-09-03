@@ -18,7 +18,7 @@
                 %td
                   =# image_tag nation.flag.nano if nation.flag?
                   = nation.abbr
-                %td= link_to nation.name, nation
+                %td= link_to nation.slug, nation
                 %td.last
                   =# link_to "Destroy!", nation_path(nation), :method => :delete
                   = link_to "Edit!", edit_nation_path(nation)

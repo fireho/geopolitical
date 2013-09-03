@@ -10,6 +10,7 @@ class City
   field :zip,    type: Integer
   field :souls,  type: Integer
   field :geom,   type: Point,    spatial: true
+  #    field :ascii, type: String
 
   spatial_scope :geom
 
@@ -28,6 +29,13 @@ class City
 
   # scope :close_to, GeoHelper::CLOSE
 
+  before_validation :set_defaults
+
+
+  def set_defaults
+    self.nation ||= region.try(:nation)
+    self.slug    ||= name.try(:downcase) # don't use slugize
+  end
 
   def abbr
     region ? region.abbr : nation.abbr
@@ -39,6 +47,10 @@ class City
 
   def self.search txt
     where(slug: /#{txt}/i)
+  end
+
+  def <=> other
+    self.slug <=> other.slug
   end
 
 end

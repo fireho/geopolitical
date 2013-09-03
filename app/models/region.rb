@@ -5,6 +5,7 @@ class Region
   field :slug,   type: String
   field :name,   type: String,  localize: true
   field :abbr,   type: String
+  field :codes,  type: Array # phone codes
 
   belongs_to :nation
 
@@ -13,9 +14,9 @@ class Region
   scope :ordered, order_by(name: 1)
 
   validates :nation, presence: true
-  validates :name, presence: true
+  validates :name,   presence: true
 
-  validates_uniqueness_of :name, :abbr,  :scope => :nation_id
+  validates :name,   uniqueness: { :scope => :nation_id }
 
 
 end
