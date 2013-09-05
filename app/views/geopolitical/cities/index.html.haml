@@ -10,6 +10,7 @@
         %thead
           %tr
             %th Nome
+            %th ZIP
             %th Region
             %th Nation
             %th Population
@@ -20,6 +21,7 @@
               %td
                 = city.name
                 = link_to city.slug , city
+              %td= city.zip
               %td= city.region.name if city.region
               %td= city.nation.name
               %td= city.souls

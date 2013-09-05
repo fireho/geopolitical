@@ -12,6 +12,7 @@
             %th Abbr
             %th ISO
             %th Name
+            %th Postal
             %th Lang
             %th Cash
             %th
@@ -25,7 +26,8 @@
               %td
                 = nation.name
                 = link_to nation.slug, nation
-              %td= nation.lang
+              %td= nation.zip
+              %td= truncate(nation.lang)
               %td= nation.cash
               %td.last
                 =# link_to "Destroy!", nation_path(nation), :method => :delete

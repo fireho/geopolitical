@@ -1,3 +1,4 @@
+require 'mongoid_geospatial'
 require 'inherited_resources'
 
 module Geopolitical

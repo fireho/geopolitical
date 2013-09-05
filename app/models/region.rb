@@ -15,9 +15,8 @@ class Region
   scope :ordered, order_by(name: 1)
 
   validates :nation, presence: true
-  validates :name,   presence: true
+  validates :name,   presence: true,  uniqueness: { :scope => :nation_id }
 
-  validates :name,   uniqueness: { :scope => :nation_id }
 
 
 end

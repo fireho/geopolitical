@@ -5,7 +5,8 @@
   .row
 
     = form_for(@region) do |f|
-      =# f.error_messages
+      - f.object.errors.each do |err|
+        = err
       .form-group
         = f.label :name
         = f.text_field :name

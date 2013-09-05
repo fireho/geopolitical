@@ -4,10 +4,10 @@ class City
   include Geopolitical::Helpers
 
   field :gid,    type: Integer
+  field :zip,    type: String
   field :slug,   type: String
   field :name,   type: String,  localize: true
   field :area,   type: Integer
-  field :zip,    type: Integer
   field :souls,  type: Integer
   field :geom,   type: Point,    spatial: true
   #    field :ascii, type: String
