@@ -1,16 +1,25 @@
-%table{:class => :table}
-  %thead
-    %tr
-      %th Nome
-      %th Sigla
-      %th{:colspan => 2} Pais
-  %tbody
-    - for region in @regions
-      %tr{:class => cycle('par','impar')}
-        %td=h region.name
-        %td=h region.abbr
-        %td=h region.nation.name
-        %td{:align => 'right'}
-          = link_to image_tag('icons/edit.png', :title => 'Editar', :border => 0), edit_region_path(region)
-
-        //%td= link_to 'Destroy', region, :confirm => 'Are you sure?', :method => :delete
+.row
+  %h1.title Regions
+  =# render "shared/filter"
+  .right.links
+    = link_to "New Regions", new_region_path
+  .block
+    .content
+      .inner
+        %table.table
+          %thead
+            %tr
+              %th Abbr
+              %th Name
+              %th
+          %tbody
+            - for region in @regions
+              %tr
+                %td
+                  = region.abbr
+                %td
+                  = region.name
+                  = link_to region.slug, region
+                %td= region.nation.try(:name)
+                %td{:align => 'right'}
+                  = link_to image_tag('icons/edit.png', :title => 'Editar', :border => 0), edit_region_path(region)

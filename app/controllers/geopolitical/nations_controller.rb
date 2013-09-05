@@ -3,7 +3,7 @@ module Geopolitical
     inherit_resources
 
     def collection
-      @nations = Nation.ordered.page(params[:page])
+      @nations = Nation.ordered #.page(params[:page])
     end
 
     private

@@ -6,12 +6,17 @@ class Nation
   field :name,   type: String, localize: true
   field :abbr,   type: String
   field :code    # optional phone/whatever code
+  field :zip,    type: String
+  field :cash,   type: String
+  field :lang,   type: String
 
   has_many :regions, :dependent => :destroy
   has_many :cities,    :dependent => :destroy
 
   scope :ordered, order_by(name: 1)
 
-  validates :name, :abbr, uniqueness: true, presence: true
+  validates :slug, :abbr, uniqueness: true, presence: true
+
+  alias :currency :cash
 
 end

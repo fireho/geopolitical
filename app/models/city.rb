@@ -1,6 +1,7 @@
 class City
   include Mongoid::Document
   include Mongoid::Geospatial
+  include GeoSlug
   # include GeoHelper
 
   field :gid,    type: Integer
@@ -19,6 +20,7 @@ class City
   belongs_to :region
   belongs_to :nation
   has_many :hoods
+
 
   index name: 1
 
@@ -52,8 +54,5 @@ class City
     self.slug <=> other.slug
   end
 
-  def slug= txt
-    self[:slug] = txt.downcase.gsub(/\s/, '-').gsub(/\W/, '')
-  end
 
 end

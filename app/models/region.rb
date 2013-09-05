@@ -1,5 +1,6 @@
 class Region
   include Mongoid::Document
+  include GeoSlug
 
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String

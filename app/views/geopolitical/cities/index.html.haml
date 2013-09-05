@@ -15,7 +15,9 @@
       %tbody
         - for city in @cities
           %tr{:class => cycle('par','impar')}
-            %td= link_to city.name , city
+            %td
+              = city.name
+              = link_to city.slug , city
             %td= city.region.name if city.region
             %td= city.nation.name
             %td{:align => 'right'}
@@ -25,5 +27,5 @@
     .inner
       .actions-bar
         .actions
-        .pagination=# paginate @cidades
+        .pagination= paginate @cities
   = link_to 'Voltar', "/", :class => 'icon back'

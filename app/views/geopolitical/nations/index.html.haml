@@ -1,5 +1,5 @@
 .row
-  %h3.title Nations
+  %h1.title Nations
   =# render "shared/filter"
   .right.links
     = link_to "New Nation", new_nation_path, :class => "blue nice small button radius"
@@ -10,7 +10,10 @@
           %thead
             %tr
               %th Abbr
-              %th Nome
+              %th ISO
+              %th Name
+              %th Lang
+              %th Cash
               %th
           %tbody
             - for nation in @nations
@@ -18,11 +21,12 @@
                 %td
                   =# image_tag nation.flag.nano if nation.flag?
                   = nation.abbr
-                %td= link_to nation.slug, nation
+                %td= nation.code
+                %td
+                  = nation.name
+                  = link_to nation.slug, nation
+                %td= nation.lang
+                %td= nation.cash
                 %td.last
                   =# link_to "Destroy!", nation_path(nation), :method => :delete
-                  = link_to "Edit!", edit_nation_path(nation)
-          .pagination
-          .clear
-
-    = paginate @nations
+                  = link_to "Edit", edit_nation_path(nation)
