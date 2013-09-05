@@ -18,5 +18,6 @@ module Geopolitical
       return unless txt
       self[:slug] = txt.downcase.gsub(/\s/, '-') #.gsub(/\W/, '')
     end
+
   end
 end
