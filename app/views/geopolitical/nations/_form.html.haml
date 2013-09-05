@@ -1,11 +1,26 @@
-= form_for(@nation) do |f|
-  =# f.error_messages
-  %p
-    = f.label :name
-    = f.text_field :name
-  %p
-    = f.label :abbr
-    = f.text_field :abbr
+.container
+  .row
+    .page-header
+      %h1= @nation.new_record? ? "New Nation" : "Editing '#{@nation}'"
+  .row
 
-  .forms_buttons
-    = f.submit
+    = form_for(@nation) do |f|
+      =# f.error_messages
+      .form-group
+        = f.label :name
+        = f.text_field :name
+      .form-group
+        = f.label :abbr
+        = f.text_field :abbr
+      .form-group
+        = f.label :slug
+        = f.text_field :slug
+      .form-group
+        = f.label :lang
+        = f.text_field :lang
+      .form-group
+        = f.label :abbr
+        = f.text_field :abbr
+
+      .forms-buttons
+        = f.submit

@@ -1,13 +1,17 @@
-%p
-  %b Pais:
-  = @region.nation.name
-%p
-  %b Nome:
-  = @region.name
-%p
-  %b Sigla:
-  = @region.abbr
-
-= link_to 'Edit', edit_region_path(@region)
-|
-= link_to 'Back', regions_path
+.container
+  .row
+    %h1= @region.name
+  .row
+    %p
+      %b Slug:
+      = @region.slug
+    %p
+      %b Nation:
+      = @region.nation
+    %p
+      %b Sigla:
+      = @region.abbr
+  .row
+    = link_to 'Edit', edit_region_path(@region)
+    |
+    = link_to 'Back', regions_path

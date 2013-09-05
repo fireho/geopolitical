@@ -1,25 +1,31 @@
-.row
-  %h1.title Regions
-  =# render "shared/filter"
-  .right.links
-    = link_to "New Regions", new_region_path
-  .block
+.container
+  .row
+    .page-header
+      %h1.title Regions
+      =# render "shared/filter"
+      = link_to "New Regions", new_region_path
+  .row
     .content
-      .inner
-        %table.table
-          %thead
+      %table.table
+        %thead
+          %tr
+            %th Abbr
+            %th Name
+            %th Country
+            %th Cities
+            %th
+        %tbody
+          - for region in @regions
             %tr
-              %th Abbr
-              %th Name
-              %th
-          %tbody
-            - for region in @regions
-              %tr
-                %td
-                  = region.abbr
-                %td
-                  = region.name
-                  = link_to region.slug, region
-                %td= region.nation.try(:name)
-                %td{:align => 'right'}
-                  = link_to image_tag('icons/edit.png', :title => 'Editar', :border => 0), edit_region_path(region)
+              %td
+                = region.abbr
+              %td
+                = region.name
+                = link_to region.slug, region
+              %td= region.nation.try(:name)
+              %td= region.cities.count
+              %td.last
+                =# link_to "Destroy!", nation_path(nation), :method => :delete
+                = link_to  'Edit', edit_region_path(region)
+  .row
+    = link_to 'Voltar', root_path

@@ -1,10 +1,20 @@
-%p
-  %b Nome:
-  = @nation.name
-%p
-  %b Abbr:
-  = @nation.abbr
-
-= link_to 'Edit', edit_nation_path(@nation)
-|
-= link_to 'Back', nations_path
+.container
+  .row
+    %h1= @nation.name
+  .row
+    %p
+      %b Abbr:
+      #{@nation.abbr} #{@nation.code}
+    %p
+      %b Slug:
+      = @nation.slug
+    %p
+      %b Lang:
+      = @nation.lang
+    %p
+      %b Cash:
+      = @nation.cash
+  .row
+    = link_to 'Edit', edit_nation_path(@nation)
+    |
+    = link_to 'Back', nations_path

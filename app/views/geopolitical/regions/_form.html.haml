@@ -1,0 +1,23 @@
+.container
+  .row
+    .page-header
+      %h1= @region.new_record? ? "New Region" : "Editing '#{@region}'"
+  .row
+
+    = form_for(@region) do |f|
+      =# f.error_messages
+      .form-group
+        = f.label :name
+        = f.text_field :name
+      .form-group
+        = f.label :abbr
+        = f.text_field :abbr
+      .form-group
+        = f.label :slug
+        = f.text_field :slug
+      .form-group
+        = f.label :nation_id
+        = f.select :nation_id, @nations
+
+      .forms-buttons
+        = f.submit

@@ -1,6 +1,6 @@
 module Geopolitical
   class RegionsController < GeopoliticalController
-   # inherit_resources
+    inherit_resources
     before_filter :get_relatives, :only => [:new, :edit]
 
     def collection

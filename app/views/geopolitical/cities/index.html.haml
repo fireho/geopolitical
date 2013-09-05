@@ -1,31 +1,33 @@
--#= js "places"
--# #rt-utility
--# .inner
--#  - if @markers
--#    = gmaps({"markers" => { "data" => @markers, "options" => { "marker_picture" => "foo", "marker_width" => 22, "marker_length" => 32 }}}, false, false)
-.block
-  .top
-    %h2 Cidades
-    %table{:class => :table}
-      %thead
-        %tr
-          %th{:sort => 'name'} Nome
-          %th{:sort => 'region'} Region
-          %th{:sort => 'nation', :colspan => 2} Pais
-      %tbody
-        - for city in @cities
-          %tr{:class => cycle('par','impar')}
-            %td
-              = city.name
-              = link_to city.slug , city
-            %td= city.region.name if city.region
-            %td= city.nation.name
-            %td{:align => 'right'}
-              = link_to 'Edit', edit_city_path(city)
-              = link_to 'Destroy', city, :confirm => 'Destroy city?', :method => :delete
+.container
+  .row
+    .page-header
+      %h1.title Cities
+      =# render "shared/filter"
+      = link_to "New City", new_city_path
+  .row
+    .content
+      %table.table
+        %thead
+          %tr
+            %th Nome
+            %th Region
+            %th Nation
+            %th Population
+            %th
+        %tbody
+          - for city in @cities
+            %tr
+              %td
+                = city.name
+                = link_to city.slug , city
+              %td= city.region.name if city.region
+              %td= city.nation.name
+              %td= city.souls
+              %td{:align => 'right'}
+                = link_to 'Edit', edit_city_path(city)
+                = link_to 'Destroy', city, :confirm => 'Destroy city?', :method => :delete
 
-    .inner
-      .actions-bar
-        .actions
-        .pagination= paginate @cities
-  = link_to 'Voltar', "/", :class => 'icon back'
+  .row
+    .pagination= paginate @cities
+  .row
+    = link_to 'Voltar', root_path

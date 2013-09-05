@@ -19,4 +19,8 @@ class Nation
 
   alias :currency :cash
 
+  def to_s
+    name || slug
+  end
+
 end
