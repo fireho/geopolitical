@@ -1,6 +1,6 @@
 class Address
   include Mongoid::Document
-  include Mongoid::Symbolize
+  # include Mongoid::Symbolize
   include Mongoid::Timestamps
   include Mongoid::Geospatial
 

@@ -1,6 +1,6 @@
 class Region
   include Mongoid::Document
-  include GeoSlug
+  include Geopolitical::Helpers
 
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String
@@ -19,8 +19,5 @@ class Region
 
   validates :name,   uniqueness: { :scope => :nation_id }
 
-  def to_s
-    "#{name}/#{abbr}"
-  end
 
 end

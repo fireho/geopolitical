@@ -1,8 +1,7 @@
 class City
   include Mongoid::Document
   include Mongoid::Geospatial
-  include GeoSlug
-  # include GeoHelper
+  include Geopolitical::Helpers
 
   field :gid,    type: Integer
   field :slug,   type: String
@@ -40,10 +39,6 @@ class City
 
   def abbr
     region ? region.abbr : nation.abbr
-  end
-
-  def to_s
-    "#{name}"
   end
 
   def self.search txt

@@ -3,6 +3,9 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'faker'
+require 'fabrication'
+require 'fabrication/syntax/make'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -12,6 +15,11 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
+Fabrication.configure do |config|
+  #config.fabricator_path = 'data/fabricators'
+  config.path_prefix = Rails.root.join("../../")
+end
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -20,7 +28,11 @@ RSpec.configure do |config|
   # config.mock_with :mocha
   # config.mock_with :flexmock
   # config.mock_with :rr
-
+  config.after(:each) do
+    Mongoid.purge!
+    # $stdout = File.new( '/tmp/lastspec', 'w' )
+    # $stdout.sync = true
+  end
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   # config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

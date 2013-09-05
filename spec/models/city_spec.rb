@@ -1,34 +1,55 @@
 # -*- coding: utf-8 -*-
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe City do
 
-  it { should belong_to(:nation) }
-  it { should belong_to(:region) }
-  it { should have_many(:tracks) }
-
   it "should create a city" do
-    blueprint_spec City
+    lambda { City.make! }.should_not raise_error
   end
 
-  describe "Geoenabled" do
+  describe "instance" do
+    let(:city) { City.make! }
+
+
+    describe "Relatives" do
+      let(:nation) { Nation.make! }
+
+      it "should belongs to nation" do
+        city.nation = nation
+        city.save.should be_true
+      end
+
+      it "should belongs to region" do
+        city.nation = nation
+        city.save.should be_true
+      end
+
+    end
+
+  end
+
+  describe "geoenabled" do
     before do
       City.create_indexes
     end
 
     it "should find closest one" do
+      pending
       city = City.make!
       City.closest_to(city.geom).should eql(city)
     end
 
   end
 
-  describe "Failure" do
+  describe "validations" do
 
-    it "should have a name" do
-      city = City.make :name => nil
+    it "should have a slug" do
+      city = City.new(name: "")
+
+
+      city.save
       city.should_not be_valid
-      city.should have(1).errors_on(:name)
+      city.should have(1).errors_on(:slug)
     end
 
   end

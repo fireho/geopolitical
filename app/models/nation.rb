@@ -1,5 +1,6 @@
 class Nation
   include Mongoid::Document
+  include Geopolitical::Helpers
 
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String
@@ -19,8 +20,5 @@ class Nation
 
   alias :currency :cash
 
-  def to_s
-    name || slug
-  end
 
 end
