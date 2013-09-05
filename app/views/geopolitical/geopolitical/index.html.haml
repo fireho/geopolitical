@@ -1,7 +1,7 @@
 %h1 Geopolitical
 %hr
 
-- [City, Region, Nation, Zone].each do |klass|
+- [City, Region, Nation, Hood, Zone].each do |klass|
   .block
     %h3.title
       = link_to klass.model_name.human.pluralize, send("#{klass.to_s.downcase.pluralize}_path")

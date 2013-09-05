@@ -1,0 +1,31 @@
+.container
+  .row
+    .page-header
+      %h1.title Zones
+      =# render "shared/filter"
+      = link_to "New Zones", new_zone_path
+  .row
+    .content
+      %table.table
+        %thead
+          %tr
+            %th Abbr
+            %th Name
+            %th Kind
+            %th Member
+            %th
+        %tbody
+          - for zone in @zones
+            %tr
+              %td
+                = zone.abbr
+              %td
+                = zone.name
+                = link_to zone.slug, zone
+              %td= zone.kind
+              %td= zone.members.count
+              %td.last
+                =# link_to "Destroy!", nation_path(nation), :method => :delete
+                = link_to  'Edit', edit_zone_path(zone)
+  .row
+    = link_to 'Back', root_path

@@ -9,10 +9,13 @@ class Hood
   field :rank,  type: Integer
 
   belongs_to :city
+
   validates  :city, :name, presence: true
 
-  def to_param
-    "#{id}-#{name}"
+  scope :ordered, order_by(name: 1)
+
+  def to_s
+    name || slug
   end
 
 end

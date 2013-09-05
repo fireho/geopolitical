@@ -1,6 +1,7 @@
 module Geopolitical
 class GeopoliticalController < ActionController::Base
 
+  layout 'geopolitical'
 
   def index
     @regions = Region.all

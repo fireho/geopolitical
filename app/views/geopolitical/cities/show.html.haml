@@ -7,11 +7,11 @@
       = @city.slug
     %p
       %b Nation:
-      = @city.nation
+      = link_to @city.nation, @city.nation
     %p
       %b Region:
-      = @city.region
+      = link_to @city.region, @city.region
   .row
     = link_to 'Edit', edit_city_path(@city)
     |
-    = link_to 'Back', city_path
+    = link_to 'Back', cities_path

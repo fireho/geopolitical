@@ -1,0 +1,20 @@
+!!!
+%html{:lang => "en"}
+  %head
+    / Meta, title, CSS, favicons, etc.
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "", :name => "author"}/
+
+    %title Geopolitical
+    / Baccafe core CSS
+    = stylesheet_link_tag    "geopolitical/application", media: "all"
+    = javascript_include_tag "geopolitical/application"
+    = csrf_meta_tags
+    //%link{:href => image_path("favicon.png?v=111119"), :rel => "shortcut icon"}/
+  %body
+    - [City, Region, Nation, Hood, Zone].each do |klass|
+      = link_to klass.model_name.human.pluralize, send("#{klass.to_s.downcase.pluralize}_path")
+
+    = yield

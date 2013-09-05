@@ -1,0 +1,14 @@
+.container
+  .row
+    %h1= @hood.name
+  .row
+    %p
+      %b Slug:
+      = @hood.slug
+    %p
+      %b City:
+      = link_to @hood.city, @hood.city
+  .row
+    = link_to 'Edit', edit_hood_path(@hood)
+    |
+    = link_to 'Back', hood_path

@@ -1,0 +1,7 @@
+.hood
+  %h4= link_to hood.name, hood
+  %span.gray
+  .right
+    = link_to "Editar", edit_hood_path(hood) if admin?
+  .right
+    .gray= time_ago_in_words hood.created_at
