@@ -5,9 +5,9 @@ class Address
   include Mongoid::Geospatial
 
   field :zip,     type: String
-  field :name,    type: String
-  field :title,   type: String
-  field :number,  type: String
+  field :name,    type: String # My house, my work...
+  field :title,   type: String # St, Rd, Av, Area, Park Foo
+  field :number,  type: String # least surprise fail
   field :extra,   type: String
   field :info,    type: String
 
@@ -18,14 +18,22 @@ class Address
   field :region_name,    type: String
   field :nation_name,    type: String
 
-  embedded_in :addressable, polymorphic: true
+  # embedded_in :addressable, polymorphic: true
+  belongs_to :addressable, polymorphic: true
 
   belongs_to :nation
   belongs_to :region
   belongs_to :city
   belongs_to :hood
 
-  validates :name, presence: true
+  validates :title, presence: true
+
+  before_save :set_caches
+
+  def set_caches
+    self.city_name ||= city.name if city
+    self.nation_name ||= nation.name if nation
+  end
 
   def print_location
     "#{hood_name} #{city_name} - #{region_name} "

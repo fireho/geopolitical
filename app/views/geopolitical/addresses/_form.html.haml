@@ -1,0 +1,17 @@
+=# vjs 'cep'
+%fieldset.address
+  .row.pull-right= f.link_to_remove "&times;".html_safe, :class => "close"
+  .row
+    -# .col-sm-3= f.select :kind, Address.get_kind_values, {}, :class => "input-auto"
+    .col-sm-12= ftext f, :title, :placeholder => "Nome"
+
+  .row
+    -# .col-sm-3= f.select :kind, Address.get_kind_values, {}, :class => "input-auto"
+    .col-sm-8= ftext f, :name, :placeholder => "Nome da Rua, Av...", :class => "street-field col-sm-12"
+    .col-sm-2= ftext f, :number, :class => "", :placeholder => "Num"
+    .col-sm-2= ftext f, :zip, :placeholder => "CEP", :class => "cep"
+  .row
+    .col-sm-4= ftext f, :city_name, :class => "city-field"
+    .col-sm-4= ftext f, :hood_name, :placeholder => "Bairro", :class => "input-small col-sm-12"
+    .col-sm-4= ftext f, :info, :placeholder => "Extra" #, :class => "col-sm-12"
+%hr
