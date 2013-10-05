@@ -3,9 +3,9 @@ source "https://rubygems.org"
 # Declare your gem's dependencies in geopolitical.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
-group :development do
-  gem 'mongoid', github: 'mongoid/mongoid'
-end
+# group :development do
+#   gem 'mongoid', github: 'mongoid/mongoid'
+# end
 gemspec
 
 # Declare any dependencies that are still in development here instead of in
