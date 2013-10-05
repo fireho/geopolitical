@@ -34,9 +34,8 @@ describe City do
     end
 
     it "should find closest one" do
-      pending
       city = City.make!
-      City.closest_to(city.geom).should eql(city)
+      City.nearby(city.geom).first.should eql(city)
     end
 
   end

@@ -7,10 +7,10 @@ class City
   field :zip,    type: String
   field :slug,   type: String
   field :name,   type: String,  localize: true
+  field :ascii,  type: String
   field :area,   type: Integer
   field :souls,  type: Integer
-  field :geom,   type: Point,    spatial: true
-  #    field :ascii, type: String
+  field :geom,   type: Point,   spatial: true
 
   spatial_scope :geom
 
@@ -38,6 +38,7 @@ class City
   end
 
   def abbr
+    return unless region || nation
     region ? region.abbr : nation.abbr
   end
 

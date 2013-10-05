@@ -2,6 +2,8 @@ class Nation
   include Mongoid::Document
   include Geopolitical::Helpers
 
+  field :_id, type: String, default: ->{ abbr }
+
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String
   field :name,   type: String, localize: true
