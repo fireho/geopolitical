@@ -1,3 +1,6 @@
+#
+# Geopolitical Address
+#
 class Address
   include Mongoid::Document
   # include Mongoid::Symbolize
@@ -67,7 +70,7 @@ class Address
   def to_s
     "#{name} #{number}" + print_location
   end
-  #index tie_id: 1, created_at: -1
+  # index tie_id: 1, created_at: -1
   # symbolize :kind, :in => [:street, :avenue, :road], default: :street
 
 end

@@ -1,3 +1,5 @@
+#
+# User created zones
 class Zone
   include Mongoid::Document
 
@@ -7,12 +9,11 @@ class Zone
   field :abbr,   type: String
   field :kind,   type: String
 
-  has_many :zone_members, :dependent => :destroy
+  has_many :zone_members, dependent: :destroy
 
   scope :ordered, order_by(name: 1)
 
   validates :name, presence: true, uniqueness: true
-
 
   def members
     zone_members.map(&:member)

@@ -1,3 +1,6 @@
+#
+# Region/Province/Estado
+#
 class Region
   include Mongoid::Document
   include Geopolitical::Helpers
@@ -10,13 +13,11 @@ class Region
 
   belongs_to :nation
 
-  has_many :cities, :dependent => :destroy
+  has_many :cities,  dependent: :destroy
 
   scope :ordered, order_by(name: 1)
 
   validates :nation, presence: true
-  validates :name,   presence: true,  uniqueness: { :scope => :nation_id }
-
-
+  validates :name,   presence: true,  uniqueness: { scope: :nation_id }
 
 end

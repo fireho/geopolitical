@@ -1,4 +1,4 @@
-#Rails.application.routes.draw
+# Rails.application.routes.draw
 Geopolitical::Engine.routes.draw do
   resources :zones
   resources :hoods
@@ -8,5 +8,5 @@ Geopolitical::Engine.routes.draw do
 
   resource :geopolitical
 
-  root :to => "geopolitical#index"
+  root to: 'geopolitical#index'
 end

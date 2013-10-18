@@ -1,4 +1,5 @@
 module Geopolitical
+  # Geopolitical Helpers TODO move to concerns?
   module Helpers
     extend ActiveSupport::Concern
 
@@ -14,11 +15,12 @@ module Geopolitical
       self.slug ||= name
     end
 
-    def slug= txt
+    def slug=(txt)
       return unless txt
-      self[:slug] = txt.encode(Encoding::ISO_8859_1).
-        gsub(/\s/, '-').downcase
+      self[:slug] = txt.encode(Encoding::ISO_8859_1)
+        .gsub(/\s/, '-').downcase
     end
 
   end
+
 end

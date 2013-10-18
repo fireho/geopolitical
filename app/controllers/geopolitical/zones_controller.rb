@@ -1,4 +1,5 @@
 module Geopolitical
+  # Main Zones Controller
   class ZonesController < GeopoliticalController
     inherit_resources
 
@@ -9,4 +10,5 @@ module Geopolitical
     private
 
   end
+
 end

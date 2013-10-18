@@ -1,21 +1,20 @@
 module Geopolitical
-class GeopoliticalController < ActionController::Base
+  # Main Geopolitical Controller
+  class GeopoliticalController < ActionController::Base
 
-  layout 'geopolitical'
+    layout 'geopolitical'
 
-  def index
-    @regions = Region.all
-    @cities = City.all
+    def index
+      @regions = Region.all
+      @cities = City.all
+    end
+
+    private
+
+    def permitted_params
+      params.permit!
+    end
+
   end
 
-
-  private
-
-  def permitted_params
-    params.permit!
-  end
-
-
-
-end
 end

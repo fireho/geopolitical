@@ -3,23 +3,23 @@ require 'spec_helper'
 
 describe City do
 
-  it "should create a city" do
-    lambda { City.make! }.should_not raise_error
+  it 'should create a city' do
+    -> { City.make! }.should_not raise_error
   end
 
-  describe "instance" do
+  describe 'instance' do
+
     let(:city) { City.make! }
 
-
-    describe "Relatives" do
+    describe 'Relatives' do
       let(:nation) { Nation.make! }
 
-      it "should belongs to nation" do
+      it 'should belongs to nation' do
         city.nation = nation
         city.save.should be_true
       end
 
-      it "should belongs to region" do
+      it 'should belongs to region' do
         city.nation = nation
         city.save.should be_true
       end
@@ -28,23 +28,22 @@ describe City do
 
   end
 
-  describe "geoenabled" do
+  describe 'geoenabled' do
     before do
       City.create_indexes
     end
 
-    it "should find closest one" do
+    it 'should find closest one' do
       city = City.make!
       City.nearby(city.geom).first.should eql(city)
     end
 
   end
 
-  describe "validations" do
+  describe 'validations' do
 
-    it "should have a slug" do
-      city = City.new(name: "")
-
+    it 'should have a slug' do
+      city = City.new(name: '')
 
       city.save
       city.should_not be_valid
@@ -52,22 +51,25 @@ describe City do
     end
 
   end
+
+end
+
 #   it { should have_indices :name, :geom, :area, [:region_id, :nation_id] }
 
-
-#   it "should accept an area" do
-#     @city = City.make(:area =>  Polygon.from_coordinates([[[0,0],[4,0],[4,4],[0,4],[0,0]],[[1,1],[3,1],[3,3],[1,3],[1,1]]]))
+#   it 'should accept an area' do
+#     @city = City.make(:area =>  Polygon.from_coordinates([
+#     [[0,0],[4,0],[4,4],[0,4],[0,0]],[[1,1],[3,1],[3,3],[1,3],[1,1]]]))
 #     @city.area.should be_instance_of(Polygon)
 #   end
 
-#   describe "some helpers" do
-#     it "should have some nice x y z" do
+#   describe 'some helpers' do
+#     it 'should have some nice x y z' do
 #       @city = City.make
 #       @city.should respond_to(:x,:y,:z)
 #     end
 #   end
 
-#   describe "Find by proximity" do
+#   describe 'Find by proximity' do
 
 #     def pt(x,y);      Point.from_x_y(x,y); end
 
@@ -78,20 +80,19 @@ describe City do
 #       @ponto = pt(12,12)
 #     end
 
-#     it "should find the closest city" do
+#     it 'should find the closest city' do
 #       @city = City.close_to(@ponto).first
 #       @city.should eql(@perto)
 #     end
 
-#     it "should find the closest city to make sure" do
+#     it 'should find the closest city to make sure' do
 #       ponto = pt(22,22)
 #       @city = City.close_to(ponto).first
 #       @city.should eql(@medio)
 #     end
 
-#     it "should find the closest" do
+#     it 'should find the closest' do
 #       @poi = City.close_to(@ponto).first(2)
 #       @poi.should eql([@perto,@medio])
 #     end
 #   end
-end

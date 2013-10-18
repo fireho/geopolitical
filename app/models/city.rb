@@ -1,3 +1,6 @@
+#
+# Cities
+#
 class City
   include Mongoid::Document
   include Mongoid::Geospatial
@@ -20,18 +23,16 @@ class City
   belongs_to :nation
   has_many :hoods
 
-
   index name: 1
 
   scope :ordered, order_by(name: 1)
 
   validates :slug, presence: true, uniqueness: true
-  validates :name, uniqueness: {  :scope => :region_id  }
+  validates :name, uniqueness: { scope: :region_id }
 
   # scope :close_to, GeoHelper::CLOSE
 
   before_validation :set_defaults
-
 
   def set_defaults
     self.nation ||= region.try(:nation)
@@ -42,13 +43,12 @@ class City
     region ? region.abbr : nation.abbr
   end
 
-  def self.search txt
+  def self.search(txt)
     where(slug: /#{txt}/i)
   end
 
-  def <=> other
-    self.slug <=> other.slug
+  def <=>(other)
+    slug <=> other.slug
   end
-
 
 end

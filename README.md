@@ -8,8 +8,30 @@ Geopolitical
 
 Geopolitical models ready to use!
 
-Use
----
+
+With
+----
+
+
+    gem "geopolitical"
+
+
+
+I have
+------
+
+
+Hood, City, Region, Nation + Spot.
+
+
+
+Geopolitical
+------------
+
+
+
+
+
 
 
 

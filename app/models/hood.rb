@@ -1,3 +1,6 @@
+#
+# Hood/Neighborhood
+#
 class Hood
   include Mongoid::Document
 

@@ -1,9 +1,10 @@
 module Geopolitical
+  # Hoods Main Public Interface
   class HoodsController < GeopoliticalController
     inherit_resources
     # belongs_to :city
     # respond_to :html, :xml, :json
-    before_filter :load_relatives, :only => [:new, :edit, :create, :update]
+    before_filter :load_relatives, only: [:new, :edit, :create, :update]
 
     def collection
       @hoods = Hood.ordered.page(params[:page])
@@ -12,7 +13,9 @@ module Geopolitical
     private
 
     def load_relatives
-      @cities = City.only(:name).map {|e| [e.name,e.id]}
+      @cities = City.only(:name).map { |e| [e.name, e.id] }
     end
+
   end
+
 end

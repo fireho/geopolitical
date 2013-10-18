@@ -1,11 +1,12 @@
 module Geopolitical
+  # Cities Public Controller
   class CitiesController < GeopoliticalController
     # allow  "admin"
     inherit_resources
-    before_filter :load_relatives, :only => [:new, :edit, :create, :update]
+    before_filter :load_relatives, only: [:new, :edit, :create, :update]
 
     def collection
-      @cities = City.ordered.search(params[:search]).page(params[:page]) # @cc.nation.cities
+      @cities = City.ordered.search(params[:search]).page(params[:page])
     end
 
     private
@@ -17,7 +18,9 @@ module Geopolitical
     end
 
     def load_relatives
-      @regions = Region.only(:name).map {|e| [e.name,e.id]}
+      @regions = Region.only(:name).map { |e| [e.name, e.id] }
     end
+
   end
+
 end

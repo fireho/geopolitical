@@ -1,3 +1,6 @@
+#
+# Nation/Country/Flag
+#
 class Nation
   include Mongoid::Document
   include Geopolitical::Helpers
@@ -13,14 +16,13 @@ class Nation
   field :cash,   type: String
   field :lang,   type: String
 
-  has_many :regions, :dependent => :destroy
-  has_many :cities,    :dependent => :destroy
+  has_many :regions, dependent: :destroy
+  has_many :cities,  dependent: :destroy
 
   scope :ordered, order_by(name: 1)
 
   validates :slug, :abbr, uniqueness: true, presence: true
 
   alias :currency :cash
-
 
 end
