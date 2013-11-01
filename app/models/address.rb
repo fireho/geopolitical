@@ -39,7 +39,7 @@ class Address
   end
 
   def print_location
-    "#{hood_name} #{city_name} - #{region_name} "
+    "#{hood_name}, #{city_name} - #{region_name}"
   end
 
   def print_full_location
@@ -68,7 +68,7 @@ class Address
   end
 
   def to_s
-    "#{name} #{number}" + print_location
+    "#{name} #{number} " + print_location
   end
   # index tie_id: 1, created_at: -1
   # symbolize :kind, :in => [:street, :avenue, :road], default: :street
