@@ -9,18 +9,22 @@ class Zone
   field :abbr,   type: String
   field :kind,   type: String
 
-  has_many :zone_members, dependent: :destroy
+  has_many :members, class_name: "Zone::Member", dependent: :destroy
 
   scope :ordered, order_by(name: 1)
 
   validates :name, presence: true, uniqueness: true
 
-  def members
-    zone_members.map(&:member)
-  end
-
   def to_s
     name
+  end
+
+  # Zone::Member
+  class Member
+    include Mongoid::Document
+
+    belongs_to :zone
+    belongs_to :member, polymorphic: true
   end
 
 end
