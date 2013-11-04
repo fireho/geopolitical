@@ -4,7 +4,7 @@
 class City
   include Mongoid::Document
   include Mongoid::Geospatial
-  include Geopolitical::Helpers
+  include Geohelper
 
   field :gid,    type: Integer
   field :zip,    type: String
