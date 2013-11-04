@@ -19,6 +19,10 @@ class Zone
     name
   end
 
+  def self.icon
+    "globe"
+  end
+
   # Zone::Member
   class Member
     include Mongoid::Document
