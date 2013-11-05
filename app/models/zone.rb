@@ -7,10 +7,10 @@ class Zone
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String
   field :name,   type: String
-  field :i18n,   type: String,  localize: true
   field :abbr,   type: String
+  field :i18n,   type: String,  localize: true
   field :kind,   type: String
-  field :info,   type: String
+  field :info,   type: String,  localize: true
 
   field :active, type: Mongoid::Boolean
 
@@ -37,7 +37,4 @@ class Zone
     belongs_to :member, polymorphic: true
   end
 
-  def self.icon
-    "globe"
-  end
 end
