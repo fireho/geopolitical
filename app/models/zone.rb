@@ -6,6 +6,7 @@ class Zone
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String
   field :name,   type: String,  localize: true
+  field :i18n,   type: String,  localize: true
   field :abbr,   type: String
   field :kind,   type: String
 
