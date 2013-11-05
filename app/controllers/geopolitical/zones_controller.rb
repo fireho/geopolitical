@@ -9,6 +9,10 @@ module Geopolitical
 
     private
 
+    def permitted_params
+      params.permit
+    end
+
   end
 
 end
