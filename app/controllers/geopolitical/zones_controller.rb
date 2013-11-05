@@ -10,7 +10,7 @@ module Geopolitical
     private
 
     def permitted_params
-      params.permit
+      params.permit!
     end
 
   end
