@@ -3,7 +3,7 @@
 #
 class Nation
   include Mongoid::Document
-  include Geohelper
+  include GeoHelper
 
   field :_id, type: String, default: ->{ abbr }
 

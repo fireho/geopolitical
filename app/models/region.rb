@@ -3,7 +3,7 @@
 #
 class Region
   include Mongoid::Document
-  include Geohelper
+  include GeoHelper
 
   field :gid,    type: Integer  # geonames id
   field :slug,   type: String
