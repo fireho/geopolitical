@@ -25,7 +25,7 @@ class City
 
   index name: 1
 
-  scope :ordered, order_by(name: 1)
+  scope :ordered, -> { order_by(name: 1) }
 
   validates :slug, presence: true, uniqueness: true
   validates :name, uniqueness: { scope: :region_id }

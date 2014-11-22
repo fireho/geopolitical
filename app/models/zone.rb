@@ -16,8 +16,8 @@ class Zone
 
   has_many :members, class_name: "Zone::Member", dependent: :destroy
 
-  scope :ordered,  order_by(name: 1)
-  scope :active,   where(active: true)
+  scope :ordered,  -> { order_by(name: 1) }
+  scope :active,   -> { where(active: true) }
 
   # validates :name, presence: true# , uniqueness: true
 

@@ -19,7 +19,7 @@ class Nation
   has_many :regions, dependent: :destroy
   has_many :cities,  dependent: :destroy
 
-  scope :ordered, order_by(name: 1)
+  scope :ordered, -> { order_by(name: 1) }
 
   validates :slug, :abbr, uniqueness: true, presence: true
 

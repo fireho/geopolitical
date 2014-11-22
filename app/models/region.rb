@@ -15,7 +15,7 @@ class Region
 
   has_many :cities,  dependent: :destroy
 
-  scope :ordered, order_by(name: 1)
+  scope :ordered, -> { order_by(name: 1) }
 
   validates :nation, presence: true
   validates :name,   presence: true,  uniqueness: { scope: :nation_id }
