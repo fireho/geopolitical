@@ -14,7 +14,7 @@
     = csrf_meta_tags
     //%link{:href => image_path("favicon.png?v=111119"), :rel => "shortcut icon"}/
   %body
-    - [City, Region, Nation, Hood, Zone].each do |klass|
+    - [Nation, Region, City, Hood].each do |klass|
       = link_to klass.model_name.human.pluralize, send("#{klass.to_s.downcase.pluralize}_path")
 
     = yield

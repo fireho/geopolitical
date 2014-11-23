@@ -1,7 +1,0 @@
-.zone
-  %h4= link_to zone.name, zone
-  %span.gray
-  .right
-    .gray= time_ago_in_words zone.created_at
-  .right
-    = link_to "Editar", edit_zone_path(zone) if admin?

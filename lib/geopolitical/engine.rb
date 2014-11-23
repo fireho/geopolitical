@@ -1,3 +1,4 @@
+require 'mongoid'
 require 'mongoid_geospatial'
 require 'inherited_resources'
 
