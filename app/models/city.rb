@@ -4,13 +4,9 @@
 class City
   include Mongoid::Document
   include Mongoid::Geospatial
-  include GeoHelper
+  include Geopolitocracy
 
-  field :gid,    type: Integer
   field :zip,    type: String
-  field :slug,   type: String
-  field :name,   type: String,  localize: true
-  field :ascii,  type: String
   field :area,   type: Integer
   field :souls,  type: Integer
   field :geom,   type: Point,   spatial: true

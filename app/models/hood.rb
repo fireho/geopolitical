@@ -3,13 +3,11 @@
 #
 class Hood
   include Mongoid::Document
+  include Geopolitocracy
 
-  field :gid,   type: Integer
-  field :slug,  type: String
-  field :name,  type: String, localize: true
   field :souls, type: Integer
-  field :zip,   type: Integer
   field :rank,  type: Integer
+  field :zip,   type: Integer
 
   belongs_to :city
 

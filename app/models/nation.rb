@@ -3,13 +3,10 @@
 #
 class Nation
   include Mongoid::Document
-  include GeoHelper
+  include Geopolitocracy
 
   field :_id, type: String, default: ->{ abbr }
 
-  field :gid,    type: Integer  # geonames id
-  field :slug,   type: String
-  field :name,   type: String, localize: true
   field :abbr,   type: String
   field :code    # optional phone/whatever code
   field :zip,    type: String
@@ -24,5 +21,4 @@ class Nation
   validates :slug, :abbr, uniqueness: true, presence: true
 
   alias :currency :cash
-
 end

@@ -1,8 +1,15 @@
 # Geopolitical Helpers
-module GeoHelper
+module Geopolitocracy
   extend ActiveSupport::Concern
 
   included do
+    field :name,   type: String,  localize: true
+
+    field :gid,    type: Integer  # geonames id
+
+    field :slug,  type: String
+    field :ascii,  type: String
+
     before_validation :set_slug
   end
 
