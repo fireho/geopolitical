@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Region do
+describe Region, :type => :model do
 
   it 'should create a region' do
-    -> {  Region.make! }.should_not raise_error
+    expect {  Region.make! }.not_to raise_error
   end
 
 end

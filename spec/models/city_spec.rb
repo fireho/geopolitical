@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 require 'spec_helper'
 
-describe City do
+describe City, :type => :model do
 
   it 'should create a city' do
-    -> { City.make! }.should_not raise_error
+    expect { City.make! }.not_to raise_error
   end
 
   describe 'instance' do
@@ -16,12 +16,12 @@ describe City do
 
       it 'should belongs to nation' do
         city.nation = nation
-        city.save.should be_true
+        expect(city.save).to be_truthy
       end
 
       it 'should belongs to region' do
         city.nation = nation
-        city.save.should be_true
+        expect(city.save).to be_truthy
       end
 
     end
@@ -35,7 +35,7 @@ describe City do
 
     it 'should find closest one' do
       city = City.make!
-      City.nearby(city.geom).first.should eql(city)
+      expect(City.nearby(city.geom).first).to eql(city)
     end
 
   end
@@ -46,8 +46,8 @@ describe City do
       city = City.new(name: '')
 
       city.save
-      city.should_not be_valid
-      city.should have(1).errors_on(:slug)
+      expect(city).not_to be_valid
+      expect(city).to have(1).errors_on(:slug)
     end
 
   end

@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Hood do
+describe Hood, :type => :model do
 
   it 'should create a nation' do
-    -> { Hood.make! }.should_not raise_error
+    expect { Hood.make! }.not_to raise_error
   end
 
   it 'should belong to city' do
-    Fabricate.build(:hood, city: nil).should have(1).error_on(:city)
+    expect(Fabricate.build(:hood, city: nil).error_on(:city).size).to eq(1)
   end
 
 end
