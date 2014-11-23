@@ -7,7 +7,7 @@ describe Hood, :type => :model do
   end
 
   it 'should belong to city' do
-    expect(Fabricate.build(:hood, city: nil).error_on(:city).size).to eq(1)
+    expect(Hood.make(city: nil)).to_not be_valid
   end
 
 end

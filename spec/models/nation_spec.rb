@@ -7,12 +7,12 @@ describe Nation, :type => :model do
   end
 
   it 'should require an abbr' do
-    expect(Nation.make(abbr: nil)).to have(1).error_on(:abbr)
+    expect(Nation.make(abbr: nil)).to_not be_valid
   end
 
   it 'should validates uniqueness of abbr' do
     Nation.make!(abbr: 'BR')
-    expect(Nation.make(abbr: 'BR')).to have(1).error_on(:abbr)
+    expect(Nation.make(abbr: 'BR')).to_not be_valid
   end
 
   it 'should have abbr as _id' do
@@ -21,12 +21,12 @@ describe Nation, :type => :model do
   end
 
   it 'may have a localized name' do
-    I18n.locale = :pt
+    I18n.locale = :'pt-BR'
     n = Nation.new(name: 'Brasil')
     expect(n.name).to eq('Brasil')
     I18n.locale = :en
     n.name = 'Brazil'
-    expect(n.name_translations).to eq('pt' => 'Brasil', 'en' => 'Brazil')
+    expect(n.name_translations).to eq('pt-BR' => 'Brasil', 'en' => 'Brazil')
   end
 
 end
