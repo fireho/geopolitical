@@ -7,6 +7,11 @@ describe City, :type => :model do
     expect { City.make! }.not_to raise_error
   end
 
+  it 'should accept some params and utf8' do
+    city = City.create(name: 'Patópolis', slug: 'patopolis', souls: 100_000)
+    expect(city).to be_valid
+  end
+
   describe 'instance' do
 
     let(:city) { City.make! }
