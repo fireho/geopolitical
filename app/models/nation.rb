@@ -5,7 +5,7 @@ class Nation
   include Mongoid::Document
   include Geopolitocracy
 
-  field :_id, type: String, default: ->{ abbr }
+  field :_id, type: String, default: -> { abbr }
 
   field :abbr,   type: String
   field :code    # optional phone/whatever code
@@ -20,5 +20,5 @@ class Nation
 
   validates :slug, :abbr, uniqueness: true, presence: true
 
-  alias :currency :cash
+  alias_method :currency, :cash
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Nation, :type => :model do
+describe Nation, type: :model do
 
   it 'should create a nation' do
     expect {  Nation.make! }.not_to raise_error

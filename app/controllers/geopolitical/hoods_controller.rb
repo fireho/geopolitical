@@ -15,7 +15,5 @@ module Geopolitical
     def load_relatives
       @cities = City.only(:name).map { |e| [e.name, e.id] }
     end
-
   end
-
 end

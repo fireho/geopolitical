@@ -13,6 +13,5 @@ module Geopolitical
     def get_relatives
       @nations = Nation.all.map { |n| [n.name, n.id] }
     end
-
   end
 end

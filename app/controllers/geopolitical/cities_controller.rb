@@ -20,7 +20,5 @@ module Geopolitical
     def load_relatives
       @regions = Region.only(:name).map { |e| [e.name, e.id] }
     end
-
   end
-
 end

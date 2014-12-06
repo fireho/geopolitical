@@ -1,7 +1,6 @@
 module Geopolitical
   # Main Geopolitical Controller
   class GeopoliticalController < ActionController::Base
-
     layout 'geopolitical'
 
     def index
@@ -14,7 +13,5 @@ module Geopolitical
     def permitted_params
       params.permit!
     end
-
   end
-
 end

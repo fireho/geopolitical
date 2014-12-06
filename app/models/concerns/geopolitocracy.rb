@@ -26,5 +26,4 @@ module Geopolitocracy
     self[:slug] = txt.encode(Encoding::ISO_8859_1)
       .gsub(/\s/, '-').downcase
   end
-
 end

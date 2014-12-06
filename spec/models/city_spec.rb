@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'spec_helper'
 
-describe City, :type => :model do
+describe City, type: :model do
 
   it 'should create a city' do
     expect { City.make! }.not_to raise_error

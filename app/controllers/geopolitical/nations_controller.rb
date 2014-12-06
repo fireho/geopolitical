@@ -12,6 +12,5 @@ module Geopolitical
     # def permitted_params
     #   params.permit! #require(:nation).permit!
     # end
-
   end
 end

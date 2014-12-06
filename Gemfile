@@ -1,11 +1,10 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gemspec
 
-
-gem "faker"
-gem "rspec"
-gem "guard"
-gem "guard-rspec"
-gem "rspec-rails"
-gem "fabrication"
+gem 'faker'
+gem 'rspec'
+gem 'guard'
+gem 'guard-rspec'
+gem 'rspec-rails'
+gem 'fabrication'

@@ -46,5 +46,4 @@ class City
   def <=>(other)
     slug <=> other.slug
   end
-
 end

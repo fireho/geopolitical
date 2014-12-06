@@ -1,4 +1,4 @@
-$:.push File.expand_path('../lib', __FILE__)
+$LOAD_PATH.push File.expand_path('../lib', __FILE__)
 
 # Maintain your gem's version:
 require 'geopolitical/version'
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = 'Geopolitical models for mongoid as a rails engine.'
 
   s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md']
-  s.test_files = Dir["spec/**/*"]
+  s.test_files = Dir['spec/**/*']
 
   s.add_dependency 'rails', '>= 4.0.0'
   s.add_dependency 'mongoid', '~> 4.0'
