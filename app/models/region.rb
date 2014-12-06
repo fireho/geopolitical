@@ -5,7 +5,6 @@ class Region
   include Mongoid::Document
   include Geopolitocracy
 
-  field :abbr,   type: String
   field :codes,  type: Array # phone codes
 
   belongs_to :nation

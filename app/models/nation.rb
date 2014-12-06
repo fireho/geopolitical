@@ -7,7 +7,6 @@ class Nation
 
   field :_id, type: String, default: -> { abbr }
 
-  field :abbr,   type: String
   field :code    # optional phone/whatever code
   field :zip,    type: String
   field :cash,   type: String

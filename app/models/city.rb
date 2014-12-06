@@ -24,7 +24,7 @@ class City
   scope :ordered, -> { order_by(name: 1) }
 
   validates :slug, presence: true, uniqueness: true
-  validates :name, uniqueness: { scope: :region_id }
+  validates :name, uniqueness: { scope: :nation_id }
 
   # scope :close_to, GeoHelper::CLOSE
 

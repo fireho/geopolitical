@@ -4,11 +4,12 @@ module Geopolitocracy
 
   included do
     field :name,   type: String,  localize: true
-
+    field :abbr,   type: String
     field :gid,    type: Integer  # geonames id
 
-    field :slug,  type: String
+    field :slug,   type: String
     field :ascii,  type: String
+    field :code,   type: String
 
     before_validation :set_slug
   end
