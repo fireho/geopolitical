@@ -2,7 +2,7 @@ module Geopolitical
   # Main Regions Controller
   class RegionsController < GeopoliticalController
     inherit_resources
-    before_filter :get_relatives, only: [:new, :edit, :create, :update]
+    before_filter :set_nations, only: [:new, :edit, :create, :update]
 
     def collection
       @regions = Region.ordered.page(params[:page])
@@ -10,7 +10,7 @@ module Geopolitical
 
     private
 
-    def get_relatives
+    def set_nations
       @nations = Nation.all.map { |n| [n.name, n.id] }
     end
   end
