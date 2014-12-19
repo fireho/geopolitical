@@ -10,14 +10,28 @@ class Nation
   field :code    # optional phone/whatever code
   field :zip,    type: String
   field :cash,   type: String
-  field :lang,   type: String
+  field :lang,   type: String # Official/main language
+  field :langs,  type: Array  # All official languages
+
+  alias_method :currency, :cash
+
+  validates :abbr, uniqueness: true, presence: true
 
   has_many :regions, dependent: :destroy
   has_many :cities,  dependent: :destroy
 
   scope :ordered, -> { order_by(name: 1) }
 
-  validates :slug, :abbr, uniqueness: true, presence: true
+  def abbr=(txt)
+    self[:abbr] = txt && txt.upcase
+  end
 
-  alias_method :currency, :cash
+  def ==(other)
+    return unless other
+    abbr == other.abbr
+  end
+
+  def <=>(other)
+    abbr <=> other.abbr
+  end
 end

@@ -12,23 +12,32 @@ describe City, type: :model do
     expect(city).to be_valid
   end
 
+  it 'should create it\'s own slug' do
+    city = City.create(name: 'Patópolis', souls: 100_000)
+    expect(city.slug).to eq('patopolis')
+  end
+
+  it 'should append region abbr if it\'s a dup' do
+    sp, mg = Region.make(abbr: "SP"), Region.make(abbr: "MG")
+    city1 = City.create(name: 'Patópolis', souls: 100_000, region: sp)
+    expect(city1.slug).to eq('patopolis')
+    city2 = City.create(name: 'Patópolis', souls: 100_000, region: mg)
+    expect(city2.slug).to eq('patopolis-mg')
+  end
+
   describe 'instance' do
 
+    let(:nation) { Nation.make! }
     let(:city) { City.make! }
 
-    describe 'Relatives' do
-      let(:nation) { Nation.make! }
+    it 'should belongs to nation' do
+      city.nation = nation
+      expect(city.save).to be_truthy
+    end
 
-      it 'should belongs to nation' do
-        city.nation = nation
-        expect(city.save).to be_truthy
-      end
-
-      it 'should belongs to region' do
-        city.nation = nation
-        expect(city.save).to be_truthy
-      end
-
+    it 'should belongs to region' do
+      city.nation = nation
+      expect(city.save).to be_truthy
     end
 
   end
@@ -47,12 +56,8 @@ describe City, type: :model do
 
   describe 'validations' do
 
-    it 'should have a slug' do
-      city = City.new(name: '')
-
-      city.save
-      expect(city).not_to be_valid
-      # expect(city).to have(1).errors_on(:slug)
+    it 'should have a name' do
+      expect(City.new(name: '')).not_to be_valid
     end
 
   end

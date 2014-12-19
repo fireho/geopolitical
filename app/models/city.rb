@@ -7,9 +7,11 @@ class City
   include Geopolitocracy
 
   field :zip,    type: String
-  field :area,   type: Integer
-  field :souls,  type: Integer
+  field :area,   type: Integer  # m2 square area
+  field :souls,  type: Integer  # Population
   field :geom,   type: Point,   spatial: true
+
+  alias_method :population, :souls
 
   spatial_scope :geom
 
@@ -19,19 +21,20 @@ class City
   belongs_to :nation
   has_many :hoods
 
-  index name: 1
-
   scope :ordered, -> { order_by(name: 1) }
 
-  validates :slug, presence: true, uniqueness: true
   validates :name, uniqueness: { scope: :nation_id }
 
-  # scope :close_to, GeoHelper::CLOSE
-
-  before_validation :set_defaults
+  before_validation :set_defaults, on: [:create]
 
   def set_defaults
     self.nation ||= region.try(:nation)
+    if City.where(slug: slug).first
+      self.slug += "-#{region.abbr}"
+      if City.where(slug: slug).first
+        fail "Can't have two cities with the same name in the same region. '#{slug}'"
+      end
+    end
   end
 
   def abbr
@@ -39,8 +42,8 @@ class City
     region ? region.abbr : nation.abbr
   end
 
-  def self.search(txt)
-    where(slug: /#{txt}/i)
+  def ==(other)
+    other && slug == other.slug
   end
 
   def <=>(other)
