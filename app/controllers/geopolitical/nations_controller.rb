@@ -7,8 +7,7 @@ module Geopolitical
       @nations = Nation.ordered
     end
 
-    private
-
+    # private
     # def permitted_params
     #   params.permit! #require(:nation).permit!
     # end

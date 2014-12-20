@@ -7,7 +7,6 @@ class Nation
 
   field :_id, type: String, default: -> { abbr }
 
-  field :code    # optional phone/whatever code
   field :zip,    type: String
   field :cash,   type: String
   field :lang,   type: String # Official/main language
@@ -20,8 +19,6 @@ class Nation
   has_many :regions, dependent: :destroy
   has_many :cities,  dependent: :destroy
 
-  scope :ordered, -> { order_by(name: 1) }
-
   def abbr=(txt)
     self[:abbr] = txt && txt.upcase
   end
@@ -32,6 +29,6 @@ class Nation
   end
 
   def <=>(other)
-    abbr <=> other.abbr
+    name <=> other.name
   end
 end

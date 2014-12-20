@@ -21,20 +21,16 @@ class City
   belongs_to :nation
   has_many :hoods
 
-  scope :ordered, -> { order_by(name: 1) }
-
   validates :name, uniqueness: { scope: :nation_id }
 
   before_validation :set_defaults, on: [:create]
 
   def set_defaults
     self.nation ||= region.try(:nation)
-    if City.where(slug: slug).first
-      self.slug += "-#{region.abbr}"
-      if City.where(slug: slug).first
-        fail "Can't have two cities with the same name in the same region. '#{slug}'"
-      end
-    end
+    return unless City.where(slug: slug).first
+    self.slug += "-#{region.abbr}"
+    return unless City.where(slug: slug).first
+    fail "Two cities with the same name in #{region}: '#{slug}'"
   end
 
   def abbr

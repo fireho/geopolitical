@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe City, type: :model do
-
   it 'should create a city' do
     expect { City.make! }.not_to raise_error
   end
@@ -18,15 +17,19 @@ describe City, type: :model do
   end
 
   it 'should append region abbr if it\'s a dup' do
-    sp, mg = Region.make(abbr: "SP"), Region.make(abbr: "MG")
+    sp, mg = Region.make(abbr: 'SP'), Region.make(abbr: 'MG')
     city1 = City.create(name: 'Patópolis', souls: 100_000, region: sp)
     expect(city1.slug).to eq('patopolis')
     city2 = City.create(name: 'Patópolis', souls: 100_000, region: mg)
     expect(city2.slug).to eq('patopolis-mg')
   end
 
-  describe 'instance' do
+  it 'should be searchable' do
+    city = City.make!(name: 'São Paulo')
+    expect(City.search('sao paulo').first).to eq(city)
+  end
 
+  describe 'instance' do
     let(:nation) { Nation.make! }
     let(:city) { City.make! }
 
@@ -39,7 +42,6 @@ describe City, type: :model do
       city.nation = nation
       expect(city.save).to be_truthy
     end
-
   end
 
   describe 'geoenabled' do
@@ -51,17 +53,13 @@ describe City, type: :model do
       city = City.make!
       expect(City.nearby(city.geom).first).to eql(city)
     end
-
   end
 
   describe 'validations' do
-
     it 'should have a name' do
       expect(City.new(name: '')).not_to be_valid
     end
-
   end
-
 end
 
 #   it { should have_indices :name, :geom, :area, [:region_id, :nation_id] }

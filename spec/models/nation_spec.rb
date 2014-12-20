@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe Nation, type: :model do
-
   it 'should create a nation' do
-    expect {  Nation.make! }.not_to raise_error
+    expect { Nation.make! }.not_to raise_error
   end
 
   it 'should require an abbr' do
@@ -20,6 +19,15 @@ describe Nation, type: :model do
     expect(Nation.first[:_id]).to eq('BR')
   end
 
+  it 'should have abbr as id' do
+    Nation.make!(abbr: 'BR')
+    expect(Nation.first.id).to eq('BR')
+  end
+
+  it 'should equal by abbr' do
+    expect(Nation.new(abbr: 'BR')).to eq(Nation.new(abbr: 'BR'))
+  end
+
   it 'may have a localized name' do
     I18n.locale = :'pt-BR'
     n = Nation.new(name: 'Brasil')
@@ -28,5 +36,4 @@ describe Nation, type: :model do
     n.name = 'Brazil'
     expect(n.name_translations).to eq('pt-BR' => 'Brasil', 'en' => 'Brazil')
   end
-
 end

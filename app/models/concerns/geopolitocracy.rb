@@ -7,9 +7,9 @@ module Geopolitocracy
     field :abbr,   type: String
     field :gid,    type: Integer  # geonames id
 
+    field :code,   type: String
     field :slug,   type: String # , default: -> { name }
     field :ascii,  type: String
-    field :code,   type: String
 
     validates :name, presence: true
     validates :slug, presence: true, uniqueness: true
@@ -18,10 +18,13 @@ module Geopolitocracy
     index name: 1
 
     before_validation :ensure_slug
-  end
 
-  def to_s
-    name || slug
+    scope :ordered, -> { order_by(name: 1) }
+
+    def self.search(txt)
+      txt.gsub!(/\s/, '-')
+      where(slug: /^#{ActiveSupport::Inflector.transliterate(txt)}/i)
+    end
   end
 
   def ensure_slug
@@ -30,11 +33,11 @@ module Geopolitocracy
 
   def slug=(txt)
     return unless txt
-    self[:slug] = ActiveSupport::Inflector.transliterate(txt).
-                  gsub(/\s/, '-').downcase
+    self[:slug] = ActiveSupport::Inflector.transliterate(txt)
+                  .gsub(/\s/, '-').downcase
   end
 
-  def self.search(txt)
-    where(slug: /#{ActiveSupport::Inflector.transliterate(txt)}/i)
+  def to_s
+    name || slug
   end
 end
