@@ -12,4 +12,5 @@ class Hood
   belongs_to :city
 
   validates :city, presence: true
+  validates :name, uniqueness: { scope: :city_id }
 end

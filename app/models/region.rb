@@ -13,5 +13,5 @@ class Region
   has_many :cities,  dependent: :destroy
 
   validates :nation, presence: true
-  validates :name,   presence: true,  uniqueness: { scope: :nation_id }
+  validates :name,   uniqueness: { scope: :nation_id }
 end

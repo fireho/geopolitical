@@ -21,7 +21,7 @@ class City
   belongs_to :nation
   has_many :hoods
 
-  validates :name, uniqueness: { scope: :nation_id }
+  validates :name, uniqueness: { scope: :region_id }
 
   before_validation :set_defaults, on: [:create]
 
