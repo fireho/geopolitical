@@ -3,13 +3,14 @@ module Geopolitocracy
   extend ActiveSupport::Concern
 
   included do
-    field :name,   type: String,  localize: true
+    field :name,   type: String, localize: true
     field :abbr,   type: String
-    field :gid,    type: Integer  # geonames id
+    field :nick,   type: String
+    field :gid,    type: Integer # geonames id
 
-    field :code,   type: String
-    field :slug,   type: String # , default: -> { name }
     field :ascii,  type: String
+    field :code,   type: String
+    field :slug,   type: String  # , default: -> { name }
 
     validates :name, presence: true
     validates :slug, presence: true, uniqueness: true

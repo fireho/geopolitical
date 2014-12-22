@@ -29,6 +29,30 @@ describe City, type: :model do
     expect(City.search('sao paulo').first).to eq(city)
   end
 
+  it 'should print nicely in #to_s' do
+    city = City.make(name: 'Ibitim', region: Region.make(abbr: 'MG'))
+    expect(city.to_s).to eq('Ibitim/MG')
+  end
+
+  it 'should print nicely in #to_s' do
+    region = Region.make(name: 'Acre', abbr: nil)
+    city = City.make(name: 'Ibitim', region: region)
+    expect(city.to_s).to eq('Ibitim/Acre')
+  end
+
+  it 'should print nicely in #with_region' do
+    region = Region.make(name: 'Acre', abbr: 'AC')
+    city = City.make(name: 'Ibitim', region: region)
+    expect(city.to_s).to eq('Ibitim/AC')
+  end
+
+  it 'should print nicely #with_nation' do
+    nation = Nation.make(abbr: 'BR')
+    region = Region.make(abbr: 'MG', nation: nation)
+    city = City.make(name: 'Ibitim', region: region, nation: nation)
+    expect(city.with_nation).to eq('Ibitim/MG/BR')
+  end
+
   describe 'instance' do
     let(:nation) { Nation.make! }
     let(:city) { City.make! }

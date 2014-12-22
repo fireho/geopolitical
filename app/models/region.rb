@@ -14,4 +14,5 @@ class Region
 
   validates :nation, presence: true
   validates :name,   uniqueness: { scope: :nation_id }
+  validates :abbr,   uniqueness: { scope: :nation_id }
 end

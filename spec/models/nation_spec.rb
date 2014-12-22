@@ -9,6 +9,10 @@ describe Nation, type: :model do
     expect(Nation.make(abbr: nil)).to_not be_valid
   end
 
+  it 'should assign upcase abbr' do
+    expect(Nation.make!(abbr: 'br').abbr).to eq('BR')
+  end
+
   it 'should validates uniqueness of abbr' do
     Nation.make!(abbr: 'BR')
     expect(Nation.make(abbr: 'BR')).to_not be_valid

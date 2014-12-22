@@ -21,9 +21,15 @@ class City
   belongs_to :nation
   has_many :hoods
 
-  validates :name, uniqueness: { scope: :region_id }
-
   before_validation :set_defaults, on: [:create]
+
+  validates :name, uniqueness: { scope: :region_id }
+  validate :region_inside_nation
+
+  def region_inside_nation
+    return if !region || region.nation == nation
+    errors.add(:region, "not inside Nation")
+  end
 
   def set_defaults
     self.nation ||= region.try(:nation)
@@ -33,16 +39,24 @@ class City
     fail "Two cities with the same name in #{region}: '#{slug}'"
   end
 
-  def abbr
-    return unless region || nation
-    region ? region.abbr : nation.abbr
-  end
-
   def ==(other)
     other && slug == other.slug
   end
 
   def <=>(other)
     slug <=> other.slug
+  end
+
+  def with_region
+    return name unless region
+    "#{name}/#{region.abbr || region.name}"
+  end
+
+  def with_nation
+    with_region + '/' + nation.abbr
+  end
+
+  def to_s
+    with_region
   end
 end
