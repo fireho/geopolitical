@@ -3,7 +3,9 @@
 # ignore(/\/.#.+/)
 
 guard :rubocop, all_on_start: false, keep_failed: false, notification: false, cli: ['--format', 'emacs'] do
+  watch(/^app\/(.+)\.rb$/)
   watch(/^lib\/(.+)\.rb$/)
+  watch(/^spec\/(.+)\.rb$/)
 end
 
 guard :rspec, cmd: 'bundle exec rspec' do

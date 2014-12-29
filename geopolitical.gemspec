@@ -12,10 +12,12 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/nofxx/geopolitical'
   s.summary     = 'Geopolitical models for mongoid.'
   s.description = 'Geopolitical models for mongoid as a rails engine.'
-  s.license   = 'MIT'
+  s.license     = 'MIT'
+  s.platform    = Gem::Platform::RUBY
 
-  s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md']
+  s.files = `git ls-files`.split("\n")
   s.test_files = Dir['spec/**/*']
+  s.require_paths = ['lib']
 
   s.add_dependency 'rails', '>= 4.0.0'
   s.add_dependency 'mongoid', '~> 4.0'
