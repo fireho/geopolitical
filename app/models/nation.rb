@@ -7,12 +7,14 @@ class Nation
 
   field :_id, type: String, default: -> { abbr }
 
-  field :zip,    type: String
+  field :tld,    type: String # Top level domain
   field :cash,   type: String
+  field :code3,  type: String # Iso 3166_3
   field :lang,   type: String # Official/main language
   field :langs,  type: Array  # All official languages
 
   alias_method :currency, :cash
+  alias_method :iso_3166_3, :code3
 
   validates :abbr, uniqueness: true, presence: true
 
