@@ -24,6 +24,14 @@ describe City, type: :model do
     expect(city2.slug).to eq('patopolis-mg')
   end
 
+  it 'should accept area phone code modified regex' do
+    expect(City.make(phone: '3555XXXX')).to be_valid
+  end
+
+  it 'should accept area postal code modified regex' do
+    expect(City.make(postal: '15123XXX')).to be_valid
+  end
+
   it 'should be searchable' do
     city = City.make!(name: 'São Paulo')
     expect(City.search('sao paulo').first).to eq(city)

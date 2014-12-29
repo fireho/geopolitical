@@ -3,14 +3,23 @@ module Geopolitocracy
   extend ActiveSupport::Concern
 
   included do
+    field :gid,    type: Integer # geonames id
+
     field :name,   type: String, localize: true
     field :abbr,   type: String
     field :nick,   type: String
-    field :gid,    type: Integer # geonames id
+
+    field :souls,  type: Integer  # Population
 
     field :ascii,  type: String
     field :code,   type: String
     field :slug,   type: String  # , default: -> { name }
+
+    field :postal,  type: String  # , default: -> { name }
+    field :phone,   type: String  # , default: -> { name }
+
+    alias_method :population, :souls
+    alias_method :iso_3166_2, :code
 
     validates :name, presence: true
     validates :slug, presence: true, uniqueness: true

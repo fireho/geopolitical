@@ -6,12 +6,8 @@ class City
   include Mongoid::Geospatial
   include Geopolitocracy
 
-  field :zip,    type: String
   field :area,   type: Integer  # m2 square area
-  field :souls,  type: Integer  # Population
   field :geom,   type: Point,   spatial: true
-
-  alias_method :population, :souls
 
   spatial_scope :geom
 
@@ -28,7 +24,7 @@ class City
 
   def region_inside_nation
     return if !region || region.nation == nation
-    errors.add(:region, "not inside Nation")
+    errors.add(:region, 'not inside Nation')
   end
 
   def set_defaults
@@ -37,6 +33,14 @@ class City
     self.slug += "-#{region.abbr}"
     return unless City.where(slug: slug).first
     fail "Two cities with the same name in #{region}: '#{slug}'"
+  end
+
+  def phone
+    self[:phone] || region.phone || nation.phone
+  end
+
+  def postal
+    self[:postal] || region.postal || nation.postal
   end
 
   def ==(other)

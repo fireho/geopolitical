@@ -9,4 +9,12 @@ describe Region, type: :model do
     city = Region.create(name: 'Amapá')
     expect(city.slug).to eq('amapa')
   end
+
+  it 'should accept area phone code modified regex' do
+    expect(Region.make(phone: '88XXXXXXXX')).to be_valid
+  end
+
+  it 'should accept area postal code modified regex' do
+    expect(Region.make(postal: '15XXXXXX')).to be_valid
+  end
 end
