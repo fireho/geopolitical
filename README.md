@@ -79,6 +79,3 @@ Use Geonames_local to populate data easily!
 
 
 This project rocks and uses MIT-LICENSE.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fireho/geopolitical/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

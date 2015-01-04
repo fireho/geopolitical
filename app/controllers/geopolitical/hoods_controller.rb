@@ -1,7 +1,6 @@
 module Geopolitical
   # Hoods Main Public Interface
   class HoodsController < GeopoliticalController
-    inherit_resources
     # belongs_to :city
     # respond_to :html, :xml, :json
     before_filter :load_relatives, only: [:new, :edit, :create, :update]

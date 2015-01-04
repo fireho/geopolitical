@@ -1,7 +1,6 @@
 module Geopolitical
   # Main Regions Controller
   class RegionsController < GeopoliticalController
-    inherit_resources
     before_filter :set_nations, only: [:new, :edit, :create, :update]
 
     def collection

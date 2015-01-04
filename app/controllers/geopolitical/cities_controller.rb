@@ -2,7 +2,6 @@ module Geopolitical
   # Cities Public Controller
   class CitiesController < GeopoliticalController
     # allow  "admin"
-    inherit_resources
     before_filter :load_relatives, only: [:new, :edit, :create, :update]
 
     def collection
