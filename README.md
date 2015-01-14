@@ -15,6 +15,8 @@ With
 I have
 ------
 
+[DB Pattern](http://dbpatterns.com/documents/54b5b9529785db781af57b4e)
+
 Nation > Region > City > Hood all with:
 
 * Names (with i18n and sanitized version)
