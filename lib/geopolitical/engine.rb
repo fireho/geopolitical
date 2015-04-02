@@ -1,5 +1,5 @@
 require 'mongoid'
-require 'mongoid_geospatial'
+require 'mongoid/geospatial'
 
 module Geopolitical
   # Rails Engine
