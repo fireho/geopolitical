@@ -8,7 +8,7 @@ class Nation
   field :_id, type: String, default: -> { abbr }
 
   field :tld,    type: String # Top level domain
-  field :cash,   type: String
+  field :cash,   type: String # Currency prefix
   field :code3,  type: String # Iso 3166_3
   field :lang,   type: String # Official/main language
   field :langs,  type: Array  # All official languages

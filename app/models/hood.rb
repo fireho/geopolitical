@@ -20,7 +20,11 @@ class Hood
     self[:postal] || city.postal
   end
 
- def as_json(opts = {})
-    { id: id.to_s, name: name, city: city }
+  def as_json(_opts = {})
+    {
+      id: id.to_s,
+      name: name,
+      city: city
+    }
   end
 end

@@ -39,8 +39,16 @@ class City
     self[:phone] || region.phone || nation.phone
   end
 
+  def phones
+    hoods.map(&:phone)
+  end
+
   def postal
     self[:postal] || region.postal || nation.postal
+  end
+
+  def postals
+    hoods.map(&:postal)
   end
 
   def ==(other)

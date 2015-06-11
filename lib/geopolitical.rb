@@ -1,4 +1,4 @@
-require 'geopolitical/engine' if Object.const_defined?("Rails")
+require 'geopolitical/engine' if Object.const_defined?('Rails')
 
 #
 # Geopolitical

@@ -15,6 +15,7 @@ class Region
   validates :name,   uniqueness: { scope: :nation_id }
   validates :abbr,   uniqueness: { scope: :nation_id }
 
+  # National dialing code / or International
   def phone
     self[:phone] || nation.phone
   end
