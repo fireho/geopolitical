@@ -16,6 +16,7 @@ env: CI="travis" JRUBY_OPTS="--server -Xcompile.invokedynamic=false -J-XX:+Tiere
 
 matrix:
   allow_failures:
+    - rvm: 1.9.3
     - rvm: ruby-head
     - rvm: jruby-head
 
