@@ -1,7 +1,7 @@
 language: ruby
 bundler_args: --without development
 rvm:
-  - 2.2.0
+  - 1.9.3
   - 2.2.2
   - ruby-head
   - jruby
@@ -21,3 +21,5 @@ matrix:
 
 services:
   - mongodb
+
+script: "bundle exec rspec"
