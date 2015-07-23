@@ -22,6 +22,10 @@ class City
   validates :name, uniqueness: { scope: :region_id }
   validate :region_inside_nation
 
+  index nation_id: 1
+  index name: 1, nation_id: 1
+  index({ region_id: 1 }, sparse: true)
+
   def region_inside_nation
     return if !region || region.nation == nation
     errors.add(:region, 'not inside Nation')

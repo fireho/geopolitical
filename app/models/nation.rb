@@ -7,6 +7,7 @@ class Nation
 
   field :_id, type: String, default: -> { abbr }
 
+  field :gid,    type: Integer # geonames id
   field :tld,    type: String # Top level domain
   field :cash,   type: String # Currency prefix
   field :code3,  type: String # Iso 3166_3
@@ -20,6 +21,8 @@ class Nation
 
   has_many :regions, dependent: :destroy
   has_many :cities,  dependent: :destroy
+
+  index lang: 1
 
   def abbr=(txt)
     self[:abbr] = txt && txt.upcase

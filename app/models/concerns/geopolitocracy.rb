@@ -3,7 +3,7 @@ module Geopolitocracy
   extend ActiveSupport::Concern
 
   included do
-    field :gid,    type: Integer # geonames id
+    # field :gid,    type: Integer # geonames id
 
     field :name,   type: String, localize: true
     field :abbr,   type: String
@@ -23,6 +23,7 @@ module Geopolitocracy
 
     validates :name, presence: true
     validates :slug, presence: true, uniqueness: true
+    validates :code, uniqueness: { allow_nil: true }
 
     index slug: 1
     index name: 1
@@ -31,9 +32,10 @@ module Geopolitocracy
 
     scope :ordered, -> { order_by(name: 1) }
 
-    def self.search(txt)
-      txt.gsub!(/\s/, '-')
-      where(slug: /^#{ActiveSupport::Inflector.transliterate(txt)}/i)
+    def self.search(txt, lazy = false)
+      key = ActiveSupport::Inflector.transliterate(txt).gsub(/\W/, '-')
+      char = lazy ? nil : '$'
+      where(slug: /^#{key}#{char}/i)
     end
   end
 
@@ -44,7 +46,7 @@ module Geopolitocracy
   def slug=(txt)
     return unless txt
     self[:slug] = ActiveSupport::Inflector.transliterate(txt)
-                  .gsub(/\s/, '-').downcase
+                  .gsub(/\W/, '-').downcase
   end
 
   def to_s
