@@ -6,8 +6,9 @@ class City
   include Mongoid::Geospatial
   include Geopolitocracy
 
-  field :area,   type: Integer  # m2 square area
-  field :geom,   type: Point,   spatial: true
+  field :area,    type: Integer  # m2 square area
+  field :geom,    type: Point,   spatial: true
+  # field :capital, type: String
 
   spatial_scope :geom
 
@@ -17,12 +18,18 @@ class City
   belongs_to :nation
   has_many :hoods
 
+  has_one :nation, as: :capital
+  has_one :region, as: :capital
+
   before_validation :set_defaults, on: [:create]
 
   validates :name, uniqueness: { scope: :region_id }
   validate :region_inside_nation
 
+  scope :population, -> { order_by(souls: -1) }
+
   index nation_id: 1
+  index souls: -1
   index name: 1, nation_id: 1
   index({ region_id: 1 }, sparse: true)
 
@@ -56,10 +63,12 @@ class City
   end
 
   def ==(other)
+    return unless other.is_a?(City)
     other && slug == other.slug
   end
 
   def <=>(other)
+    return unless other.is_a?(City)
     slug <=> other.slug
   end
 

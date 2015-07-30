@@ -92,6 +92,19 @@ describe City, type: :model do
       expect(City.new(name: '')).not_to be_valid
     end
   end
+
+  describe 'sorting' do
+    let(:cities) { [City.make!(name: 'Abadia', souls: 500),
+                    City.make!(name: 'Xangrilá', souls: 5000)] }
+
+    it 'should sort by name' do
+      expect(City.ordered).to eq cities
+    end
+
+    it 'should sort by pop' do
+      expect(City.population).to eq cities.reverse
+    end
+  end
 end
 
 #   it { should have_indices :name, :geom, :area, [:region_id, :nation_id] }
