@@ -1,8 +1,11 @@
 Geopolitical
 ============
 
-[![Code Climate](https://codeclimate.com/github/fireho/geopolitical.png)](https://codeclimate.com/github/fireho/geopolitical)
-[![Build Status](https://travis-ci.org/fireho/geopolitical.png)](https://travis-ci.org/fireho/geopolitical)
+[![Gem Version](https://badge.fury.io/rb/geopolitical.svg)](http://badge.fury.io/rb/geopolitical)
+[![Code Climate](https://codeclimate.com/github/fireho/geopolitical.svg)](https://codeclimate.com/github/fireho/geopolitical)
+[![Coverage Status](https://coveralls.io/repos/fireho/geopolitical/badge.svg?branch=master)](https://coveralls.io/r/fireho/geopolitical?branch=master)
+[![Dependency Status](https://gemnasium.com/fireho/geopolitical.svg)](https://gemnasium.com/fireho/geopolitical)
+[![Build Status](https://travis-ci.org/fireho/geopolitical.svg)](https://travis-ci.org/fireho/geopolitical)
 
 Geopolitical models ready to use!
 
