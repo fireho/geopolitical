@@ -13,3 +13,4 @@ gem 'rspec-rails'
 gem 'guard'
 gem 'guard-rspec'
 gem 'guard-rubocop'
+gem 'coveralls', require: false
