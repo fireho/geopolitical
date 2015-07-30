@@ -79,5 +79,10 @@ Populate
 Use Geonames_local to populate data easily!
 "geonames_local"(https://github.com/fireho/geonames_local)
 
+Links
+-----
+
+http://download.geonames.org/export/dump/
+http://www.statoids.com/ubr.html
 
 This project rocks and uses MIT-LICENSE.
