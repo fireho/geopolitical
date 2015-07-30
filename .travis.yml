@@ -1,7 +1,6 @@
 language: ruby
 bundler_args: --without development
 rvm:
-  - 1.9.3
   - 2.2.2
   - ruby-head
   - jruby
@@ -16,7 +15,6 @@ env: CI="travis"
 
 matrix:
   allow_failures:
-    - rvm: 1.9.3
     - rvm: jruby
     - rvm: ruby-head
 
