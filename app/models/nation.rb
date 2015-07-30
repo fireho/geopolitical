@@ -18,6 +18,7 @@ class Nation
   alias_method :iso_3166_3, :code3
 
   validates :abbr, uniqueness: true, presence: true
+  belongs_to :capital, class_name: 'City'
 
   has_many :regions, dependent: :destroy
   has_many :cities,  dependent: :destroy
