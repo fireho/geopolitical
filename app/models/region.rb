@@ -10,7 +10,8 @@ class Region
   belongs_to :nation
 
   has_many :cities,  dependent: :destroy
-  belongs_to :capital, class_name: 'City'
+
+  belongs_to :capital, inverse_of: :region_capital, class_name: 'City'
 
   validates :nation, presence: true
   validates :name,   uniqueness: { scope: :nation_id }

@@ -14,12 +14,12 @@ class City
 
   attr_writer :x, :y, :z
 
-  belongs_to :region
-  belongs_to :nation
+  belongs_to :region, inverse_of: :cities
+  belongs_to :nation, inverse_of: :cities
   has_many :hoods
 
-  has_one :nation, as: :capital
-  has_one :region, as: :capital
+  has_one :nation_governancy, as: :nation_capital
+  has_one :region_governancy, as: :region_capital
 
   before_validation :set_defaults, on: [:create]
 
