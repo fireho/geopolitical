@@ -18,8 +18,8 @@ class City
   belongs_to :nation, inverse_of: :cities
   has_many :hoods
 
-  has_one :nation_governancy, as: :nation_capital
-  has_one :region_governancy, as: :region_capital
+  has_one :nation_governancy, as: :nation_capital, class_name: 'Nation'
+  has_one :region_governancy, as: :region_capital, class_name: 'Region'
 
   before_validation :set_defaults, on: [:create]
 
