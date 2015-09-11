@@ -17,7 +17,8 @@ describe City, type: :model do
   end
 
   it 'should append region abbr if it\'s a dup' do
-    sp, mg = Region.make(abbr: 'SP'), Region.make(abbr: 'MG')
+    sp = Region.make(abbr: 'SP')
+    mg = Region.make(abbr: 'MG')
     city1 = City.create(name: 'Patópolis', souls: 100_000, region: sp)
     expect(city1.slug).to eq('patopolis')
     city2 = City.create(name: 'Patópolis', souls: 100_000, region: mg)
