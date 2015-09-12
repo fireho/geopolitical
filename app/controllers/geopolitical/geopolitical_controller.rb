@@ -11,7 +11,7 @@ module Geopolitical
     private
 
     def permitted_params
-      params.permit!
+      # params.permit(:name, :slug)
     end
   end
 end
