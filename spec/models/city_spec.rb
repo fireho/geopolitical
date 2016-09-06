@@ -99,8 +99,10 @@ describe City, type: :model do
   end
 
   describe 'sorting' do
-    let(:cities) { [City.make!(name: 'Abadia', souls: 500),
-                    City.make!(name: 'Xangrilá', souls: 5000)] }
+    let(:cities) do
+      [City.make!(name: 'Abadia', souls: 500),
+       City.make!(name: 'Xangrilá', souls: 5000)]
+    end
 
     it 'should sort by name' do
       expect(City.ordered).to eq cities

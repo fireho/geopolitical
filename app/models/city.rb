@@ -6,8 +6,8 @@ class City
   include Mongoid::Geospatial
   include Geopolitocracy
 
-  field :area,    type: Integer  # m2 square area
-  field :geom,    type: Point,   spatial: true
+  field :area,    type: Integer # m2 square area
+  field :geom,    type: Point, spatial: true
   # field :capital, type: String
 
   spatial_scope :geom
@@ -43,7 +43,7 @@ class City
     return unless City.where(slug: slug).first
     self.slug += "-#{region.abbr}"
     return unless City.where(slug: slug).first
-    fail "Two cities with the same name in #{region}: '#{slug}'"
+    raise "Two cities with the same name in #{region}: '#{slug}'"
   end
 
   def phone

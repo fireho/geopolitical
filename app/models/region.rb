@@ -9,7 +9,7 @@ class Region
 
   belongs_to :nation
 
-  has_many :cities,  dependent: :destroy
+  has_many :cities, dependent: :destroy
 
   belongs_to :capital, inverse_of: :region_capital, class_name: 'City'
 

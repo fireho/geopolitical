@@ -14,8 +14,8 @@ class Nation
   field :lang,   type: String # Official/main language
   field :langs,  type: Array  # All official languages
 
-  alias_method :currency, :cash
-  alias_method :iso_3166_3, :code3
+  alias currency cash
+  alias iso_3166_3 code3
 
   validates :abbr, uniqueness: true, presence: true
 
