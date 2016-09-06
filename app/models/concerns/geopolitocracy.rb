@@ -37,6 +37,7 @@ module Geopolitocracy
     end
 
     def name=(txt)
+      return unless txt
       txt = txt.titleize unless txt =~ /[A-Z][a-z]/
       super txt
     end

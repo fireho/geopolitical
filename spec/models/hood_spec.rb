@@ -17,6 +17,10 @@ describe Hood, type: :model do
     expect(Hood.make(name: '')).to_not be_valid
   end
 
+  it 'should have a name' do
+    expect(Hood.make(name: nil)).to_not be_valid
+  end
+
   it 'should have city slug' do
     city = City.make!(name: 'Gotham')
     hood = Hood.make(name: 'JD. ITALIA', city: city).tap(&:save)
