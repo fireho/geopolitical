@@ -1,4 +1,4 @@
 # :nodoc:
 module Geopolitical
-  VERSION = '1.0.3'.freeze
+  VERSION = '1.0.5'.freeze
 end
