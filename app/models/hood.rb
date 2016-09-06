@@ -12,6 +12,11 @@ class Hood
   validates :city, presence: true
   validates :name, uniqueness: { scope: :city_id }
 
+  def ensure_slug
+    return unless city
+    self.slug ||= "#{city.slug}-#{name}"
+  end
+
   def phone
     self[:phone] || city.phone
   end

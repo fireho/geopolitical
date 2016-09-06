@@ -5,15 +5,15 @@ module Geopolitocracy
   included do
     # field :gid,    type: Integer # geonames id
 
-    field :name,   type: String, localize: true
-    field :abbr,   type: String
-    field :nick,   type: String
+    field :name,    type: String, localize: true
+    field :abbr,    type: String
+    field :nick,    type: String
 
-    field :souls,  type: Integer  # Population
+    field :souls,   type: Fixnum  # Population
 
-    field :ascii,  type: String
-    field :code,   type: String
-    field :slug,   type: String  # , default: -> { name }
+    field :ascii,   type: String
+    field :code,    type: String
+    field :slug,    type: String  # , default: -> { name }
 
     field :postal,  type: String  # , default: -> { name }
     field :phone,   type: String  # , default: -> { name }
@@ -32,24 +32,29 @@ module Geopolitocracy
 
     scope :ordered, -> { order_by(name: 1) }
 
+    def ensure_slug
+      self.slug ||= name
+    end
+
+    def name=(txt)
+      txt = txt.titleize unless txt =~ /[A-Z][a-z]/
+      super txt
+    end
+
+    def slug=(txt)
+      return unless txt
+      self[:slug] = ActiveSupport::Inflector
+                    .transliterate(txt).delete('.').gsub(/\W/, '-').downcase
+    end
+
+    def to_s
+      name || slug
+    end
+
     def self.search(txt, lazy = false)
       key = ActiveSupport::Inflector.transliterate(txt).gsub(/\W/, '-')
       char = lazy ? nil : '$'
       where(slug: /^#{key}#{char}/i)
     end
-  end
-
-  def ensure_slug
-    self.slug ||= name
-  end
-
-  def slug=(txt)
-    return unless txt
-    self[:slug] = ActiveSupport::Inflector.transliterate(txt)
-                  .gsub(/\W/, '-').downcase
-  end
-
-  def to_s
-    name || slug
   end
 end

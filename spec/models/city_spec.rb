@@ -16,6 +16,10 @@ describe City, type: :model do
     expect(city.slug).to eq('patopolis')
   end
 
+  it 'should avoid dots it\'s own slug' do
+    expect(City.create(name: 'Mte. Sto. de MG').slug).to eq('mte-sto-de-mg')
+  end
+
   it 'should append region abbr if it\'s a dup' do
     sp = Region.make(abbr: 'SP')
     mg = Region.make(abbr: 'MG')
