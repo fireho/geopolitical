@@ -23,6 +23,16 @@ describe Nation, type: :model do
     expect(Nation.first[:_id]).to eq('BR')
   end
 
+  it 'should have langs' do
+    Nation.make!(abbr: 'BR', langs: %w(pt-BR es en))
+    expect(Nation.first.langs.join(',')).to eq('pt-BR,es,en')
+  end
+
+  it 'should have lang' do
+    Nation.make!(abbr: 'BR', lang: 'pt-BR')
+    expect(Nation.first.lang).to eq('pt-BR')
+  end
+
   it 'should have abbr as id' do
     Nation.make!(abbr: 'BR')
     expect(Nation.first.id).to eq('BR')

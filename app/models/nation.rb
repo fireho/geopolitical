@@ -19,7 +19,8 @@ class Nation
 
   validates :abbr, uniqueness: true, presence: true
 
-  belongs_to :capital, inverse_of: :nation_capital, class_name: 'City'
+  belongs_to :capital, inverse_of: :nation_capital, class_name: 'City',
+                       optional: true
 
   has_many :regions, dependent: :destroy
   has_many :cities,  dependent: :destroy

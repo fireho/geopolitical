@@ -7,7 +7,7 @@ describe City, type: :model do
   end
 
   it 'should accept some params and utf8' do
-    city = City.create(name: 'Patópolis', slug: 'patopolis', souls: 100_000)
+    city = City.make(name: 'Patópolis', slug: 'patopolis', souls: 100_000)
     expect(city).to be_valid
   end
 

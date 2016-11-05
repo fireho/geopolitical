@@ -14,7 +14,7 @@ class City
 
   attr_writer :x, :y, :z
 
-  belongs_to :region, inverse_of: :cities
+  belongs_to :region, inverse_of: :cities, optional: true
   belongs_to :nation, inverse_of: :cities
   has_many :hoods
 
