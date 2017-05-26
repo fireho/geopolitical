@@ -41,7 +41,7 @@ class City
   def set_defaults
     self.nation ||= region.try(:nation)
     return unless City.where(slug: slug).first
-    self.slug += "-#{region.abbr}"
+    self.slug += "-#{region.abbr || region.slug}"
     return unless City.where(slug: slug).first
     raise "Two cities with the same name in #{region}: '#{slug}'"
   end
