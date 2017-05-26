@@ -9,7 +9,7 @@ module Geopolitocracy
     field :abbr,    type: String
     field :nick,    type: String
 
-    field :souls,   type: Fixnum  # Population
+    field :souls,   type: Integer # Population
 
     field :ascii,   type: String
     field :code,    type: String
@@ -23,7 +23,7 @@ module Geopolitocracy
 
     validates :name, presence: true
     validates :slug, presence: true, uniqueness: true
-    validates :code, uniqueness: { allow_nil: true }
+    validates :code, uniqueness: { scope: :nation_id, allow_nil: true }
 
     index slug: 1
     index name: 1
@@ -55,7 +55,7 @@ module Geopolitocracy
     def self.search(txt, lazy = false)
       key = ActiveSupport::Inflector.transliterate(txt).gsub(/\W/, '-')
       char = lazy ? nil : '$'
-      where(slug: /^#{key}#{char}/i)
+      where(slug: /^#{key.downcase}#{char}/)
     end
   end
 end
