@@ -20,11 +20,14 @@ class Hood
   validates :city, presence: true
   validates :name, uniqueness: { scope: :city_id, message: 'must be unique within its city' }
   # `abbr` (from Geopolitocracy) could also be validated for uniqueness within the city if used.
-  # validates :abbr, uniqueness: { scope: :city_id, allow_nil: true, message: "must be unique within its city if provided" }
+  # validates :abbr,
+  #           uniqueness: { scope: :city_id, allow_nil: true, message: "must be unique within its city if provided" }
 
   index({ city_id: 1, name: 1 }, { unique: true })
   # index({ city_id: 1, abbr: 1 }, { unique: true, sparse: true }) # If abbr is used and needs to be unique
   index({ slug: 1 }, { unique: true }) # Hood slugs are globally unique due to city_slug prefix
+
+  before_validation :ensure_slug_for_hood
 
   # Ensures the slug is generated correctly for the hood.
   # This method is typically called via a `before_validation` callback
@@ -37,9 +40,10 @@ class Hood
   # this method will effectively overwrite it if `city` is present.
   # Consider the order of operations or make `Geopolitocracy`'s slug generation more flexible
   # if this causes issues. For now, this assumes `slug` might be nil or a simple name parameterization.
-  def ensure_slug
-    # Let Geopolitocracy's ensure_slug run first (it's included, so its callbacks apply)
-    super # Calls the ensure_slug from Geopolitocracy if it exists and is a callback
+  def ensure_slug_for_hood
+    # Geopolitocracy's `ensure_slug_is_generated` callback will have already run,
+    # potentially setting a slug based on the hood's name.
+    # This method refines it by prepending the city's slug.
 
     return unless city.present?
 
@@ -115,15 +119,22 @@ class Hood
   #
   # @param other [Hood] The other hood to compare with.
   # @return [-1, 0, 1, nil] -1, 0, or 1 if `other` is a Hood; nil otherwise.
+  # rubocop:disable Metrics/AbcSize
   def <=>(other)
     return nil unless other.is_a?(Hood)
 
-    if city_id == other.city_id
-      name <=> other.name
-    elsif city && other.city # Both have cities, compare city names/slugs
-      (city.slug || city.name) <=> (other.city.slug || other.city.name)
-    else # Fallback if cities are not loaded or one is nil
-      city_id <=> other.city_id # Compare by city_id as a last resort
-    end
+    # Compare by city first, then by hood name
+    city_comparison = if city_id == other.city_id
+                        0
+                      elsif city && other.city
+                        (city.slug || city.name) <=> (other.city.slug || other.city.name)
+                      else
+                        city_id <=> other.city_id # Fallback
+                      end
+
+    return city_comparison unless city_comparison&.zero? # If cities are different, result is based on them
+
+    name <=> other.name # If cities are the same (or comparison is 0), compare by hood name
   end
+  # rubocop:enable Metrics/AbcSize
 end
