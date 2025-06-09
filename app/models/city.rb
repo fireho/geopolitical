@@ -1,114 +1,197 @@
+# Represents a city within a nation and, optionally, a region.
 #
-# Cities
+# Cities have a name, geographical location (`geom`), area, and can be associated
+# with neighborhoods (`Hood`). They also inherit common geopolitical attributes
+# from the `Geopolitocracy` concern (like `name`, `abbr`, `slug`, `pop`, `phone`, `postal`).
 #
+# The city's `slug` is automatically generated and suffixed with its region's
+# abbreviation to ensure uniqueness across regions.
 class City
   include Mongoid::Document
-  include Mongoid::Geospatial
-  include Geopolitocracy
+  include Mongoid::Geospatial # For GIS capabilities like `geom` field and spatial queries
+  include Geopolitocracy     # Provides common geopolitical fields and slug generation
 
-  field :area,    type: Integer # m2 square area
+  # @!attribute [rw] area
+  #   @return [Integer] The square area of the city in square meters (m2).
+  field :area,    type: Integer
+  # @!attribute [rw] geom
+  #   @return [Point] The geographical coordinates (longitude, latitude) of the city.
+  #   Indexed for spatial queries.
   field :geom,    type: Point, spatial: true
+  # @!attribute [rw] rbbr
+  #   @return [String] Cached abbreviation of the city's region.
+  #   Used internally, primarily to construct unique slugs.
+  #   Alias: `region_abbr` (writer only, getter is custom).
   field :rbbr,    type: String, as: :region_abbr
 
+  # Enables spatial queries on the `geom` field.
   spatial_scope :geom
 
+  # @!attribute [rw] region
+  #   @return [Region, nil] The region this city belongs to. Optional.
   belongs_to :region, inverse_of: :cities, optional: true
+  # @!attribute [rw] nation
+  #   @return [Nation] The nation this city belongs to. Required.
   belongs_to :nation, inverse_of: :cities
-  has_many :hoods
 
+  # @!attribute [rw] hoods
+  #   @return [Mongoid::Relations::Targets::Enumerable<Hood>] Neighborhoods within this city.
+  has_many :hoods, dependent: :destroy # Assuming hoods should be destroyed if city is
+
+  # @!attribute [r] nation_governancy
+  #   @return [Nation, nil] The nation for which this city is the capital.
+  #   This association signifies that the city is a national capital.
   has_one :nation_governancy, as: :nation_capital, class_name: 'Nation'
+  # @!attribute [r] region_governancy
+  #   @return [Region, nil] The region for which this city is the capital.
+  #   This association signifies that the city is a regional capital.
   has_one :region_governancy, as: :region_capital, class_name: 'Region'
 
   before_validation :ensure_derived_fields_and_slug
 
-  validates :name, uniqueness: { scope: :region_id }
-  validate :region_inside_nation
+  validates :name, uniqueness: { scope: :region_id, message: "must be unique within its region" }
+  validates :nation, presence: true
+  validate :region_inside_nation_if_region_present
 
-  scope :population, -> { order_by(pop: -1) }
+  # @!method self.population
+  #   @return [Mongoid::Criteria] Cities ordered by population in descending order.
+  #   Assumes `pop` field is provided by `Geopolitocracy`.
+  scope :population, -> { order_by(pop: :desc) }
 
   index({ slug: 1 }, unique: true)
-  index({ name: 1, nation_id: 1 })
-  index({ nation_id: 1 })
-  index({ region_id: 1 }, sparse: true)
-  index({ pop: -1 })
+  index({ name: 1, nation_id: 1 }) # For lookups by name within a nation
+  index({ nation_id: 1 })          # For finding all cities in a nation
+  index({ region_id: 1 }, sparse: true) # For finding cities in a region, sparse if region is optional
+  index({ pop: -1 })               # For sorting by population
 
-  def region_inside_nation
-    return if !region || region.nation == nation
+  # Validates that if a city is associated with a region, that region
+  # belongs to the same nation as the city.
+  def region_inside_nation_if_region_present
+    return unless region.present? # Only validate if region is set
+    return if nation.nil? # Avoid error if nation is not yet set (covered by presence validation)
+    return if region.nation == nation
 
-    errors.add(:region, 'not inside Nation')
+    errors.add(:region, "must be within the same nation as the city. Region's nation: #{region.nation&.abbr}, City's nation: #{nation.abbr}.")
   end
 
-  # Custom getter for region_abbr that populates rbbr if needed
+  # Gets the region's abbreviation (`rbbr`).
+  # If `rbbr` is not set and the city has a region, it populates `rbbr`
+  # with the region's abbreviation or name. This value is then cached on the city.
+  #
+  # @return [String, nil] The region's abbreviation or name, or nil if not determinable.
   def region_abbr
-    val = read_attribute(:rbbr)
-    if val.blank? && region
-      val = region.abbr.presence || region.name.presence
-      write_attribute(:rbbr, val) # Store it for future use and for callbacks
+    current_rbbr = read_attribute(:rbbr)
+    if current_rbbr.blank? && region.present?
+      new_rbbr = region.abbr.presence || region.name.presence
+      write_attribute(:rbbr, new_rbbr) if new_rbbr.present?
+      return new_rbbr
     end
-    val
+    current_rbbr
   end
 
+  # Callback executed before validation to:
+  # 1. Derive the `nation` from the `region` if `nation` is not set and `region` is.
+  # 2. Ensure `rbbr` (region abbreviation) is populated if possible.
+  # 3. Append the (lowercase) region abbreviation to the `slug` (generated by `Geopolitocracy`)
+  #    to ensure city slugs are unique, e.g., "cityname-regionabbr".
   def ensure_derived_fields_and_slug
-    # Ensure nation is derived from region if not set and region exists
-    if region
-      self.nation ||= region.nation
-      write_attribute(:rbbr, region.abbr.presence || region.name.presence) if read_attribute(:rbbr).blank?
+    # 1. Derive nation from region if possible and not already set
+    if region.present? && nation.blank?
+      self.nation = region.nation
     end
-    current_rbbr = read_attribute(:rbbr) # Use the potentially just-set rbbr
 
-    # Geopolitocracy's ensure_slug runs before_validation, typically setting slug ||= name.
-    # We need to append our suffix to that.
-    # The Geopolitocracy concern should have already set a base slug (e.g., from name).
-    return unless current_rbbr.present? && slug.present?
+    # 2. Ensure rbbr is populated (uses the getter's logic which caches)
+    # This will attempt to set self.rbbr if it's blank and region is present.
+    loaded_region_abbr = self.region_abbr # Call getter to ensure rbbr is loaded/set
 
-    slug_suffix = "-#{current_rbbr}"
+    # 3. Modify slug (from Geopolitocracy) to include region abbreviation for uniqueness.
+    # Geopolitocracy's ensure_slug typically sets slug based on name.
+    return unless loaded_region_abbr.present? && slug.present?
+
+    slug_suffix = "-#{loaded_region_abbr.downcase}" # Standardize to lowercase for slugs
     # Only append if the slug doesn't already end with this specific suffix.
-    # This handles cases where slug might be `name-rbbr` already or just `name`.
-    return if slug.end_with?(slug_suffix)
-
-    # If the slug is just the name (common after Geopolitocracy's ensure_slug),
-    # or if it's some other base slug that doesn't include our suffix.
-    self.slug += slug_suffix
+    self.slug += slug_suffix unless slug.ends_with?(slug_suffix)
   end
 
+  # Retrieves the phone number for the city.
+  # Falls back to the region's phone, then the nation's phone if the city's is not set.
+  # Assumes `phone` field is provided by `Geopolitocracy`.
+  #
+  # @return [String, nil] The phone number.
   def phone
-    self[:phone] || region.phone || nation.phone
+    self[:phone] || region&.phone || nation&.phone
   end
 
+  # Collects unique, non-nil phone numbers from all associated hoods.
+  # Assumes `phone` field is provided by `Geopolitocracy` on Hood model.
+  #
+  # @return [Array<String>] An array of unique phone numbers.
   def phones
-    hoods.map(&:phone)
+    hoods.map(&:phone).compact.uniq
   end
 
+  # Retrieves the postal code for the city.
+  # Falls back to the region's postal code, then the nation's if the city's is not set.
+  # Assumes `postal` field is provided by `Geopolitocracy`.
+  #
+  # @return [String, nil] The postal code.
   def postal
-    self[:postal] || region.postal || nation.postal
+    self[:postal] || region&.postal || nation&.postal
   end
 
+  # Collects unique, non-nil postal codes from all associated hoods.
+  # Assumes `postal` field is provided by `Geopolitocracy` on Hood model.
+  #
+  # @return [Array<String>] An array of unique postal codes.
   def postals
-    hoods.map(&:postal)
+    hoods.map(&:postal).compact.uniq
   end
 
+  # Compares this city with another object for equality.
+  # Cities are considered equal if their slugs are the same.
+  #
+  # @param other [Object] The object to compare with.
+  # @return [Boolean] True if the other object is a City and has the same slug, false otherwise.
   def ==(other)
-    return unless other.is_a?(City)
-
-    other && slug == other.slug
+    other.is_a?(City) && slug == other.slug
   end
 
+  # Compares this city with another city for sorting purposes.
+  # Comparison is based on the city's slug.
+  #
+  # @param other [City] The other city to compare with.
+  # @return [-1, 0, 1, nil] -1, 0, or 1 if `other` is a City; nil otherwise.
   def <=>(other)
-    return unless other.is_a?(City)
-
+    return nil unless other.is_a?(City)
     slug <=> other.slug
   end
 
+  # Returns the city's name, optionally suffixed with its region's abbreviation.
+  #
+  # @param separator [String] The string to use between the name and region abbreviation.
+  # @return [String] The formatted name.
   def with_region(separator = '/')
-    return name unless region_abbr
-
-    "#{name}#{separator}#{region_abbr}"
+    # Use the getter for region_abbr to ensure it's loaded if available
+    current_region_abbr = self.region_abbr
+    return name unless current_region_abbr.present?
+    "#{name}#{separator}#{current_region_abbr}"
   end
 
+  # Returns the city's name, suffixed with its region's and nation's abbreviations.
+  # e.g., "CityName/RegionAbbr/NationAbbr"
+  #
+  # @param separator [String] The string to use as a separator.
+  # @return [String] The formatted name string.
   def with_nation(separator = '/')
-    with_region(separator) + "#{separator}#{nation.abbr}"
+    base = with_region(separator) # Relies on with_region using the (potentially now loaded) region_abbr
+    # Ensure nation and nation.abbr are present before appending
+    base += "#{separator}#{nation.abbr}" if nation&.abbr.present?
+    base
   end
 
+  # Default string representation of the city.
+  #
+  # @return [String] The city name, possibly with its region abbreviation.
   def to_s
     with_region
   end

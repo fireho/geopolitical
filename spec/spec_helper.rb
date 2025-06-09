@@ -5,10 +5,12 @@ require 'rspec/rails'
 require 'faker'
 require 'fabrication'
 require 'fabrication/syntax/make'
+require 'mongoid-rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
 
 Fabrication.configure do |config|
   # config.fabricator_path = 'data/fabricators'
@@ -25,6 +27,9 @@ RSpec.configure do |config|
   # config.mock_with :mocha
   # config.mock_with :flexmock
   # config.mock_with :rr
+  config.use_active_record = false
+  config.include Mongoid::Matchers, type: :model
+
   config.after(:each) do
     Mongoid.purge!
     # $stdout = File.new( '/tmp/lastspec', 'w' )
