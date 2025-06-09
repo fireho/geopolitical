@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents a region, province, or state within a nation.
 #
 # Regions belong to a nation and can have multiple cities. They can also have

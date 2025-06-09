@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents a city within a nation and, optionally, a region.
 #
 # Cities have a name, geographical location (`geom`), area, and can be associated

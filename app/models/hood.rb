@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Represents a neighborhood (hood) within a city.
 #
 # Hoods belong to a city and inherit common geopolitical attributes
