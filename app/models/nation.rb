@@ -27,6 +27,11 @@ class Nation
 
   index lang: 1
 
+  # Would miss this in a world...
+  def planet
+    :earth # id: 1
+  end
+
   def abbr=(txt)
     self[:abbr] = txt && txt.upcase
   end

@@ -19,28 +19,56 @@ class City
   has_one :nation_governancy, as: :nation_capital, class_name: 'Nation'
   has_one :region_governancy, as: :region_capital, class_name: 'Region'
 
-  before_validation :set_defaults, on: [:create]
+  before_validation :ensure_derived_fields_and_slug
 
   validates :name, uniqueness: { scope: :region_id }
   validate :region_inside_nation
 
-  scope :population, -> { order_by(souls: -1) }
+  scope :population, -> { order_by(pop: -1) }
 
   index({ slug: 1 }, unique: true)
   index({ name: 1, nation_id: 1 })
   index({ nation_id: 1 })
   index({ region_id: 1 }, sparse: true)
-  index({ souls: -1 })
+  index({ pop: -1 })
 
   def region_inside_nation
     return if !region || region.nation == nation
+
     errors.add(:region, 'not inside Nation')
   end
 
-  def set_defaults
-    self.nation ||= region&.nation
-    self.rbbr ||= region&.abbr || region&.slug
-    self.slug += "-#{rbbr}" if rbbr && !slug.include?(rbbr)
+  # Custom getter for region_abbr that populates rbbr if needed
+  def region_abbr
+    val = read_attribute(:rbbr)
+    if val.blank? && region
+      val = region.abbr.presence || region.name.presence
+      write_attribute(:rbbr, val) # Store it for future use and for callbacks
+    end
+    val
+  end
+
+  def ensure_derived_fields_and_slug
+    # Ensure nation is derived from region if not set and region exists
+    if region
+      self.nation ||= region.nation
+      write_attribute(:rbbr, region.abbr.presence || region.name.presence) if read_attribute(:rbbr).blank?
+    end
+    current_rbbr = read_attribute(:rbbr) # Use the potentially just-set rbbr
+
+    # Geopolitocracy's ensure_slug runs before_validation, typically setting slug ||= name.
+    # We need to append our suffix to that.
+    # The Geopolitocracy concern should have already set a base slug (e.g., from name).
+    return unless current_rbbr.present? && slug.present?
+
+    slug_suffix = "-#{current_rbbr}"
+    # Only append if the slug doesn't already end with this specific suffix.
+    # This handles cases where slug might be `name-rbbr` already or just `name`.
+    return if slug.end_with?(slug_suffix)
+
+    # If the slug is just the name (common after Geopolitocracy's ensure_slug),
+    # or if it's some other base slug that doesn't include our suffix.
+    self.slug += slug_suffix
   end
 
   def phone
@@ -61,16 +89,19 @@ class City
 
   def ==(other)
     return unless other.is_a?(City)
+
     other && slug == other.slug
   end
 
   def <=>(other)
     return unless other.is_a?(City)
+
     slug <=> other.slug
   end
 
   def with_region(separator = '/')
     return name unless region_abbr
+
     "#{name}#{separator}#{region_abbr}"
   end
 

@@ -6,10 +6,11 @@ module Geopolitocracy
     # field :gid,    type: Integer # geonames id
 
     field :name,    type: String, localize: true
+    field :alt,     type: String, localize: true
     field :abbr,    type: String
     field :nick,    type: String
 
-    field :souls,   type: Integer # Population
+    field :pop,     type: Integer # Population
 
     field :ascii,   type: String
     field :code,    type: String
@@ -18,7 +19,8 @@ module Geopolitocracy
     field :postal,  type: String  # , default: -> { name }
     field :phone,   type: String  # , default: -> { name }
 
-    alias_method :population, :souls
+    alias_method :souls, :pop
+    alias_method :population, :pop
     alias_method :iso_3166_2, :code
 
     validates :name, presence: true
@@ -47,7 +49,10 @@ module Geopolitocracy
       return unless txt
 
       self[:slug] = ActiveSupport::Inflector
-                    .transliterate(txt).delete('.').gsub(/\W/, '-').downcase
+                      .transliterate(txt)
+                      .delete('.')
+                      .gsub(/\W/, '-')
+                      .downcase
     end
 
     def to_s
