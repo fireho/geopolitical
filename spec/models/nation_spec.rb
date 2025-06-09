@@ -24,7 +24,7 @@ describe Nation, type: :model do
   end
 
   it 'should have langs' do
-    Nation.make!(abbr: 'BR', langs: %w(pt-BR es en))
+    Nation.make!(abbr: 'BR', langs: %w[pt-BR es en])
     expect(Nation.first.langs.join(',')).to eq('pt-BR,es,en')
   end
 

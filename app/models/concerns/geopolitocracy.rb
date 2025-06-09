@@ -38,12 +38,14 @@ module Geopolitocracy
 
     def name=(txt)
       return unless txt
+
       txt = txt.titleize unless txt =~ /[A-Z][a-z]/
       super txt
     end
 
     def slug=(txt)
       return unless txt
+
       self[:slug] = ActiveSupport::Inflector
                     .transliterate(txt).delete('.').gsub(/\W/, '-').downcase
     end

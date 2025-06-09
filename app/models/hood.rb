@@ -5,7 +5,7 @@ class Hood
   include Mongoid::Document
   include Geopolitocracy
 
-  field :rank,  type: Integer
+  field :rank, type: Integer
 
   belongs_to :city
 
@@ -14,6 +14,7 @@ class Hood
 
   def ensure_slug
     return unless city
+
     self.slug ||= "#{city.slug}-#{name}"
   end
 

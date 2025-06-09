@@ -33,6 +33,7 @@ class Nation
 
   def ==(other)
     return unless other
+
     abbr == other.abbr
   end
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 require 'spec_helper'
 
 describe City, type: :model do
@@ -7,13 +6,18 @@ describe City, type: :model do
   end
 
   it 'should accept some params and utf8' do
-    city = City.make(name: 'Patópolis', slug: 'patopolis', souls: 100_000)
+    city = City.make(name: 'Patópolis', slug: 'patopolis')
     expect(city).to be_valid
   end
 
   it 'should create it\'s own slug' do
-    city = City.create(name: 'Patópolis', souls: 100_000)
+    city = City.create(name: 'Patópolis')
     expect(city.slug).to eq('patopolis')
+  end
+
+  it 'should have a souls count' do
+    city = City.create(name: 'Patópolis', souls: 100_000)
+    expect(city.souls).to eq(100_000)
   end
 
   it 'should avoid dots it\'s own slug' do
@@ -23,9 +27,9 @@ describe City, type: :model do
   it 'should append region abbr if it\'s a dup' do
     sp = Region.make(abbr: 'SP')
     mg = Region.make(abbr: 'MG')
-    city1 = City.create(name: 'Patópolis', souls: 100_000, region: sp)
-    expect(city1.slug).to eq('patopolis')
-    city2 = City.create(name: 'Patópolis', souls: 100_000, region: mg)
+    city1 = City.create(name: 'Patópolis', region: sp)
+    expect(city1.slug).to eq('patopolis-sp')
+    city2 = City.create(name: 'Patópolis', region: mg)
     expect(city2.slug).to eq('patopolis-mg')
   end
 
@@ -57,6 +61,12 @@ describe City, type: :model do
     region = Region.make(name: 'Acre', abbr: 'AC')
     city = City.make(name: 'Ibitim', region: region)
     expect(city.to_s).to eq('Ibitim/AC')
+  end
+
+  it 'should print nicely in #with_region diff separator' do
+    region = Region.make(name: 'Acre', abbr: 'AC')
+    city = City.make(name: 'Ibitim', region: region)
+    expect(city.with_region('-')).to eq('Ibitim-AC')
   end
 
   it 'should print nicely #with_nation' do
