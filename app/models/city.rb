@@ -9,7 +9,7 @@
 class City
   include Mongoid::Document
   include Mongoid::Geospatial # For GIS capabilities like `geom` field and spatial queries
-  include Geopolitocracy     # Provides common geopolitical fields and slug generation
+  include Geopolitocracy
 
   # @!attribute [rw] area
   #   @return [Integer] The square area of the city in square meters (m2).
@@ -49,20 +49,20 @@ class City
 
   before_validation :ensure_derived_fields_and_slug
 
-  validates :name, uniqueness: { scope: :region_id, message: "must be unique within its region" }
+  validates :name, uniqueness: { scope: :region_id, message: 'must be unique within its region' }
   validates :nation, presence: true
   validate :region_inside_nation_if_region_present
 
   # @!method self.population
   #   @return [Mongoid::Criteria] Cities ordered by population in descending order.
-  #   Assumes `pop` field is provided by `Geopolitocracy`.
-  scope :population, -> { order_by(pop: :desc) }
+  scope :population, -> { order_by(souls: :desc) }
 
   index({ slug: 1 }, unique: true)
   index({ name: 1, nation_id: 1 }) # For lookups by name within a nation
   index({ nation_id: 1 })          # For finding all cities in a nation
   index({ region_id: 1 }, sparse: true) # For finding cities in a region, sparse if region is optional
-  index({ pop: -1 })               # For sorting by population
+  index({ souls: -1 }) # For sorting by population count
+  index({ geom: '2dsphere' }) # Explicit 2dsphere index for geospatial queries
 
   # Validates that if a city is associated with a region, that region
   # belongs to the same nation as the city.
@@ -71,7 +71,11 @@ class City
     return if nation.nil? # Avoid error if nation is not yet set (covered by presence validation)
     return if region.nation == nation
 
-    errors.add(:region, "must be within the same nation as the city. Region's nation: #{region.nation&.abbr}, City's nation: #{nation.abbr}.")
+    errors.add(
+      :region,
+      'must be within the same nation as the city. ' \
+      "Region's nation: #{region.nation&.abbr}, City's nation: #{nation.abbr}."
+    )
   end
 
   # Gets the region's abbreviation (`rbbr`).
@@ -96,13 +100,11 @@ class City
   #    to ensure city slugs are unique, e.g., "cityname-regionabbr".
   def ensure_derived_fields_and_slug
     # 1. Derive nation from region if possible and not already set
-    if region.present? && nation.blank?
-      self.nation = region.nation
-    end
+    self.nation = region.nation if region.present? && nation.blank?
 
     # 2. Ensure rbbr is populated (uses the getter's logic which caches)
     # This will attempt to set self.rbbr if it's blank and region is present.
-    loaded_region_abbr = self.region_abbr # Call getter to ensure rbbr is loaded/set
+    loaded_region_abbr = region_abbr # Call getter to ensure rbbr is loaded/set
 
     # 3. Modify slug (from Geopolitocracy) to include region abbreviation for uniqueness.
     # Geopolitocracy's ensure_slug typically sets slug based on name.
@@ -163,6 +165,7 @@ class City
   # @return [-1, 0, 1, nil] -1, 0, or 1 if `other` is a City; nil otherwise.
   def <=>(other)
     return nil unless other.is_a?(City)
+
     slug <=> other.slug
   end
 
@@ -172,8 +175,9 @@ class City
   # @return [String] The formatted name.
   def with_region(separator = '/')
     # Use the getter for region_abbr to ensure it's loaded if available
-    current_region_abbr = self.region_abbr
+    current_region_abbr = region_abbr
     return name unless current_region_abbr.present?
+
     "#{name}#{separator}#{current_region_abbr}"
   end
 

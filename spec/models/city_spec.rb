@@ -24,21 +24,25 @@ describe City, type: :model do
     subject(:city) { Fabricate.build(:city, name: 'Populonia', pop: 100_000, nation: nation_br) }
 
     it { is_expected.to respond_to(:name) }
-    it { is_expected.to respond_to(:pop) }
-    it { is_expected.to respond_to(:population) } # Alias for pop
+    it { is_expected.to respond_to(:souls) } # Direct field
+    it { is_expected.to respond_to(:population) } # Alias for souls
     it { is_expected.to respond_to(:area) }
     it { is_expected.to respond_to(:geom) }
     it { is_expected.to respond_to(:rbbr) } # region_abbr internal field
     it { is_expected.to respond_to(:region_abbr) } # custom getter
 
-    it 'stores population correctly' do
-      puts city.inspect
+    it 'stores population via souls field' do
+      expect(city.souls).to eq(100_000)
+    end
+
+    it 'stores population via population alias' do
       expect(city.population).to eq(100_000)
     end
 
-    it 'stores population correctly' do
-      expect(city.pop).to eq(100_000)
-    end
+    # This test was causing NoMethodError: undefined method `count` for an instance of Integer
+    # 'population' (alias for 'souls') returns an Integer, not a collection.
+    # The two tests above already cover checking the value.
+    # Removing this incorrect test.
   end
 
   describe 'slug generation' do
@@ -324,10 +328,13 @@ describe City, type: :model do
   end
 
   describe 'scopes and search' do
-    let!(:city_a) { Fabricate(:city, name: 'Abadia', pop: 500, nation: nation_br, region: region_mg) } # Slug: abadia-mg
+    # Slug: abadia-mg
+    let!(:city_a) do
+      Fabricate(:city, name: 'Abadia', souls: 500, nation: nation_br, region: region_mg)
+    end
     # Slug: xangrila-sp
     let!(:city_x) do
-      Fabricate(:city, name: 'Xangrilá', pop: 5000, nation: nation_br, region: region_sp)
+      Fabricate(:city, name: 'Xangrilá', souls: 5000, nation: nation_br, region: region_sp)
     end
     context '.ordered (by name)' do
       it 'sorts cities by name ascending' do

@@ -29,9 +29,9 @@ module Geopolitocracy
     #   @return [String, nil] A nickname or colloquial name for the entity.
     field :nick,    type: String, default: nil
 
-    # @!attribute [rw] pop
-    #   @return [Integer, nil] The population count of the entity.
-    field :pop,     type: Integer, default: nil
+    # @!attribute [rw] souls
+    #   @return [Integer, nil] The population count of the entity. Note: `pop` was taken by mongoid
+    field :souls, type: Integer, default: nil
     # @!attribute [rw] ascii
     #   @return [String, nil] An ASCII-only representation of the name, useful for systems that don't support Unicode.
     field :ascii,   type: String, default: nil
@@ -51,14 +51,10 @@ module Geopolitocracy
     field :phone,   type: String, default: nil
 
     # @!group Aliases
-    # @!attribute [rw] souls
-    #   @see #pop
-    alias_method :souls, :pop
-    alias_method :souls=, :pop=
-    # @!attribute [rw] population
-    #   @see #pop
-    alias_method :population, :pop
-    alias_method :population=, :pop=
+    # @!attribute [rw] population # This alias might still be problematic if Mongoid defines a 'population' method.
+    #   @see #souls  # For now, keeping it as it was a direct alias to 'pop'.
+    alias_method :population, :souls
+    alias_method :population=, :souls=
 
     # @!group Validations
     validates :name, presence: true
@@ -93,7 +89,7 @@ module Geopolitocracy
     # It titleizes the input string if it doesn't already contain mixed-case characters.
     # @param new_name [String] The new name.
     def name=(new_name)
-      if new_name.present? && !(new_name =~ /[A-Z][a-z]/)
+      if new_name.present? && new_name !~ /[A-Z][a-z]/
         super(new_name.titleize)
       else
         super(new_name)

@@ -20,7 +20,6 @@ class Hood
   # `abbr` (from Geopolitocracy) could also be validated for uniqueness within the city if used.
   # validates :abbr, uniqueness: { scope: :city_id, allow_nil: true, message: "must be unique within its city if provided" }
 
-
   index({ city_id: 1, name: 1 }, { unique: true })
   # index({ city_id: 1, abbr: 1 }, { unique: true, sparse: true }) # If abbr is used and needs to be unique
 
@@ -114,6 +113,7 @@ class Hood
   # @return [-1, 0, 1, nil] -1, 0, or 1 if `other` is a Hood; nil otherwise.
   def <=>(other)
     return nil unless other.is_a?(Hood)
+
     if city_id == other.city_id
       name <=> other.name
     elsif city && other.city # Both have cities, compare city names/slugs
