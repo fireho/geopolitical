@@ -19,14 +19,14 @@ Gem::Specification.new do |s|
     regions, cities, and neighborhoods. Includes common attributes, relationships,
     geospatial capabilities, and helper methods. Designed as a Rails engine for easy integration.
   DESC
-  s.license     = 'MIT'
+  s.license = 'MIT'
 
   # Specify which files should be added to the gem.
   # `git ls-files` is a common approach but ensure your .gitignore is effective.
-  s.files         = `git ls-files -z`.split("\x0").reject do |f|
+  s.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/}) # Exclude test/spec/features
   end
-  s.bindir        = "exe" # If you have executables
+  s.bindir        = 'exe' # If you have executables
   s.executables   = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
   s.require_paths = ['lib']
 
