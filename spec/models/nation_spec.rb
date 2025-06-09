@@ -244,11 +244,11 @@ describe Nation, type: :model do
     end
 
     it 'can perform an exact slug match' do
-      exact_results = Nation.search('united-states', true)
+      exact_results = Nation.search('united-states', exact: true)
       expect(exact_results.first).to eq(nation1)
       expect(exact_results.count).to eq(1)
 
-      partial_results = Nation.search('united', true)
+      partial_results = Nation.search('united', exact: true)
       expect(partial_results.count).to eq(0)
     end
   end

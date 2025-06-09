@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 # Specs for the Hood model, covering its attributes, validations,
@@ -280,11 +282,11 @@ describe Hood, type: :model do
     end
 
     it 'can perform an exact slug match' do
-      exact_results = Hood.search('metroville-tr-green-valley', true)
+      exact_results = Hood.search('metroville-tr-green-valley', exact: true)
       expect(exact_results.first).to eq(hood1)
       expect(exact_results.count).to eq(1)
 
-      partial_results = Hood.search('metroville-tr-green', true) # Not an exact match
+      partial_results = Hood.search('metroville-tr-green', exact: true) # Not an exact match
       expect(partial_results.count).to eq(0)
     end
   end

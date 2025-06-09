@@ -221,11 +221,11 @@ describe Region, type: :model do
     end
 
     it 'can perform an exact slug match' do
-      exact_results = Region.search('north-province', true)
+      exact_results = Region.search('north-province', exact: true)
       expect(exact_results.first).to eq(region1)
       expect(exact_results.count).to eq(1)
 
-      partial_results = Region.search('north', true)
+      partial_results = Region.search('north', exact: true)
       expect(partial_results.count).to eq(0)
     end
   end

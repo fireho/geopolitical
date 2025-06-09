@@ -92,7 +92,7 @@ module Geopolitocracy
       if new_name.present? && new_name !~ /[A-Z][a-z]/
         super(new_name.titleize)
       else
-        super(new_name)
+        super
       end
     end
 
@@ -104,7 +104,7 @@ module Geopolitocracy
       if new_slug_source.present?
         generated_slug = ActiveSupport::Inflector.transliterate(new_slug_source.to_s)
                                                  .delete('.') # Remove periods first
-                                                 .gsub(/\W+/, '-') # Replace one or more non-word characters with a single hyphen
+                                                 .gsub(/\W+/, '-') # Replace one or more non-word with - hyphen
                                                  .gsub(/^-+|-+$/, '') # Remove leading/trailing hyphens
                                                  .downcase
         super(generated_slug)
@@ -126,7 +126,7 @@ module Geopolitocracy
     # @param exact_match [Boolean] If true, searches for an exact match of the parameterized query.
     #                             If false (default), searches for slugs starting with the parameterized query.
     # @return [Mongoid::Criteria] A criteria object for fetching matching documents.
-    def self.search(query_text, exact_match = false)
+    def self.search(query_text, exact: false)
       return none if query_text.blank? # Return an empty criteria if query is blank
 
       # Use the same slug generation logic as the setter for consistency
@@ -141,7 +141,7 @@ module Geopolitocracy
 
       return none if parameterized_query.blank?
 
-      if exact_match
+      if exact # matches the exact slug
         where(slug: parameterized_query)
       else
         where(slug: /^#{Regexp.escape(parameterized_query)}/)

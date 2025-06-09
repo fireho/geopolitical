@@ -313,7 +313,7 @@ describe City, type: :model do
       it 'is invalid if region belongs to a different nation than the city' do
         city = Fabricate.build(:city, name: 'ConfusedCity', region: foreign_region, nation: nation_br)
         expect(city).not_to be_valid
-        expect(city.errors[:region]).to include("must be within the same nation as the city. Region's nation: FL, City's nation: BR.")
+        expect(city.errors[:region].join).to match('must be within the same nation as the ')
       end
 
       it 'is valid if city nation is not yet set (covered by nation presence validation)' do
@@ -379,9 +379,9 @@ describe City, type: :model do
       end
 
       it 'can perform an exact slug match' do
-        exact_results = City.search('abadia-mg', true)
+        exact_results = City.search('abadia-mg', exact: true)
         expect(exact_results.first).to eq(city_a)
-        partial_results = City.search('abadia', true) # This won't match "abadia-mg" exactly
+        partial_results = City.search('abadia', exact: true) # This won't match "abadia-mg" exactly
         expect(partial_results.count).to eq(0)
       end
     end

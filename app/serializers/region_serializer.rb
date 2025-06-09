@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Serializes Region objects for API responses.
 #
 # Includes essential region attributes like name, abbreviation, timezone,

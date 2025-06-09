@@ -3,6 +3,7 @@ AllCops:
     - "spec/dummy/**/*"
     - "vendor/**/*"
     - "db/schema.rb"
+    - "bin/**/*"
   NewCops: enable
 
 Metrics/BlockLength:
