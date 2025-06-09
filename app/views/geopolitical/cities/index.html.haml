@@ -24,7 +24,7 @@
               %td= city.zip
               %td= city.region.name if city.region
               %td= city.nation.name
-              %td= city.souls
+              %td= city.pop
               %td{:align => 'right'}
                 = link_to 'Edit', edit_city_path(city)
                 = link_to 'Destroy', city, :confirm => 'Destroy city?', :method => :delete

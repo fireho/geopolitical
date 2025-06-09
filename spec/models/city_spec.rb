@@ -15,9 +15,9 @@ describe City, type: :model do
     expect(city.slug).to eq('patopolis')
   end
 
-  it 'should have a souls count' do
-    city = City.create(name: 'Patópolis', souls: 100_000)
-    expect(city.souls).to eq(100_000)
+  it 'should have a pop count' do
+    city = City.create(name: 'Patópolis', pop: 100_000)
+    expect(city.pop).to eq(100_000)
   end
 
   it 'should avoid dots it\'s own slug' do
@@ -110,8 +110,8 @@ describe City, type: :model do
 
   describe 'sorting' do
     let(:cities) do
-      [City.make!(name: 'Abadia', souls: 500),
-       City.make!(name: 'Xangrilá', souls: 5000)]
+      [City.make!(name: 'Abadia', pop: 500),
+       City.make!(name: 'Xangrilá', pop: 5000)]
     end
 
     it 'should sort by name' do

@@ -22,7 +22,7 @@
                 = link_to hood.slug , hood
               %td= hood.city.name if hood.city
               %td= hood.city.name
-              %td= hood.souls
+              %td= hood.pop
               %td{:align => 'right'}
                 = link_to 'Edit', edit_hood_path(hood)
                 = link_to 'Destroy', hood, :confirm => 'Destroy hood?', :method => :delete

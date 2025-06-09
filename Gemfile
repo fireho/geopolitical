@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'mongoid', '>= 8.0.0'
 
 gemspec
+
+gem "geonames_local", path: "../geonames_local"
 
 gem 'rails', '~> 8.0.0'
 gem 'faker'
@@ -13,3 +14,4 @@ gem 'guard'
 gem 'ruby-lsp'
 gem 'guard-rspec'
 gem 'guard-rubocop'
+
