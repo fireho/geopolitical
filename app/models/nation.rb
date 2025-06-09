@@ -46,6 +46,7 @@ class Nation
 
   validates :abbr, presence: true # Name presence is validated in Geopolitocracy
   validates_uniqueness_of :abbr, case_sensitive: false
+  validates :slug, uniqueness: { message: 'must be unique' } # Slug presence is validated in Geopolitocracy
 
   # @!attribute [rw] capital
   #   @return [City] The capital city of this nation.
@@ -59,6 +60,7 @@ class Nation
   has_many :cities,  dependent: :destroy
 
   index({ name: 1 }) # Index for sorting by name, common operation
+  index({ slug: 1 }, { unique: true }) # Slugs must be globally unique for nations
 
   # A whimsical method indicating the planet.
   # In a more complex system, this might point to a Planet model.

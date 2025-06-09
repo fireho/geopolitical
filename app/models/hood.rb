@@ -18,12 +18,13 @@ class Hood
   belongs_to :city
 
   validates :city, presence: true
-  validates :name, uniqueness: { scope: :city_id, message: "must be unique within its city" }
+  validates :name, uniqueness: { scope: :city_id, message: 'must be unique within its city' }
   # `abbr` (from Geopolitocracy) could also be validated for uniqueness within the city if used.
   # validates :abbr, uniqueness: { scope: :city_id, allow_nil: true, message: "must be unique within its city if provided" }
 
   index({ city_id: 1, name: 1 }, { unique: true })
   # index({ city_id: 1, abbr: 1 }, { unique: true, sparse: true }) # If abbr is used and needs to be unique
+  index({ slug: 1 }, { unique: true }) # Hood slugs are globally unique due to city_slug prefix
 
   # Ensures the slug is generated correctly for the hood.
   # This method is typically called via a `before_validation` callback
@@ -40,18 +41,19 @@ class Hood
     # Let Geopolitocracy's ensure_slug run first (it's included, so its callbacks apply)
     super # Calls the ensure_slug from Geopolitocracy if it exists and is a callback
 
-    if city.present?
-      parameterized_name = (name || '').parameterize
-      # If Geopolitocracy set a slug, and it's just the parameterized name,
-      # or if the slug is still blank, then we build our composite slug.
-      if self.slug == parameterized_name || self.slug.blank?
-        self.slug = "#{city.slug}-#{parameterized_name}" if parameterized_name.present?
-      elsif !self.slug.start_with?("#{city.slug}-")
-        # If a slug exists but doesn't seem to be our composite one, prepend city slug.
-        # This case might be rare if Geopolitocracy's slug is simple.
-        self.slug = "#{city.slug}-#{self.slug}"
-      end
+    return unless city.present?
+
+    parameterized_name = (name || '').parameterize
+    # If Geopolitocracy set a slug, and it's just the parameterized name,
+    # or if the slug is still blank, then we build our composite slug.
+    if slug == parameterized_name || slug.blank?
+      self.slug = "#{city.slug}-#{parameterized_name}" if parameterized_name.present?
+    elsif !slug.start_with?("#{city.slug}-")
+      # If a slug exists but doesn't seem to be our composite one, prepend city slug.
+      # This case might be rare if Geopolitocracy's slug is simple.
+      self.slug = "#{city.slug}-#{slug}"
     end
+
     # If slug is still blank after all this (e.g. name was blank), Geopolitocracy's validation might catch it.
   end
 

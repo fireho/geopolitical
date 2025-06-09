@@ -37,6 +37,7 @@ class Region
   index({ abbr: 1 }, { sparse: true }) # Sparse index as abbr can be nil
   index({ nation_id: 1, name: 1 }, { unique: true }) # Enforce uniqueness of name within nation
   index({ nation_id: 1, abbr: 1 }, { unique: true, sparse: true }) # Enforce uniqueness of abbr within nation
+  index({ nation_id: 1, slug: 1 }, { unique: true }) # Enforce uniqueness of slug within nation
 
   # Retrieves the phone dialing code for the region.
   # Falls back to the nation's phone code if the region's is not set.

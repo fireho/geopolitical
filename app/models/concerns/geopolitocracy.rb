@@ -58,11 +58,11 @@ module Geopolitocracy
 
     # @!group Validations
     validates :name, presence: true
-    validates :slug, presence: true, uniqueness: { message: 'must be unique' }
+    validates :slug, presence: true # Uniqueness will be handled by including models with appropriate scope
     # @!endgroup
 
     # @!group Indexes
-    index({ slug: 1 }, { unique: true })
+    index({ slug: 1 }) # Index for querying by slug, uniqueness handled by including models
     index({ name: 1 }) # For sorting and lookups by name
     index({ abbr: 1 }, { sparse: true }) # Sparse as abbr can be nil
     index({ code: 1 }, { sparse: true }) # Sparse as code can be nil
