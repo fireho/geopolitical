@@ -7,11 +7,13 @@ gemspec
 # Core Rails dependency for the dummy app / engine testing.
 # Version constraint should ideally match the engine's supported Rails versions.
 gem 'rails', '~> 8.0.0'
+gem "bson", github: "mongodb/bson-ruby", branch: "master"
 
 # Local development dependency, not required by default in the application.
 # Used for populating Geonames data.
 
 group :development, :test do
+  gem "mongoid-rspec"
   # Test suite
   gem 'rspec-rails' # For Rails integration with RSpec
   gem 'fabrication' # Fixture replacement
