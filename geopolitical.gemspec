@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir['spec/**/*']
   s.require_paths = ['lib']
 
-  s.add_dependency 'mongoid', '>= 4.0'
+  s.add_dependency 'mongoid', '>= 8.0.0'
   s.add_dependency 'mongoid-geospatial', '>= 4.0'
+  s.add_development_dependency 'rails', '~> 8.0.0'
 end
