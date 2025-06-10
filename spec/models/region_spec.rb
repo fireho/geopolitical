@@ -229,4 +229,49 @@ describe Region, type: :model do
       expect(partial_results.count).to eq(0)
     end
   end
+
+  describe 'specific cases' do
+    describe 'brasil' do
+      let(:brasil) { Fabricate(:nation, name: 'Brasil', abbr: 'BR', phone: '55', postal: '00000-000') }
+      let!(:rio_de_janeiro) { Fabricate(:region, name: 'Rio de Janeiro', nation: brasil, abbr: 'RJ') }
+      let!(:rio_de_janeiro_city) { Fabricate(:city, name: 'Rio de Janeiro', nation: brasil, region: rio_de_janeiro) }
+
+      it 'has Rio de Janeiro as regions and city' do
+        expect(Region.where(nation: brasil).pluck(:name)).to include('Rio de Janeiro')
+        expect(City.where(nation: brasil).pluck(:name)).to include('Rio de Janeiro')
+      end
+
+      it 'handles special characters in names' do
+        geohash = {
+          id: '1234567',
+          name_translations: { 'en' => 'São Paulo', 'pt' => 'São Paulo' },
+          abbr: 'SP', souls: 12_000_000, nation: brasil, code: '35'
+        }
+        region = Region.create(geohash)
+        expect(region).to be_valid
+        expect(region.slug).to eql('sao-paulo')
+      end
+    end
+
+    describe 'argentina' do
+      let(:argentina) { Fabricate(:nation, name: 'Argentina', abbr: 'AR', phone: '54', postal: 'C1000') }
+      let!(:buenos_aires) { Fabricate(:region, name: 'Buenos Aires', nation: argentina, abbr: 'B') }
+      let!(:cordoba) { Fabricate(:region, name: 'Córdoba', nation: argentina, abbr: 'C') }
+
+      it 'has Buenos Aires and Córdoba as regions' do
+        expect(Region.where(nation: argentina).pluck(:name)).to include('Buenos Aires', 'Córdoba')
+      end
+
+      it 'lots of terra del fuego' do
+        geohash = {
+          id: '3834450',
+          name_translations: { 'en' => 'Tierra del Fuego', 'es' => 'Provincia de Tierra del Fuego ...' },
+          abbr: 'T', souls: 190_641, nation: argentina, code: '23'
+        }
+        region = Region.create(geohash)
+        expect(region).to be_valid
+        expect(region.slug).to eql('tierra-del-fuego')
+      end
+    end
+  end
 end
