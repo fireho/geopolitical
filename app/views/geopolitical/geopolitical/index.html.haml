@@ -1,21 +1,19 @@
-%h1 Geopolitical
+%h1= t('geopolitical.title')
 %hr
 
 - [Nation, Region, City, Hood].each do |klass|
   .block
     %h3.title
-      = link_to klass.model_name.human.pluralize, send("#{klass.to_s.downcase.pluralize}_path")
+      = link_to klass.model_name.human(count: 2), send("#{klass.to_s.downcase.pluralize}_path")
       %small= klass.count
     .right.links
-      = link_to "+ #{klass.model_name.human}", send("new_#{klass.to_s.downcase}_path"), :class => "small blue nice button radius"
-
+      = link_to t('geopolitical.actions.new', model: klass.model_name.human),
+        send("new_#{klass.to_s.downcase}_path")
 
 %br
 %h4
-  Use Geonames_local to populate data easily!
-  %small= link_to "geonames_local", "http://github.com/nofxx/geonames_local"
+  = t('geopolitical.dashboard.populate')
+  %small= link_to 'geonames_local', 'https://github.com/nofxx/geonames_local'
 
 %hr
-%p Minimalist layout by NoCSS Co.
-%p= link_to "fireho/geopolitical", "http://github.com/fireho/geopolitical"
-%p= link_to "< Back", "/"
+%p= link_to 'fireho/geopolitical', 'https://github.com/fireho/geopolitical'

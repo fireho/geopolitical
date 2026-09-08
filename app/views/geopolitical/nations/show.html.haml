@@ -3,18 +3,18 @@
     %h1= @nation.name
   .row
     %p
-      %b Abbr:
-      #{@nation.abbr} #{@nation.code}
+      %b #{Nation.human_attribute_name(:abbr)}:
+      #{@nation.abbr} #{@nation.code3}
     %p
-      %b Slug:
+      %b #{Nation.human_attribute_name(:slug)}:
       = @nation.slug
     %p
-      %b Lang:
+      %b #{Nation.human_attribute_name(:lang)}:
       = @nation.lang
     %p
-      %b Cash:
+      %b #{Nation.human_attribute_name(:cash)}:
       = @nation.cash
   .row
-    = link_to 'Edit', edit_nation_path(@nation)
+    = link_to t('geopolitical.actions.edit'), edit_nation_path(@nation)
     |
-    = link_to 'Back', nations_path
+    = link_to t('geopolitical.actions.back'), nations_path

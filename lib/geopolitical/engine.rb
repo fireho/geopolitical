@@ -2,6 +2,7 @@
 
 require 'mongoid'
 require 'mongoid/geospatial'
+require 'haml'
 
 module Geopolitical
   # Rails Engine

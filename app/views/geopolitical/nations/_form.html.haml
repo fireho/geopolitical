@@ -1,11 +1,15 @@
 .container
   .row
     .page-header
-      %h1= @nation.new_record? ? "New Nation" : "Editing '#{@nation}'"
+      %h1
+        - key = @nation.new_record? ? 'new' : 'edit'
+        = t("geopolitical.forms.#{key}", model: Nation.model_name.human)
   .row
-
-    = form_for(@nation) do |f|
-      =# f.error_messages
+    = form_with model: @nation, url: (@nation.persisted? ? nation_path(@nation) : nations_path) do |f|
+      - if @nation.errors.any?
+        %ul
+          - @nation.errors.full_messages.each do |message|
+            %li= message
       .form-group
         = f.label :name
         = f.text_field :name
@@ -19,8 +23,7 @@
         = f.label :lang
         = f.text_field :lang
       .form-group
-        = f.label :abbr
-        = f.text_field :abbr
-
+        = f.label :cash
+        = f.text_field :cash
       .forms-buttons
-        = f.submit
+        = f.submit t('geopolitical.actions.save')

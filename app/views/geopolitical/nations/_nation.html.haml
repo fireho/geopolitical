@@ -1,0 +1,5 @@
+.nation
+  %h4= link_to nation.name, nation_path(nation)
+  %span.gray= nation.abbr
+  .right
+    = link_to t('geopolitical.actions.edit'), edit_nation_path(nation)

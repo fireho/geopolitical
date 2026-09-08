@@ -1,0 +1,77 @@
+pt:
+  mongoid:
+    models:
+      nation:
+        one: País
+        other: Países
+      region:
+        one: Região
+        other: Regiões
+      city:
+        one: Cidade
+        other: Cidades
+      hood:
+        one: Bairro
+        other: Bairros
+    attributes:
+      nation:
+        name: Nome
+        abbr: Sigla
+        slug: Slug
+        code: Código
+        code3: ISO
+        lang: Idioma
+        langs: Idiomas
+        cash: Moeda
+        tld: Domínio
+        souls: População
+        postal: CEP
+        phone: Telefone
+        capital_id: Capital
+      region:
+        name: Nome
+        abbr: Sigla
+        slug: Slug
+        nation_id: País
+        timezone: Fuso horário
+        souls: População
+        postal: CEP
+        phone: Telefone
+        cities: Cidades
+      city:
+        name: Nome
+        slug: Slug
+        nation_id: País
+        region_id: Região
+        area: Área
+        geom: Coordenadas
+        souls: População
+        postal: CEP
+        phone: Telefone
+      hood:
+        name: Nome
+        slug: Slug
+        city_id: Cidade
+        rank: Ordem
+        souls: População
+        postal: CEP
+        phone: Telefone
+  geopolitical:
+    title: Geopolítico
+    actions:
+      # "Adicionar/Editando" avoid the novo/nova gender agreement of %{model}
+      new: "Adicionar %{model}"
+      edit: Editar
+      destroy: Remover
+      back: Voltar
+      save: Salvar
+      confirm_destroy: "Remover %{model}?"
+    forms:
+      new: "Adicionar %{model}"
+      edit: "Editando %{model}"
+    flash:
+      created: Registro criado com sucesso.
+      updated: Registro atualizado com sucesso.
+      destroyed: Registro removido com sucesso.
+    dashboard:
+      populate: Use o geonames_local para popular os dados facilmente!

@@ -1,7 +1,4 @@
 .hood
-  %h4= link_to hood.name, hood
-  %span.gray
+  %h4= link_to hood.name, hood_path(hood)
   .right
-    = link_to "Editar", edit_hood_path(hood) if admin?
-  .right
-    .gray= time_ago_in_words hood.created_at
+    = link_to t('geopolitical.actions.edit'), edit_hood_path(hood)

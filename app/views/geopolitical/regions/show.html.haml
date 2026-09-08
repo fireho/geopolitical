@@ -3,15 +3,15 @@
     %h1= @region.name
   .row
     %p
-      %b Slug:
+      %b #{Region.human_attribute_name(:slug)}:
       = @region.slug
     %p
-      %b Nation:
+      %b #{Region.human_attribute_name(:nation_id)}:
       = link_to @region.nation, @region.nation
     %p
-      %b Sigla:
+      %b #{Region.human_attribute_name(:abbr)}:
       = @region.abbr
   .row
-    = link_to 'Edit', edit_region_path(@region)
+    = link_to t('geopolitical.actions.edit'), edit_region_path(@region)
     |
-    = link_to 'Back', regions_path
+    = link_to t('geopolitical.actions.back'), regions_path

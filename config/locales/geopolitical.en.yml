@@ -1,0 +1,76 @@
+en:
+  mongoid:
+    models:
+      nation:
+        one: Nation
+        other: Nations
+      region:
+        one: Region
+        other: Regions
+      city:
+        one: City
+        other: Cities
+      hood:
+        one: Hood
+        other: Hoods
+    attributes:
+      nation:
+        name: Name
+        abbr: Abbr
+        slug: Slug
+        code: Code
+        code3: ISO
+        lang: Lang
+        langs: Languages
+        cash: Cash
+        tld: TLD
+        souls: Population
+        postal: Postal
+        phone: Phone
+        capital_id: Capital
+      region:
+        name: Name
+        abbr: Abbr
+        slug: Slug
+        nation_id: Nation
+        timezone: Timezone
+        souls: Population
+        postal: Postal
+        phone: Phone
+        cities: Cities
+      city:
+        name: Name
+        slug: Slug
+        nation_id: Nation
+        region_id: Region
+        area: Area
+        geom: Coordinates
+        souls: Population
+        postal: Postal
+        phone: Phone
+      hood:
+        name: Name
+        slug: Slug
+        city_id: City
+        rank: Rank
+        souls: Population
+        postal: Postal
+        phone: Phone
+  geopolitical:
+    title: Geopolitical
+    actions:
+      new: "New %{model}"
+      edit: Edit
+      destroy: Destroy
+      back: Back
+      save: Save
+      confirm_destroy: "Destroy %{model}?"
+    forms:
+      new: "New %{model}"
+      edit: "Editing %{model}"
+    flash:
+      created: "%{model} created."
+      updated: "%{model} updated."
+      destroyed: "%{model} deleted."
+    dashboard:
+      populate: Use geonames_local to populate data easily!

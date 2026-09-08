@@ -1,35 +1,32 @@
 .container
   .row
     .page-header
-      %h1.title Cities
-      =# render "shared/filter"
-      = link_to "New City", new_city_path
+      %h1.title= City.model_name.human(count: 2)
+      = link_to t('geopolitical.actions.new', model: City.model_name.human), new_city_path
   .row
     .content
       %table.table
         %thead
           %tr
-            %th Nome
-            %th ZIP
-            %th Region
-            %th Nation
-            %th Population
+            %th= City.human_attribute_name(:name)
+            %th= City.human_attribute_name(:postal)
+            %th= City.human_attribute_name(:region_id)
+            %th= City.human_attribute_name(:nation_id)
+            %th= City.human_attribute_name(:souls)
             %th
         %tbody
-          - for city in @cities
+          - @cities.each do |city|
             %tr
               %td
                 = city.name
-                = link_to city.slug , city
-              %td= city.zip
-              %td= city.region.name if city.region
-              %td= city.nation.name
-              %td= city.pop
-              %td{:align => 'right'}
-                = link_to 'Edit', edit_city_path(city)
-                = link_to 'Destroy', city, :confirm => 'Destroy city?', :method => :delete
-
+                = link_to city.slug, city_path(city)
+              %td= city.postal
+              %td= city.region&.name
+              %td= city.nation&.name
+              %td= city.souls
+              %td{align: 'right'}
+                = link_to t('geopolitical.actions.edit'), edit_city_path(city)
+                = button_to t('geopolitical.actions.destroy'), city_path(city), method: :delete,
+                  data: { turbo_confirm: t('geopolitical.actions.confirm_destroy', model: City.model_name.human) }
   .row
-    .pagination= paginate @cities
-  .row
-    = link_to 'Back', root_path
+    = link_to t('geopolitical.actions.back'), root_path

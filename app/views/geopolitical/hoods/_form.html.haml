@@ -1,27 +1,26 @@
 .container
   .row
     .page-header
-      %h1= @hood.new_record? ? "New Hood" : "Editing Hood"
+      %h1
+        - key = @hood.new_record? ? 'new' : 'edit'
+        = t("geopolitical.forms.#{key}", model: Hood.model_name.human)
   .row
     .content
-      = form_for(@hood, :html => {:class => "form"}) do |f|
-        - f.object.errors.each do |err|
-          = err
-        .grid_3
-          .forms_btns
-            .hooddata
-              .field{"data-role" => "fieldcontain"}
-                = f.label :city
-                = f.select :city_id, @cities
-              .group
-                = f.label :name
-                = f.text_field :name, :size => 30
-              .group
-                = f.label :slug
-                = f.text_field :slug, :size => 30
-              .field
-                = f.label :pop
-                = f.text_field :pop, :size => 30
-              = f.submit
-        .grid_8
-          #map=# gmaps(@map, false, false)
+      = form_with model: @hood, url: (@hood.persisted? ? hood_path(@hood) : hoods_path), html: { class: 'form' } do |f|
+        - if @hood.errors.any?
+          %ul
+            - @hood.errors.full_messages.each do |message|
+              %li= message
+        .form-group
+          = f.label :city_id
+          = f.select :city_id, @cities, include_blank: true
+        .form-group
+          = f.label :name
+          = f.text_field :name
+        .form-group
+          = f.label :slug
+          = f.text_field :slug
+        .form-group
+          = f.label :souls
+          = f.number_field :souls
+        = f.submit t('geopolitical.actions.save')

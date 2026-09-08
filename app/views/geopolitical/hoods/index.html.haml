@@ -1,33 +1,28 @@
 .container
   .row
     .page-header
-      %h1.title Hoods
-      =# render "shared/filter"
-      = link_to "New Hood", new_hood_path
+      %h1.title= Hood.model_name.human(count: 2)
+      = link_to t('geopolitical.actions.new', model: Hood.model_name.human), new_hood_path
   .row
     .content
       %table.table
         %thead
           %tr
-            %th Nome
-            %th Region
-            %th Nation
-            %th Population
+            %th= Hood.human_attribute_name(:name)
+            %th= Hood.human_attribute_name(:city_id)
+            %th= Hood.human_attribute_name(:souls)
             %th
         %tbody
-          - for hood in @hoods
+          - @hoods.each do |hood|
             %tr
               %td
                 = hood.name
-                = link_to hood.slug , hood
-              %td= hood.city.name if hood.city
-              %td= hood.city.name
-              %td= hood.pop
-              %td{:align => 'right'}
-                = link_to 'Edit', edit_hood_path(hood)
-                = link_to 'Destroy', hood, :confirm => 'Destroy hood?', :method => :delete
-
+                = link_to hood.slug, hood_path(hood)
+              %td= hood.city&.name
+              %td= hood.souls
+              %td{align: 'right'}
+                = link_to t('geopolitical.actions.edit'), edit_hood_path(hood)
+                = button_to t('geopolitical.actions.destroy'), hood_path(hood), method: :delete,
+                  data: { turbo_confirm: t('geopolitical.actions.confirm_destroy', model: Hood.model_name.human) }
   .row
-    .pagination= paginate @hoods
-  .row
-    = link_to 'Back', root_path
+    = link_to t('geopolitical.actions.back'), root_path

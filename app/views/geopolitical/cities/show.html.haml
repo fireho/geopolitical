@@ -3,15 +3,15 @@
     %h1= @city.name
   .row
     %p
-      %b Slug:
+      %b #{City.human_attribute_name(:slug)}:
       = @city.slug
     %p
-      %b Nation:
-      = link_to @city.nation, @city.nation
+      %b #{City.human_attribute_name(:nation_id)}:
+      = link_to @city.nation, nation_path(@city.nation) if @city.nation
     %p
-      %b Region:
-      = link_to @city.region, @city.region
+      %b #{City.human_attribute_name(:region_id)}:
+      = link_to @city.region, region_path(@city.region) if @city.region
   .row
-    = link_to 'Edit', edit_city_path(@city)
+    = link_to t('geopolitical.actions.edit'), edit_city_path(@city)
     |
-    = link_to 'Back', cities_path
+    = link_to t('geopolitical.actions.back'), cities_path

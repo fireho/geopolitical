@@ -1,31 +1,28 @@
 .container
   .row
     .page-header
-      %h1= @city.new_record? ? "Nova Cidade" : "Editando Cidade"
-  .container_16
-    .box.secondary.shadow
-      = form_for(@city, :html => {:class => "form"}) do |f|
-        - f.object.errors.each do |err|
-          = err
-        .grid_3
-          =# hidden_field_tag 'city_geom_xy', @city.ll, :name => "city[xy]", :class => "geom_xy"
-          =# hidden_field_tag 'city_geom_y', @city.y, :name => "city[y]", :class => "geom_y"
-          =# hidden_field_tag 'city_geom_z', @city.z, :name => "city[z]", :class => "geom_z"
-
-          .forms_btns
-            .citydata
-              .field{"data-role" => "fieldcontain"}
-                = f.label :region
-                = f.select :region_id, @regions
-              .group
-                = f.label :name
-                = f.text_field :name, :size => 30
-              .group
-                = f.label :slug
-                = f.text_field :slug, :size => 30
-              .field
-                = f.label :pop
-                = f.text_field :pop, :size => 30
-              = f.submit
-        .grid_8
-          #map=# gmaps(@map, false, false)
+      %h1
+        - key = @city.new_record? ? 'new' : 'edit'
+        = t("geopolitical.forms.#{key}", model: City.model_name.human)
+  .row
+    = form_with model: @city, url: (@city.persisted? ? city_path(@city) : cities_path), html: { class: 'form' } do |f|
+      - if @city.errors.any?
+        %ul
+          - @city.errors.full_messages.each do |message|
+            %li= message
+      .form-group
+        = f.label :nation_id
+        = f.select :nation_id, @nations, include_blank: true
+      .form-group
+        = f.label :region_id
+        = f.select :region_id, @regions, include_blank: true
+      .form-group
+        = f.label :name
+        = f.text_field :name
+      .form-group
+        = f.label :slug
+        = f.text_field :slug
+      .form-group
+        = f.label :souls
+        = f.number_field :souls
+      = f.submit t('geopolitical.actions.save')

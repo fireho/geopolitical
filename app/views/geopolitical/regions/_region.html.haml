@@ -1,7 +1,4 @@
 .region
-  %h4= link_to region.name, region
-  %span.gray
+  %h4= link_to region.name, region_path(region)
   .right
-    .gray= time_ago_in_words region.created_at
-  .right
-    = link_to "Editar", edit_region_path(region) if admin?
+    = link_to t('geopolitical.actions.edit'), edit_region_path(region)
