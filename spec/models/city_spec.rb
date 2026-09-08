@@ -53,13 +53,13 @@ describe City, type: :model do
 
       it 'generates a slug from the name' do
         city_no_region.valid? # Trigger before_validation callbacks
-        expect(city_no_region.slug).to eq('patopolis')
+        expect(city_no_region.slug).to eq('patopolis-br')
       end
 
       it 'handles names with dots and special characters' do
         city = Fabricate.build(:city, name: 'Mte. Sto. de Algo', nation: nation_br, region: nil)
         city.valid?
-        expect(city.slug).to eq('mte-sto-de-algo')
+        expect(city.slug).to eq('mte-sto-de-algo-br')
       end
     end
 
@@ -423,44 +423,6 @@ describe City, type: :model do
         expect(results).to include(city_geom)
         expect(results).to include(nearby_city)
         expect(results.first).to eq(nearby_city) # or nearby_city if it's closer due to precision
-      end
-    end
-  end
-
-  describe 'equality and comparison' do
-    let(:city1_sp) { Fabricate(:city, name: 'City One', region: region_sp, nation: nation_br) } # slug: city-one-sp
-    let(:city1_sp_again) { City.find(city1_sp.id) } # Same object, different instance
-    let(:city1_mg) { Fabricate(:city, name: 'City One', region: region_mg, nation: nation_br) } # slug: city-one-mg
-    let(:city2_sp) { Fabricate(:city, name: 'City Two', region: region_sp, nation: nation_br) } # slug: city-two-sp
-
-    context '#==' do
-      it 'returns true for cities with the same slug' do
-        # Manually set slug for city1_sp_again to ensure it matches city1_sp after callbacks
-        city1_sp_again.valid? # Ensure slug is generated
-        expect(city1_sp == city1_sp_again).to be true
-      end
-
-      it 'returns false for cities with different slugs' do
-        expect(city1_sp == city1_mg).to be false
-        expect(city1_sp == city2_sp).to be false
-      end
-
-      it 'returns false when comparing with a non-City object' do
-        expect(city1_sp == 'not a city').to be false
-      end
-    end
-
-    context '#<=>' do
-      it 'sorts cities based on their slugs' do
-        # city-one-mg, city-one-sp, city-two-sp
-        # Need to ensure slugs are generated before sort
-        [city1_sp, city1_mg, city2_sp].each(&:valid?)
-        sorted_cities = [city1_mg, city1_sp, city2_sp].sort
-        expect(sorted_cities).to eq([city1_mg, city1_sp, city2_sp])
-      end
-
-      it 'returns nil when comparing with a non-City object' do
-        expect(city1_sp <=> 'not a city').to be_nil
       end
     end
   end

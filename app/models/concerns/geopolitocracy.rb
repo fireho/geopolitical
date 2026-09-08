@@ -12,6 +12,21 @@
 module Geopolitocracy
   extend ActiveSupport::Concern
 
+  # Turns any name into a URL-friendly slug: "São Paulo" => "sao-paulo".
+  # Latin script is transliterated to ASCII (accents stripped via NFKD, then
+  # æ/ø/ß/đ via I18n); other scripts (日本, Москва, دبي) keep their letters so
+  # the slug is never blank: "東京" => "東京", "Санкт-Петербург" => "санкт-петербург".
+  # @param text [String]
+  # @return [String]
+  def self.slugify(text)
+    # NFC first: decomposed input (macOS filenames, some form posts) would otherwise
+    # split a Latin run on its combining marks — "São" => "sa-o".
+    latin = text.to_s.unicode_normalize(:nfc).delete('.').gsub(/\p{Latin}+/) do |word|
+      ActiveSupport::Inflector.transliterate(word.unicode_normalize(:nfkd).gsub(/\p{Mn}/, ''))
+    end
+    latin.gsub(/[^\p{Alnum}]+/, '-').gsub(/^-+|-+$/, '').downcase
+  end
+
   included do
     # @!group Fields
 

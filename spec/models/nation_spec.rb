@@ -204,23 +204,24 @@ describe Nation, type: :model do
 
     around do |example|
       original_locale = I18n.locale
-      I18n.available_locales = %i[en pt-BR fr]
+      original_available = I18n.available_locales
+      I18n.available_locales = (original_available | %i[en pt fr])
       example.run
       I18n.locale = original_locale
-      I18n.available_locales = %i[en] # Reset
+      I18n.available_locales = original_available # never clamp: other specs use other locales
     end
 
     it 'can store and retrieve localized names' do
-      I18n.with_locale(:'pt-BR') { nation.name = 'Brasil' }
-      I18n.with_locale(:en)      { nation.name = 'Brazil' }
-      I18n.with_locale(:fr)      { nation.name = 'Brésil' }
+      I18n.with_locale(:pt) { nation.name = 'Brasil' }
+      I18n.with_locale(:en) { nation.name = 'Brazil' }
+      I18n.with_locale(:fr) { nation.name = 'Brésil' }
 
-      I18n.with_locale(:'pt-BR') { expect(nation.name).to eq('Brasil') }
-      I18n.with_locale(:en)      { expect(nation.name).to eq('Brazil') }
-      I18n.with_locale(:fr)      { expect(nation.name).to eq('Brésil') }
+      I18n.with_locale(:pt) { expect(nation.name).to eq('Brasil') }
+      I18n.with_locale(:en) { expect(nation.name).to eq('Brazil') }
+      I18n.with_locale(:fr) { expect(nation.name).to eq('Brésil') }
 
       expect(nation.name_translations).to eq({
-                                               'pt-BR' => 'Brasil',
+                                               'pt' => 'Brasil',
                                                'en' => 'Brazil',
                                                'fr' => 'Brésil'
                                              })
