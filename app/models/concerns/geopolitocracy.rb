@@ -62,7 +62,8 @@ module Geopolitocracy
     # @!endgroup
 
     # @!group Indexes
-    index({ slug: 1 }) # Index for querying by slug, uniqueness handled by including models
+    # NOTE: no plain slug index here — each model declares its own (unique where it
+    # can be), and a duplicate key declaration would silently shadow theirs.
     index({ name: 1 }) # For sorting and lookups by name
     index({ abbr: 1 }, { sparse: true }) # Sparse as abbr can be nil
     index({ code: 1 }, { sparse: true }) # Sparse as code can be nil
@@ -96,21 +97,10 @@ module Geopolitocracy
       end
     end
 
-    # Custom writer for the slug attribute.
-    # It transliterates, parameterizes (replaces non-alphanumeric with hyphens),
-    # and downcases the input string.
+    # Custom writer for the slug attribute. See {Geopolitocracy.slugify}.
     # @param new_slug_source [String] The string to be converted into a slug.
     def slug=(new_slug_source)
-      if new_slug_source.present?
-        generated_slug = ActiveSupport::Inflector.transliterate(new_slug_source.to_s)
-                                                 .delete('.') # Remove periods first
-                                                 .gsub(/\W+/, '-') # Replace one or more non-word with - hyphen
-                                                 .gsub(/^-+|-+$/, '') # Remove leading/trailing hyphens
-                                                 .downcase
-        super(generated_slug)
-      else
-        super(nil) # Allow clearing the slug
-      end
+      super(new_slug_source.present? ? Geopolitocracy.slugify(new_slug_source) : nil)
     end
 
     # Default string representation of the entity.
@@ -129,16 +119,7 @@ module Geopolitocracy
     def self.search(query_text, exact: false)
       return none if query_text.blank? # Return an empty criteria if query is blank
 
-      # Use the same slug generation logic as the setter for consistency
-      # Create a temporary instance to use its slug generation
-      # temp_instance = new(name: query_text) # Use name to trigger slug logic via ensure_slug or direct set
-      # Or, more directly, replicate slug logic:
-      parameterized_query = ActiveSupport::Inflector.transliterate(query_text.to_s)
-                                                    .delete('.')
-                                                    .gsub(/\W+/, '-')
-                                                    .gsub(/^-+|-+$/, '')
-                                                    .downcase
-
+      parameterized_query = Geopolitocracy.slugify(query_text)
       return none if parameterized_query.blank?
 
       if exact # matches the exact slug

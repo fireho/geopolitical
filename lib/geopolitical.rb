@@ -17,5 +17,14 @@ module Geopolitical
   mattr_accessor :parent_controller, default: 'ActionController::Base'
 end
 
-# Load Rails Engine
-require 'geopolitical/engine' if Object.const_defined?('Rails')
+if Object.const_defined?('Rails')
+  require 'geopolitical/engine'
+else
+  require 'mongoid'
+  require 'mongoid/geospatial'
+  require_relative '../app/models/concerns/geopolitocracy'
+  require_relative '../app/models/nation'
+  require_relative '../app/models/region'
+  require_relative '../app/models/city'
+  require_relative '../app/models/hood'
+end

@@ -50,7 +50,7 @@ class Nation
 
   # @!attribute [rw] capital
   #   @return [City] The capital city of this nation.
-  belongs_to :capital, inverse_of: :nation_capital, class_name: 'City', optional: true
+  belongs_to :capital, inverse_of: :nation_governancy, class_name: 'City', optional: true
 
   # @!attribute [rw] regions
   #   @return [Mongoid::Relations::Targets::Enumerable<Region>] The regions within this nation.
@@ -61,6 +61,11 @@ class Nation
 
   index({ name: 1 }) # Index for sorting by name, common operation
   index({ slug: 1 }, { unique: true }) # Slugs must be globally unique for nations
+
+  # Nation['br'] => the Nation with abbr BR (the abbr is the _id), nil if unknown.
+  # @param abbr [String, Symbol]
+  # @return [Nation, nil]
+  def self.[](abbr) = where(_id: abbr.to_s.upcase).first
 
   # A whimsical method indicating the planet.
   # In a more complex system, this might point to a Planet model.
@@ -75,6 +80,13 @@ class Nation
   # @return [String, nil] The primary language code or nil if no languages are set.
   def lang
     langs&.first
+  end
+
+  # Sets the primary language, keeping any other languages the nation speaks.
+  # @param value [String, nil]
+  def lang=(value)
+    rest = langs.to_a.drop(1)
+    self.langs = value.present? ? [value.to_s, *rest] : rest
   end
 
   # Sets the abbreviation for the nation.

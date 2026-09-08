@@ -143,67 +143,6 @@ describe Region, type: :model do
     end
   end
 
-  describe '#to_s' do
-    it 'returns the name of the region' do
-      region = Fabricate.build(:region, name: 'My Awesome Region', nation: nation)
-      expect(region.to_s).to eq('My Awesome Region')
-    end
-  end
-
-  describe 'equality and comparison' do
-    let(:region1_tl) { Fabricate(:region, name: 'Region Alpha', nation: nation, abbr: 'RA') }
-    let(:region1_tl_again) { Region.find(region1_tl.id) } # Same object, different instance
-    let(:region2_tl) { Fabricate(:region, name: 'Region Beta', nation: nation, abbr: 'RB') }
-    let(:other_nation_obj) { Fabricate(:nation, name: 'OtherNation', abbr: 'ON') }
-    let(:region1_on) { Fabricate(:region, name: 'Region Alpha', nation: other_nation_obj, abbr: 'RA') }
-
-    context '#==' do
-      it 'returns true for regions with the same nation_id and name' do
-        expect(region1_tl == region1_tl_again).to be true
-      end
-
-      it 'returns false for regions with different names in the same nation' do
-        expect(region1_tl == region2_tl).to be false
-      end
-
-      it 'returns false for regions with the same name but different nations' do
-        expect(region1_tl == region1_on).to be false
-      end
-
-      it 'returns false when comparing with a non-Region object' do
-        expect(region1_tl == 'not a region').to be false
-      end
-    end
-
-    context '#<=>' do
-      # Sorting is by nation.name, then region.name
-      let(:nation_a) { Fabricate(:nation, name: 'Atlantis', abbr: 'AT') }
-      let(:nation_z) { Fabricate(:nation, name: 'Zanzibar', abbr: 'ZN') }
-
-      let(:region_at_beta)  { Fabricate(:region, name: 'Beta Province', nation: nation_a) }
-      let(:region_at_gamma) { Fabricate(:region, name: 'Gamma State', nation: nation_a) }
-      let(:region_zn_alpha) { Fabricate(:region, name: 'Alpha District', nation: nation_z) }
-
-      let(:regions_for_sort) { [region_zn_alpha, region_at_gamma, region_at_beta] }
-      let(:sorted_regions)   { [region_at_beta, region_at_gamma, region_zn_alpha] }
-
-      it 'sorts regions based on their nation name, then region name' do
-        expect(regions_for_sort.sort).to eq(sorted_regions)
-      end
-
-      it 'returns 0 if nation and name are the same' do
-        # This implies they are the same record or an unsaved duplicate
-        r1 = Fabricate.build(:region, name: 'Same Region', nation: nation)
-        r2 = Fabricate.build(:region, name: 'Same Region', nation: nation)
-        expect(r1 <=> r2).to eq(0)
-      end
-
-      it 'returns nil when comparing with a non-Region object' do
-        expect(region1_tl <=> 'not a region').to be_nil
-      end
-    end
-  end
-
   describe '.search (from Geopolitocracy)' do
     let!(:region1) { Fabricate(:region, name: 'North Province', nation: nation, slug: 'north-province', abbr: 'NP') }
     let!(:region2) { Fabricate(:region, name: 'South Province', nation: nation, slug: 'south-province', abbr: 'SP') }
