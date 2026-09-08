@@ -9,3 +9,6 @@ spec/dummy/.sass-cache
 Gemfile.lock
 tmp/*
 coverage/*
+
+# Built gems
+*.gem

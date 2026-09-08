@@ -1,150 +1,170 @@
-# Geopolitical Gem
+# Geopolitical
 
 [![Gem Version](https://badge.fury.io/rb/geopolitical.svg)](http://badge.fury.io/rb/geopolitical)
-[![Code Climate](https://codeclimate.com/github/fireho/geopolitical.svg)](https://codeclimate.com/github/fireho/geopolitical)
-[![Dependency Status](https://gemnasium.com/fireho/geopolitical.svg)](https://gemnasium.com/fireho/geopolitical)
+[![CI](https://github.com/fireho/geopolitical/actions/workflows/ci.yml/badge.svg)](https://github.com/fireho/geopolitical/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](MIT-LICENSE)
 
-The `geopolitical` gem provides a set of Mongoid models for representing geopolitical entities: `Nation`, `Region`, `City`, and `Hood` (neighborhood). It aims to offer a ready-to-use solution for applications needing to manage and query geographical data.
+```
+        _.--""--._            Nation ─┐  "Brasil"  BR  .br  BRL  +55
+      .'   __ o   '.                  │
+     /   .'  \      \         Region ─┤  "São Paulo"  SP  America/Sao_Paulo
+    |   /  o  |  ~   |                │
+    |   \_ o /   ~   |          City ─┤  "São Paulo"  sao-paulo-sp  (-46.63, -23.55)
+     \    `-'     ~ /                 │
+      '.  ~  ~  ~ .'            Hood ─┘  "Vila Madalena"  sao-paulo-sp-vila-madalena
+        `--....--'
+                              place.hood.city.region.nation.planet  # => :earth
+```
 
-## Features
+**The whole planet as four Mongoid models.** Nation → Region → City → Hood,
+with slugs that never collide, names in every script, geo queries, and a
+fallback chain for phone/postal codes. Bring your own data (Geonames, IBGE,
+a CSV, a hunch) — or let [geonames_local](https://github.com/nofxx/geonames_local)
+fill it for you.
 
-- **Hierarchical Models:** Clear parent-child relationships:
-  - `Nation` (Country)
-  - `Region` (State/Province, belongs to a Nation)
-  - `City` (District/Microregion, belongs to a Nation and optionally a Region)
-  - `Hood` (Zone/Neighborhood, belongs to a City)
-- **Rich Attributes:**
-  - Localized names (`name`, `alt`) and ASCII versions (`ascii`).
-  - Common abbreviations (`abbr`) and nicknames (`nick`).
-  - Population data (`souls`, aliased as `population`).
-  - Standardized codes (e.g., ISO 3166-1 for Nations, ISO 3166-2 for Regions).
-  - Top-level domains (`tld`), currency (`cash`), and languages (`langs`) for Nations.
-  - Timezones for Regions.
-  - Geospatial data (`geom` for City coordinates, `area`).
-  - Contact information like postal codes (`postal`) and phone dialing codes (`phone`), with fallbacks to parent entities.
-- **`Geopolitocracy` Concern:** A shared Mongoid concern (`app/models/concerns/geopolitocracy.rb`) providing common fields (name, abbr, slug, souls, ascii, code, postal, phone), validations, slug generation, and basic search functionality to all geopolitical models.
-- **Slug Generation:** Automatic, URL-friendly slug generation for all entities. Slugs are unique globally for Nations, Cities (due to region/nation context in slug), and Hoods (due to city context in slug), and unique within their parent nation for Regions.
-- **Internationalization (i18n):** Support for localized names.
-- **Data Population:** Designed to be populated using data from sources like Geonames, particularly via the [geonames_local gem](https://github.com/fireho/geonames_local).
+## Why not the other gems?
 
-## Installation
+| gem                                                        | Nation | Region | City | Hood | DB       | Geo | i18n names | Admin UI |
+|------------------------------------------------------------|:------:|:------:|:----:|:----:|----------|:---:|:----------:|:--------:|
+| [countries](https://github.com/countries/countries)         | ✓      | ✓      | –    | –    | in-memory| –   | ✓          | –        |
+| [city-state](https://github.com/loureirorg/city-state)      | ✓      | ✓      | ✓    | –    | in-memory| –   | –          | –        |
+| [geonames-rails](https://github.com/tanguyantoine/geonames-rails) | ✓ | ✓  | ✓    | –    | AR       | ✓   | –          | –        |
+| [geonames_dump](https://github.com/kmmndr/geonames_dump)    | ✓      | ✓      | ✓    | –    | AR       | ✓   | –          | –        |
+| **geopolitical**                                           | ✓      | ✓      | ✓    | ✓    | Mongoid  | ✓   | ✓          | ✓        |
 
-Add this line to your application's Gemfile:
+Static lists are great until a user wants *their* city in the dropdown, a
+neighborhood on the address, or a query like "cities within 50km".
+That's when you want documents, not constants.
+
+## Install
 
 ```ruby
-gem "geopolitical"
+gem 'geopolitical'
 ```
 
-And then execute:
-
-```bash
-$ bundle install
-```
-
-Or install it yourself as:
-
-```bash
-$ gem install geopolitical
-```
-
-## Usage
-
-Once the gem is installed and your MongoDB connection is configured, you can use the models like any other Mongoid document.
+Rails: it's an engine, models autoload. Optionally mount the admin UI:
 
 ```ruby
-# Example: Creating a Nation
-brasil = Nation.create(name: "Brasil", abbr: "BR", tld: ".br", cash: "BRL", langs: ["pt"])
-
-# Example: Creating a Region within that Nation
-sao_paulo_state = Region.create(name: "São Paulo State", abbr: "SP", nation: brasil)
-
-# Example: Creating a City within that Region
-sao_paulo_city = City.create(name: "São Paulo", region: sao_paulo_state, nation: brasil, souls: 12_000_000)
-# City slug will be something like 'sao-paulo-sp'
-
-# Example: Creating a Hood within that City
-vila_madalena = Hood.create(name: "Vila Madalena", city: sao_paulo_city)
-# Hood slug will be something like 'sao-paulo-sp-vila-madalena'
-
-# Accessing hierarchical data
-puts vila_madalena.city.name # => "São Paulo"
-puts vila_madalena.city.region.name # => "São Paulo State"
-puts vila_madalena.city.nation.abbr # => "BR"
-
-# Using fallbacks for phone/postal codes
-# If hood_phone is nil, it will try city.phone, then city.region.phone, etc.
-puts vila_madalena.phone
+# config/routes.rb
+mount Geopolitical::Engine => '/geopolitical'
 ```
 
-### Using Outside Rails
-
-If you're using the gem in a non-Rails Ruby project, you might need to require the models explicitly after setting up Mongoid:
+**The admin UI has no authentication of its own** — it is a mountable engine, so
+guarding it is the host app's job. Either constrain the mount:
 
 ```ruby
-require 'mongoid'
-# Configure Mongoid connection here
-# Mongoid.load!("path/to/mongoid.yml", :environment)
-
-require 'geopolitical' # Or more specifically 'geopolitical/models' if needed
+authenticate :user, ->(user) { user.admin? } do
+  mount Geopolitical::Engine => '/geopolitical'
+end
 ```
 
-## Models Overview
+or hand the engine a controller of yours that already authenticates:
 
-### `Nation`
+```ruby
+# config/initializers/geopolitical.rb
+Geopolitical.parent_controller = 'Admin::BaseController'
+```
 
-Represents a country.
+Plain Ruby: configure Mongoid, then `require 'geopolitical'`.
 
-- Key fields: `name`, `abbr` (used as `_id`), `slug`, `gid` (Geonames ID), `tld`, `cash`, `code3` (ISO 3166-1 alpha-3), `langs`.
-- Associations: `has_many :regions`, `has_many :cities`, `belongs_to :capital` (a City).
+### Languages
 
-### `Region`
+The engine ships `en` and `pt` (`config/locales/geopolitical.*.yml`) and follows
+`I18n.locale` — model names, attribute labels, buttons and flashes all move together:
 
-Represents a state, province, or administrative division within a Nation.
+```ruby
+I18n.locale = :pt
+City.model_name.human(count: 2)      # => "Cidades"
+Hood.human_attribute_name(:souls)    # => "População"
+```
 
-- Key fields: `name`, `abbr`, `slug`, `timezone`.
-- Associations: `belongs_to :nation`, `has_many :cities`, `belongs_to :capital` (a City).
-- Slug uniqueness is scoped to its `nation_id`.
+Override a string by defining the same key in your app, or add a locale by copying
+one of those two files. Note the model *data* is localized separately — `name` and
+`alt` are `localize: true` fields, so a city carries its own name per language.
 
-### `City`
+## Cheat sheet
 
-Represents a city, town, or significant populated place.
 
-- Key fields: `name`, `slug`, `area`, `geom` (Point for coordinates).
-- Associations: `belongs_to :nation`, `belongs_to :region` (optional), `has_many :hoods`.
-- Slug includes region context for uniqueness (e.g., `cityname-regionabbr`).
+```ruby
+br = Nation.create!(name: 'Brasil', abbr: 'br', tld: '.br', cash: 'BRL', langs: %w[pt], phone: '55')
+sp = Region.create!(name: 'São Paulo', abbr: 'SP', nation: br, timezone: 'America/Sao_Paulo')
+sampa = City.create!(name: 'São Paulo', region: sp, souls: 12_000_000, geom: [-46.63, -23.55])
+vila = Hood.create!(name: 'Vila Madalena', city: sampa)
 
-### `Hood`
+Nation['br']                    # => #<Nation BR>   abbr is the _id, any case
+Nation.find('BR')               # same thing
+sampa.slug                      # => "sao-paulo-sp"    region suffix, no collisions
+vila.slug                       # => "sao-paulo-sp-vila-madalena"
+sampa.nation                    # => BR   derived from the region, you may omit it
+sampa.to_s                      # => "São Paulo/SP"
+sampa.with_nation('-')          # => "São Paulo-SP-BR"
+sampa.population                # => 12000000   alias of `souls`
+vila.phone                      # => "55"   hood → city → region → nation
+br.currency                     # => "BRL"  alias of `cash`
 
-Represents a neighborhood or sub-locality within a City.
+City.search('sao pa')           # slug prefix, accent/case-insensitive
+City.search('sao-paulo-sp', exact: true)
+City.nearby(sampa.geom)         # 2dsphere $near, needs City.create_indexes
+City.population.first           # biggest city
+Region.ordered                  # by name
+```
 
-- Key fields: `name`, `slug`, `rank`.
-- Associations: `belongs_to :city`.
-- Slug includes city context for uniqueness (e.g., `cityslug-hoodname`).
+Slugs are the API. They're stable, unique, URL-safe and they survive scripts
+you can't transliterate:
 
-## WHY THIS GEM EXISTS
+```
+"São Paulo"        => "sao-paulo"
+"Baden-Württemberg"=> "baden-wurttemberg"
+"Hà Nội"           => "ha-noi"
+"St. Louis"        => "st-louis"
+"東京"              => "東京"
+"Санкт-Петербург"  => "санкт-петербург"
+"دبي"              => "دبي"
+```
 
-So you can do this:
+Two Springfields? `springfield-il` and `springfield-ma`. Tokyo with a region
+that has no abbr? `tokyo-東京都`. It just works.
 
-    place.hood.city.region.nation.planet # => :earth
+## The models
 
-That actually works, but works better with:
+```
+Nation   _id = abbr (ISO 3166-1 α2)   gid  tld  cash  code3  langs  capital
+  └── Region   abbr (ISO 3166-2)  code  timezone  capital        unique per nation
+        └── City   geom (Point)  area  rbbr           slug unique globally
+              └── Hood   rank                        slug unique globally
+```
 
-## Data Population
+Every model shares (via the `Geopolitocracy` concern):
+`name` & `alt` (localized), `abbr`, `nick`, `ascii`, `code`, `slug`,
+`souls`/`population`, `postal`, `phone`, `.search`, `.ordered`, `to_s`, `==`, `<=>`.
 
-It is highly recommended to use the [geonames_local gem](https://github.com/fireho/geonames_local) to populate the database with data from [Geonames.org](http://download.geonames.org/export/dump/). This gem provides tools and Rake tasks to download and import Geonames data into the `geopolitical` model structure.
+Names get titleized only when you shout or mumble: `'new york'` and
+`'NEW YORK'` become `"New York"`; `'McAllen'` stays `"McAllen"`.
 
-Refer to the `geonames_local` documentation for detailed instructions on populating your database.
+## Feeding it
+
+[geonames_local](https://github.com/nofxx/geonames_local) downloads
+[Geonames](http://download.geonames.org/export/dump/) dumps and writes
+straight into these models:
+
+```
+geonames BR -c geonames.yml    # all of Brasil: regions, cities, hoods
+```
+
+Or hand-roll from any source — every model is just a Mongoid document.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```
+bundle install
+bundle exec rspec     # needs a local mongod
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at [https://github.com/fireho/geopolitical](https://github.com/fireho/geopolitical). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Specs take a world tour (`spec/models/world_spec.rb`): Japan, Russia, Greece,
+Egypt, India, Korea, Germany, the US, Singapore… add your country if it's
+missing, that's the best PR you can send.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+MIT. Bug reports and PRs at [fireho/geopolitical](https://github.com/fireho/geopolitical).

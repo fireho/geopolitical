@@ -1,8 +1,15 @@
 #!/usr/bin/env ruby
-# This command will automatically be run when you run "rails" with Rails 4 gems installed from the root of your application.
+# frozen_string_literal: true
 
-ENGINE_ROOT = File.expand_path('../..', __FILE__)
-ENGINE_PATH = File.expand_path('../../lib/geopolitical/engine', __FILE__)
+ENGINE_ROOT = File.expand_path("..", __dir__)
+ENGINE_PATH = File.expand_path("../lib/geopolitical/engine", __dir__)
+APP_PATH = File.expand_path("../spec/dummy/config/application", __dir__)
 
-require 'rails/all'
-require 'rails/engine/commands'
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", ENGINE_ROOT)
+require "bundler/setup" if File.exist?(ENV["BUNDLE_GEMFILE"])
+
+require "rails"
+require "active_model/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "rails/engine/commands"
