@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.2.1
+
+- Every uniqueness validation now has a unique index behind it, so concurrent writes can't slip a duplicate past the check:
+  - `Nation` abbr: unique (the writer upcases, so it is case-insensitive).
+  - `City` name: unique on `{nation_id, region_id, name}`, the validation's own scope.
+  - `Region` abbr within a nation: partial on `abbr > ""` instead of sparse. Sparse did nothing on a compound index whose `nation_id` is always set, so the second abbr-less region in a nation failed to save.
+- The concern no longer declares `{abbr: 1}`. Mongoid keys a declaration on its fields alone, so the concern's copy silently swallowed `Nation`'s unique one. `Region` keeps its own.
+- `spec/models/indexes_spec.rb` inserts straight into the collection, past the validations, and expects the index to refuse.
+
 ## 3.2.0
 
 - Slugs work in every script: `東京` → `東京`, `Санкт-Петербург` → `санкт-петербург`. Non-Latin names were previously invalid (blank slug). Accents are stripped via NFKD (`Hà Nội` → `ha-noi`). Underscores now become hyphens.
@@ -25,4 +34,4 @@
 - `Nation#lang=` keeps the nations other languages instead of wiping `langs` to a single entry.
 - `Nation[]` returns `nil` for an unknown abbr instead of raising `DocumentNotFound`.
 
-**Upgrading:** stored slugs are not rewritten until a document is saved again, so existing data is untouched � but region-less cities will pick up a nation suffix the next time they are saved, and `City.create_indexes` will now fail on a database that already holds duplicate city slugs. `geonames_local` depends on `geopolitical > 0.8.4` (no upper bound) and will pick this up on its next bundle.
+**Upgrading:** stored slugs are not rewritten until a document is saved again, so existing data is untouched � but region-less cities will pick up a nation suffix the next time they are saved, and `City.create_indexes` will now fail on a database that already holds duplicate city slugs. `geonames_local` depends on `geopolitical > 0.8.4` (no upper bound) and will pick this up on its next bundle.

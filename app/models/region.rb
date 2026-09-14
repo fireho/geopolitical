@@ -30,14 +30,16 @@ class Region
   validates :name, uniqueness: { scope: :nation_id, message: 'must be unique within its nation' }
   # `abbr` (from Geopolitocracy) should also be unique within its nation if present.
   validates :abbr,
-            uniqueness: { scope: :nation_id, allow_nil: true, message: 'must be unique within its nation if provided' }
+            uniqueness: { scope: :nation_id, allow_blank: true, message: 'must be unique within its nation if provided' }
   # Slug (from Geopolitocracy) should be unique within its nation. Presence is already validated by Geopolitocracy.
   validates :slug, uniqueness: { scope: :nation_id, message: 'must be unique within its nation' }
 
   index({ slug: 1 }) # For .search; global uniqueness is not required, see the compound index below
   index({ abbr: 1 }, { sparse: true }) # Sparse index as abbr can be nil
   index({ nation_id: 1, name: 1 }, { unique: true }) # Enforce uniqueness of name within nation
-  index({ nation_id: 1, abbr: 1 }, { unique: true, sparse: true }) # Enforce uniqueness of abbr within nation
+  # Partial, not sparse: nation_id is always set, so a sparse compound index
+  # still indexes every abbr-less region and the second one collides.
+  index({ nation_id: 1, abbr: 1 }, { unique: true, partial_filter_expression: { abbr: { '$gt' => '' } } })
   index({ nation_id: 1, slug: 1 }, { unique: true }) # Enforce uniqueness of slug within nation
 
   # Retrieves the phone dialing code for the region.

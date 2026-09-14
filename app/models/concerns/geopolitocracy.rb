@@ -77,10 +77,10 @@ module Geopolitocracy
     # @!endgroup
 
     # @!group Indexes
-    # NOTE: no plain slug index here — each model declares its own (unique where it
-    # can be), and a duplicate key declaration would silently shadow theirs.
+    # NOTE: no slug or abbr index here — each model declares its own (unique where
+    # it can be). Mongoid keys a declaration on the fields alone, so a second
+    # `index({ abbr: 1 }, unique: true)` in a model would be silently ignored.
     index({ name: 1 }) # For sorting and lookups by name
-    index({ abbr: 1 }, { sparse: true }) # Sparse as abbr can be nil
     index({ code: 1 }, { sparse: true }) # Sparse as code can be nil
     # @!endgroup
 

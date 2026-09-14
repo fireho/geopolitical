@@ -61,6 +61,7 @@ class City
 
   index({ slug: 1 }, unique: true)
   index({ name: 1, nation_id: 1 }) # For lookups by name within a nation
+  index({ nation_id: 1, region_id: 1, name: 1 }, { unique: true }) # Backs the name uniqueness validation
   index({ nation_id: 1 })          # For finding all cities in a nation
   index({ region_id: 1 }, sparse: true) # For finding cities in a region, sparse if region is optional
   index({ souls: -1 }) # For sorting by population count

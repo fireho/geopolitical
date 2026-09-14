@@ -61,6 +61,7 @@ class Nation
 
   index({ name: 1 }) # Index for sorting by name, common operation
   index({ slug: 1 }, { unique: true }) # Slugs must be globally unique for nations
+  index({ abbr: 1 }, { unique: true }) # abbr is upcased by its writer, so plain unique is case-insensitive
 
   # Nation['br'] => the Nation with abbr BR (the abbr is the _id), nil if unknown.
   # @param abbr [String, Symbol]
