@@ -109,6 +109,47 @@ City.population.first           # biggest city
 Region.ordered                  # by name
 ```
 
+### Addresses — `Geopolitical::Postal`
+
+Two ways in, one answer out: a `Found` with the street, number, hood, postal
+code and the `City` (found, or made under its state's `Region`).
+
+```
+  typing "av paulista 1578"  ──suggest──►  [Suggestion(ref, text), …]   free, nothing kept
+  the person picks one       ──pick─────►  Found                        one call, yours to store
+  a Brazilian CEP            ──find─────►  Found                        free, no key
+```
+
+```ruby
+# config/initializers/geopolitical.rb
+Geopolitical.postal_provider = :google        # :google · :geoapify — nil means no typing search
+Geopolitical.postal_key      = ENV['GOOGLE_MAPS_KEY']
+
+token = SecureRandom.uuid                       # one per form: Google bills the typing as one session
+Geopolitical::Postal.suggest('av paulista 1578', session: token, nation: 'BR')
+# => [#<data Suggestion ref="ChIJ…" text="Avenida Paulista, 1578 - Bela Vista, São Paulo - SP, Brasil">]
+found = Geopolitical::Postal.pick('ChIJ…', session: token)
+found.street                   # => "Avenida Paulista"
+found.number                   # => "1578"
+found.city                     # => #<City São Paulo/SP>
+found.ref                      # => "ChIJ…"   the provider's id, the one thing Google lets you keep forever
+
+Geopolitical::Postal.find('01311-925')          # a CEP, masked or not — BrasilAPI, whatever the provider
+Geopolitical::Postal.find('10001', nation: 'US')  # => nil — no guessing
+```
+
+| provider    | data              | store the pick? | free                            |
+|-------------|-------------------|-----------------|---------------------------------|
+| `:google`   | best, Brazil too  | yes — the address the person picked ([Places policy](https://developers.google.com/maps/documentation/places/web-service/policies)) | typing unlimited in a session, 10k picks/mo |
+| `:geoapify` | OpenStreetMap     | yes             | 3,000 requests/day              |
+| BrasilAPI   | Correios (CEP)    | yes             | no key, `find` only             |
+
+Google's pick asks the **Essentials** fields and nothing else
+(`Postal::Google::FIELDS`) — one field more and it bills as Pro. Suggestions
+and picks are never cached; a CEP is cached a day where Rails has a cache.
+Offline, unknown, a bad key: `[]` or `nil`, and the form stays open for a
+person to type.
+
 Slugs are the API. They're stable, unique, URL-safe and they survive scripts
 you can't transliterate:
 

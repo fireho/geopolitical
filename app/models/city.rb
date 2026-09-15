@@ -15,19 +15,18 @@ class City
 
   # @!attribute [rw] area
   #   @return [Integer] The square area of the city in square meters (m2).
-  field :area,    type: Integer
+  field :area, type: Integer
+
   # @!attribute [rw] geom
-  #   @return [Point] The geographical coordinates (longitude, latitude) of the city.
-  #   Indexed for spatial queries.
-  field :geom,    type: Point, spatial: true
+  #   @return [Point] [lng, lat], 2dsphere — `nearby` is `$nearSphere`.
+  #
+  field :geom, type: Point, sphere: true
+
   # @!attribute [rw] rbbr
   #   @return [String] Cached abbreviation of the city's region.
   #   Used internally, primarily to construct unique slugs.
   #   Alias: `region_abbr` (writer only, getter is custom).
-  field :rbbr,    type: String, as: :region_abbr
-
-  # Enables spatial queries on the `geom` field.
-  spatial_scope :geom
+  field :rbbr, type: String, as: :region_abbr
 
   # @!attribute [rw] region
   #   @return [Region, nil] The region this city belongs to. Optional.
@@ -62,10 +61,9 @@ class City
   index({ slug: 1 }, unique: true)
   index({ name: 1, nation_id: 1 }) # For lookups by name within a nation
   index({ nation_id: 1, region_id: 1, name: 1 }, { unique: true }) # Backs the name uniqueness validation
-  index({ nation_id: 1 })          # For finding all cities in a nation
+  index({ nation_id: 1 }) # For finding all cities in a nation
   index({ region_id: 1 }, sparse: true) # For finding cities in a region, sparse if region is optional
   index({ souls: -1 }) # For sorting by population count
-  index({ geom: '2dsphere' }) # Explicit 2dsphere index for geospatial queries
 
   # Validates that if a city is associated with a region, that region
   # belongs to the same nation as the city.

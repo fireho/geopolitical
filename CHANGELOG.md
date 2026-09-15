@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.2
+
+- `City#geom` has one index, 2dsphere (`sphere: true`). It had a planar `2d` beside it and `City.nearby` used that one; it is `$nearSphere` now. The `spatial_scope :geom` (`City.closest_to_geom`, planar) is gone. An existing database keeps the old `geom_2d` until `City.remove_undefined_indexes`.
+
+- `Geopolitical::Postal.suggest(text, session:)` and `.pick(ref, session:)` — type any address, pick one, get a `Found` you may store. `Geopolitical.postal_provider = :google` (Places API New, Essentials fields only) or `:geoapify`; `Geopolitical.postal_key` holds the key. A `City` the table lacks is made under its state's `Region`, same as a CEP's.
+- `Geopolitical::Postal.find('01311-925')` — a Brazilian CEP in, the street, the neighbourhood and the `City` out (by IBGE code, `City#code`). A city the table lacks is made under its state's `Region`. BrasilAPI v2, one call, cached a day where Rails has a cache; offline, unknown or malformed answers `nil`. `nation:` is `'BR'`, and anything else answers `nil` rather than a guess.
+
 ## 3.2.1
 
 - Every uniqueness validation now has a unique index behind it, so concurrent writes can't slip a duplicate past the check:

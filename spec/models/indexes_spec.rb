@@ -51,6 +51,14 @@ describe 'unique indexes back the uniqueness validations' do
         .to raise_error(Mongo::Error::OperationFailure, /E11000/)
     end
 
+    # `spatial: true` plus an explicit 2dsphere used to give geom two indexes,
+    # and `nearby` picked the planar one. One index, spherical, like every
+    # Whereabouts geom in the fleet.
+    it 'indexes geom once, as 2dsphere' do
+      geo = City.index_specifications.map(&:key).select { |key| key.key?(:geom) }
+      expect(geo).to eq([{ geom: '2dsphere' }])
+    end
+
     it 'keeps the same name in two regions' do
       City.create!(name: 'Guaíra', region: sp, nation: br)
       expect(City.create!(name: 'Guaíra', region: mg, nation: br)).to be_persisted
