@@ -21,7 +21,7 @@ module Geopolitical
       if @nation.save
         redirect_to nation_path(@nation), notice: t('geopolitical.flash.created', model: Nation.model_name.human)
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -29,7 +29,7 @@ module Geopolitical
       if @nation.update(nation_params)
         redirect_to nation_path(@nation), notice: t('geopolitical.flash.updated', model: Nation.model_name.human)
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

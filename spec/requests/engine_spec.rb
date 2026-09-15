@@ -45,7 +45,7 @@ describe 'Geopolitical engine', type: :request do
 
       it 'rejects an invalid create' do
         expect { post "/#{path}", params: { param => { name: '' } } }.not_to change(model, :count)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it 'updates' do

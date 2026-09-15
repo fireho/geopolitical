@@ -22,7 +22,7 @@ module Geopolitical
       if @hood.save
         redirect_to hood_path(@hood), notice: t('geopolitical.flash.created', model: Hood.model_name.human)
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -30,7 +30,7 @@ module Geopolitical
       if @hood.update(hood_params)
         redirect_to hood_path(@hood), notice: t('geopolitical.flash.updated', model: Hood.model_name.human)
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 
