@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <h1><%= @hood.name %></h1>
+  </div>
+  <div class="row">
+    <p>
+      <b><%= Hood.human_attribute_name(:slug) %>:</b>
+      <%= @hood.slug %>
+    </p>
+    <p>
+      <b><%= Hood.human_attribute_name(:city_id) %>:</b>
+      <%= link_to @hood.city, city_path(@hood.city) if @hood.city %>
+    </p>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.edit'), edit_hood_path(@hood) %>
+    |
+    <%= link_to t('geopolitical.actions.back'), hoods_path %>
+  </div>
+</div>

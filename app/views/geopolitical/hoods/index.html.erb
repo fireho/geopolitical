@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1 class="title"><%= Hood.model_name.human(count: 2) %></h1>
+      <%= link_to t('geopolitical.actions.new', model: Hood.model_name.human), new_hood_path %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="content">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= Hood.human_attribute_name(:name) %></th>
+            <th><%= Hood.human_attribute_name(:city_id) %></th>
+            <th><%= Hood.human_attribute_name(:souls) %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @hoods.each do |hood| %>
+            <tr>
+              <td>
+                <%= hood.name %>
+                <%= link_to hood.slug, hood_path(hood) %>
+              </td>
+              <td><%= hood.city&.name %></td>
+              <td><%= hood.souls %></td>
+              <td align="right">
+                <%= link_to t('geopolitical.actions.edit'), edit_hood_path(hood) %>
+                <%= button_to t('geopolitical.actions.destroy'), hood_path(hood), method: :delete,
+                  data: { turbo_confirm: t('geopolitical.actions.confirm_destroy', model: Hood.model_name.human) } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.back'), root_path %>
+  </div>
+</div>

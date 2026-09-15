@@ -16,11 +16,10 @@ Gem::Specification.new do |s|
 
   # Ship the engine (app, config, lib) and the docs. No specs, no dev tooling.
   s.files = `git ls-files -z`.split("\x0")
-            .grep(%r{^(app|config|lib)/|^(README\.md|CHANGELOG\.md|MIT-LICENSE|geopolitical\.gemspec)$})
+                             .grep(%r{^(app|config|lib)/|^(README\.md|CHANGELOG\.md|MIT-LICENSE|geopolitical\.gemspec)$})
   s.require_paths = ['lib']
   s.required_ruby_version = '>= 3.2.0'
 
-  s.add_dependency 'haml', '>= 6.0'
   s.add_dependency 'mongoid', '>= 8.0.0'
-  s.add_dependency 'mongoid-geospatial', '>= 4.0.0'
+  s.add_dependency 'mongoid-geospatial', '>= 7.0.0'
 end

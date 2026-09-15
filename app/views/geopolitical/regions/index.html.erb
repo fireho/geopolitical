@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1 class="title"><%= Region.model_name.human(count: 2) %></h1>
+      <%= link_to t('geopolitical.actions.new', model: Region.model_name.human), new_region_path %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="content">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= Region.human_attribute_name(:abbr) %></th>
+            <th><%= Region.human_attribute_name(:name) %></th>
+            <th><%= Region.human_attribute_name(:nation_id) %></th>
+            <th><%= Region.human_attribute_name(:cities) %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @regions.each do |region| %>
+            <tr>
+              <td><%= region.abbr %></td>
+              <td>
+                <%= region.name %>
+                <%= link_to region.slug, region_path(region) %>
+              </td>
+              <td><%= region.nation&.name %></td>
+              <td><%= region.cities.count %></td>
+              <td class="last">
+                <%= link_to t('geopolitical.actions.edit'), edit_region_path(region) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.back'), root_path %>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1 class="title"><%= Nation.model_name.human(count: 2) %></h1>
+      <%= link_to t('geopolitical.actions.new', model: Nation.model_name.human), new_nation_path %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="content">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= Nation.human_attribute_name(:abbr) %></th>
+            <th><%= Nation.human_attribute_name(:code3) %></th>
+            <th><%= Nation.human_attribute_name(:name) %></th>
+            <th><%= Nation.human_attribute_name(:postal) %></th>
+            <th><%= Nation.human_attribute_name(:lang) %></th>
+            <th><%= Nation.human_attribute_name(:cash) %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @nations.each do |nation| %>
+            <tr>
+              <td><%= nation.abbr %></td>
+              <td><%= nation.code3.presence || nation.code %></td>
+              <td>
+                <%= nation.name %>
+                <%= link_to nation.slug, nation_path(nation) %>
+              </td>
+              <td><%= nation.postal %></td>
+              <td><%= truncate(nation.lang.to_s) %></td>
+              <td><%= nation.cash %></td>
+              <td class="last">
+                <%= link_to t('geopolitical.actions.edit'), edit_nation_path(nation) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.back'), root_path %>
+  </div>
+</div>

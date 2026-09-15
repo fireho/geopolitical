@@ -1,6 +1,10 @@
 # Changelog
 
-## 3.2.2
+## 4.1.0
+
+- Engine views are ERB; the `haml` gem is gone.
+
+## 4.0.0
 
 - `City#geom` has one index, 2dsphere (`sphere: true`). It had a planar `2d` beside it and `City.nearby` used that one; it is `$nearSphere` now. The `spatial_scope :geom` (`City.closest_to_geom`, planar) is gone. An existing database keeps the old `geom_2d` until `City.remove_undefined_indexes`.
 

@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="row">
+    <h1><%= @region.name %></h1>
+  </div>
+  <div class="row">
+    <p>
+      <b><%= Region.human_attribute_name(:slug) %>:</b>
+      <%= @region.slug %>
+    </p>
+    <p>
+      <b><%= Region.human_attribute_name(:nation_id) %>:</b>
+      <%= link_to @region.nation, @region.nation %>
+    </p>
+    <p>
+      <b><%= Region.human_attribute_name(:abbr) %>:</b>
+      <%= @region.abbr %>
+    </p>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.edit'), edit_region_path(@region) %>
+    |
+    <%= link_to t('geopolitical.actions.back'), regions_path %>
+  </div>
+</div>

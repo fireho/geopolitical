@@ -1,0 +1,7 @@
+<div class="nation">
+  <h4><%= link_to nation.name, nation_path(nation) %></h4>
+  <span class="gray"><%= nation.abbr %></span>
+  <div class="right">
+    <%= link_to t('geopolitical.actions.edit'), edit_nation_path(nation) %>
+  </div>
+</div>

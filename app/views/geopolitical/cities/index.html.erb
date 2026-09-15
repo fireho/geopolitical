@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1 class="title"><%= City.model_name.human(count: 2) %></h1>
+      <%= link_to t('geopolitical.actions.new', model: City.model_name.human), new_city_path %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="content">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= City.human_attribute_name(:name) %></th>
+            <th><%= City.human_attribute_name(:postal) %></th>
+            <th><%= City.human_attribute_name(:region_id) %></th>
+            <th><%= City.human_attribute_name(:nation_id) %></th>
+            <th><%= City.human_attribute_name(:souls) %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @cities.each do |city| %>
+            <tr>
+              <td>
+                <%= city.name %>
+                <%= link_to city.slug, city_path(city) %>
+              </td>
+              <td><%= city.postal %></td>
+              <td><%= city.region&.name %></td>
+              <td><%= city.nation&.name %></td>
+              <td><%= city.souls %></td>
+              <td align="right">
+                <%= link_to t('geopolitical.actions.edit'), edit_city_path(city) %>
+                <%= button_to t('geopolitical.actions.destroy'), city_path(city), method: :delete,
+                  data: { turbo_confirm: t('geopolitical.actions.confirm_destroy', model: City.model_name.human) } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.back'), root_path %>
+  </div>
+</div>

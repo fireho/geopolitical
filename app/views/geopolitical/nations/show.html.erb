@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <h1><%= @nation.name %></h1>
+  </div>
+  <div class="row">
+    <p>
+      <b><%= Nation.human_attribute_name(:abbr) %>:</b>
+      <%= @nation.abbr %> <%= @nation.code3 %>
+    </p>
+    <p>
+      <b><%= Nation.human_attribute_name(:slug) %>:</b>
+      <%= @nation.slug %>
+    </p>
+    <p>
+      <b><%= Nation.human_attribute_name(:lang) %>:</b>
+      <%= @nation.lang %>
+    </p>
+    <p>
+      <b><%= Nation.human_attribute_name(:cash) %>:</b>
+      <%= @nation.cash %>
+    </p>
+  </div>
+  <div class="row">
+    <%= link_to t('geopolitical.actions.edit'), edit_nation_path(@nation) %>
+    |
+    <%= link_to t('geopolitical.actions.back'), nations_path %>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+      <h1>
+        <% key = @region.new_record? ? 'new' : 'edit' %>
+        <%= t("geopolitical.forms.#{key}", model: Region.model_name.human) %>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <%= form_with model: @region, url: (@region.persisted? ? region_path(@region) : regions_path) do |f| %>
+      <% if @region.errors.any? %>
+        <ul>
+          <% @region.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
+      <div class="form-group">
+        <%= f.label :abbr %>
+        <%= f.text_field :abbr %>
+      </div>
+      <div class="form-group">
+        <%= f.label :slug %>
+        <%= f.text_field :slug %>
+      </div>
+      <div class="form-group">
+        <%= f.label :nation_id %>
+        <%= f.select :nation_id, @nations, include_blank: true %>
+      </div>
+      <div class="forms-buttons">
+        <%= f.submit t('geopolitical.actions.save') %>
+      </div>
+    <% end %>
+  </div>
+</div>
