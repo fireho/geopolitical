@@ -7,6 +7,6 @@ development:
 test:
   clients:
     default:
-      database: geopolitical_spec
+      database: <%= ENV.fetch("MONGO_TEST_DB", "geopolitical_spec") %>
       hosts:
         - <%= ENV.fetch("MONGODB_HOST", "localhost:27017") %>
