@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.2.0
 
 - `City` includes `Mongoid::Geospatial::Geom` — the pin is the gem's, `within(geom, km)` too.
 - Indexes match the queries (README § The models). Gone, nothing read them: `name_1` on all four (`name` is localized, Mongoid asks `name.<locale>`), `cities.name_1_nation_id_1`, `cities.nation_id_1` (the unique compound leads with it), `regions.abbr_1` (every abbr lookup carries its nation), `code_1` on nations, regions and hoods (only City's is read, and stays). Hosts: `DROP_INDEXES=1` on the next deploy sheds them.
