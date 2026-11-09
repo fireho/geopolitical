@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.2.0'
 
   s.add_dependency 'mongoid', '>= 8.0.0'
-  s.add_dependency 'mongoid-geospatial', '>= 7.0.0'
+  s.add_dependency 'mongoid-geospatial', '>= 7.2.0'
 end

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `City` includes `Mongoid::Geospatial::Geom` — the pin is the gem's, `within(geom, km)` too.
+
 ## 4.1.0
 
 - Engine views are ERB; the `haml` gem is gone.

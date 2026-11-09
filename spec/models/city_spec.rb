@@ -418,11 +418,15 @@ describe City, type: :model do
       end
 
       it 'finds cities close to a given point' do
-        # Using city_geom's coordinates as the center point for the search
         results = City.nearby(city_geom.geom)
         expect(results).to include(city_geom)
         expect(results).to include(nearby_city)
-        expect(results.first).to eq(nearby_city) # or nearby_city if it's closer due to precision
+        expect(results.first).to eq(nearby_city)
+      end
+
+      it 'caps in kilometres' do
+        expect(City.within(city_geom.geom, 10)).to include(city_geom, nearby_city)
+        expect(City.within(city_geom.geom, 10)).not_to include(far_city)
       end
     end
   end

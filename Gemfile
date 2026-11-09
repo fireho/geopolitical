@@ -26,3 +26,6 @@ end
 group :development do
   gem 'geonames_local', path: '../geonames_local', require: false if Dir.exist?('../geonames_local')
 end
+
+# Sibling checkout while 7.2 is unreleased. The gemspec still pins >= 7.2.0.
+gem 'mongoid-geospatial', path: '../mongoid-geospatial' if Dir.exist?('../mongoid-geospatial')

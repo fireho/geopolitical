@@ -10,17 +10,14 @@
 # abbreviation to ensure uniqueness across regions.
 class City
   include Mongoid::Document
-  include Mongoid::Geospatial # For GIS capabilities like `geom` field and spatial queries
+  include Mongoid::Geospatial::Geom
   include Geopolitocracy
 
   # @!attribute [rw] area
   #   @return [Integer] The square area of the city in square meters (m2).
   field :area, type: Integer
 
-  # @!attribute [rw] geom
-  #   @return [Point] [lng, lat], 2dsphere — `nearby` is `$nearSphere`.
-  #
-  field :geom, type: Point, sphere: true
+  # geom — [lng, lat], 2dsphere. `City.nearby` / `City.within(point, km)`.
 
   # @!attribute [rw] rbbr
   #   @return [String] Cached abbreviation of the city's region.
