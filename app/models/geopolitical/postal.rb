@@ -77,8 +77,12 @@ module Geopolitical
       return if region.nil? || name.blank?
 
       slug = "#{Geopolitocracy.slugify(name)}-#{Geopolitocracy.slugify(region.abbr)}"
-      City.where(slug: slug).first || make_city(name, code, region) || City.where(slug: slug).first
+      town(region, slug) || make_city(name, code, region) || town(region, slug)
     end
+
+    # A slug is unique within a nation, not across (BR and AR both have a
+    # BA): never another nation's town.
+    def town(region, slug) = City.where(nation_id: region.nation_id, slug: slug).first
 
     def region(nation, state)
       country = Nation[nation] or return

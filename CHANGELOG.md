@@ -7,6 +7,7 @@
 - `Nation` checks a taken `abbr` as an equality on `abbr_1` (its writer upcases), not `/\ABR\z/i`.
 - `City` and `Hood` validate `slug` uniqueness: a taken slug is a 422 with its message, not an E11000 (a 500 in any form). Slugs are unique within a nation, not across: BR and AR both have a BA.
 - Every uniqueness message lives in the locales, en and pt (`mongoid.errors.models.<model>.attributes.<field>.taken`), no English literal in the models.
+- `Geopolitical::Postal.city` finds a slug in the address's own nation only: an Argentine "Salvador" in BA got Bahia's.
 - `.search` matches `\A`, not `^`: bson sends a Ruby regexp multiline, so `^` scanned all of `slug_1`. Now it reads the prefix's keys only.
 
 ## 4.1.0

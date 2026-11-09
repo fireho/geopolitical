@@ -112,7 +112,9 @@ Region.ordered                  # by name
 ### Addresses — `Geopolitical::Postal`
 
 Two ways in, one answer out: a `Found` with the street, number, hood, postal
-code and the `City` (found, or made under its state's `Region`).
+code and the `City` (found, or made under its state's `Region`). Found in
+the address's own nation only: Brazil and Argentina both have a `BA`, and an
+Argentine "Salvador" never gets Bahia's `salvador-ba`.
 
 ```
   typing "av paulista 1578"  ──suggest──►  [Suggestion(ref, text), …]   free, nothing kept

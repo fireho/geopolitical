@@ -38,11 +38,23 @@ describe Geopolitical::Postal do
   it 'takes the City another request just made, when its own insert loses the race' do
     winner = Fabricate(:city, name: 'São Paulo', region: sp, nation: brazil)
     allow(City).to receive(:where).and_call_original
-    allow(City).to receive(:where).with(slug: 'sao-paulo-sp').and_return(City.none, City.where(id: winner.id))
+    allow(City).to receive(:where).with(nation_id: 'BR', slug: 'sao-paulo-sp')
+                                  .and_return(City.none, City.where(id: winner.id))
     allow(City).to receive(:create).and_raise(Mongo::Error::OperationFailure, 'E11000 duplicate key')
     allow(described_class).to receive(:http).and_return(paulista.merge('ibge' => nil))
 
     expect(described_class.find('01311925').city).to eq(winner)
+  end
+
+  # The slug Postal builds ("salvador-ba") is unique within a nation, not
+  # across: BR and AR both have a BA. An Argentine address never gets Bahia's.
+  it 'never answers a City of another nation that holds the same slug' do
+    bahia = Fabricate(:region, name: 'Bahia', abbr: 'BA', nation: brazil)
+    Fabricate(:city, name: 'Salvador', region: bahia, nation: brazil)
+    argentina = Fabricate(:nation, name: 'Argentina', abbr: 'AR')
+    Fabricate(:region, name: 'Buenos Aires', abbr: 'BA', nation: argentina)
+
+    expect(described_class.city(nation: 'AR', state: 'BA', name: 'Salvador')).to be_nil
   end
 
   it 'fills what it can and leaves the City blank when it cannot place the state' do
