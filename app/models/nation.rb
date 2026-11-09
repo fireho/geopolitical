@@ -45,7 +45,7 @@ class Nation
   # alias iso_3166_3= code3=
 
   validates :abbr, presence: true # Name presence is validated in Geopolitocracy
-  validates_uniqueness_of :abbr, case_sensitive: false
+  validates_uniqueness_of :abbr # an equality: abbr= upcases, so the case is already one
   validates :slug, uniqueness: { message: 'must be unique' } # Slug presence is validated in Geopolitocracy
 
   # @!attribute [rw] capital

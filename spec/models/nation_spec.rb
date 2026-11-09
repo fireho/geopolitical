@@ -64,10 +64,30 @@ describe Nation, type: :model do
 
     it { is_expected.to validate_presence_of(:name) } # From Nation model
     it { is_expected.to validate_presence_of(:abbr) } # From Nation model
-    it {
-      is_expected.to validate_uniqueness_of(:abbr).case_insensitive
-    } # Mongoid default is case sensitive, but setter upcases
+    it { is_expected.to validate_uniqueness_of(:abbr) } # Case sensitive: the setter upcases
     it { is_expected.to validate_presence_of(:slug) } # From Geopolitocracy
+
+    # The filters a block sends to a collection, as the server receives them.
+    def filters_sent(collection)
+      sent = []
+      spy = Object.new
+      spy.define_singleton_method(:started) { |ev| sent << ev.command['filter'] if ev.command['find'] == collection }
+      def spy.succeeded(_) = nil
+      def spy.failed(_) = nil
+      Mongoid.default_client.subscribe(Mongo::Monitoring::COMMAND, spy)
+      yield
+      sent
+    ensure
+      Mongoid.default_client.unsubscribe(Mongo::Monitoring::COMMAND, spy)
+    end
+
+    # The writer upcases abbr, so a case-insensitive check would only turn the
+    # lookup into /\ABR\z/i, a regex abbr_1 cannot bound.
+    it 'checks a taken abbr with an equality abbr_1 answers' do
+      Fabricate(:nation, name: 'Brasil', abbr: 'BR')
+      sent = filters_sent('nations') { expect(Fabricate.build(:nation, name: 'Brazil', abbr: 'br')).not_to be_valid }
+      expect(sent).to include(a_hash_including('abbr' => 'BR'))
+    end
     it { is_expected.to validate_uniqueness_of(:slug) } # From Geopolitocracy
 
     it 'requires abbr to be present' do
