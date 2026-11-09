@@ -46,7 +46,7 @@ class Nation
 
   validates :abbr, presence: true # Name presence is validated in Geopolitocracy
   validates_uniqueness_of :abbr # an equality: abbr= upcases, so the case is already one
-  validates :slug, uniqueness: { message: 'must be unique' } # Slug presence is validated in Geopolitocracy
+  validates :slug, uniqueness: true # Slug presence is validated in Geopolitocracy
 
   # @!attribute [rw] capital
   #   @return [City] The capital city of this nation.

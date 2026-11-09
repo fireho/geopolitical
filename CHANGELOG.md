@@ -5,6 +5,8 @@
 - `City` includes `Mongoid::Geospatial::Geom` — the pin is the gem's, `within(geom, km)` too.
 - Indexes match the queries (README § The models). Gone, nothing read them: `name_1` on all four (`name` is localized, Mongoid asks `name.<locale>`), `cities.name_1_nation_id_1`, `cities.nation_id_1` (the unique compound leads with it), `regions.abbr_1` (every abbr lookup carries its nation), `code_1` on nations, regions and hoods (only City's is read, and stays). Hosts: `DROP_INDEXES=1` on the next deploy sheds them.
 - `Nation` checks a taken `abbr` as an equality on `abbr_1` (its writer upcases), not `/\ABR\z/i`.
+- `City` and `Hood` validate `slug` uniqueness: a taken slug is a 422 with its message, not an E11000 (a 500 in any form). Slugs are unique within a nation, not across: BR and AR both have a BA.
+- Every uniqueness message lives in the locales, en and pt (`mongoid.errors.models.<model>.attributes.<field>.taken`), no English literal in the models.
 - `.search` matches `\A`, not `^`: bson sends a Ruby regexp multiline, so `^` scanned all of `slug_1`. Now it reads the prefix's keys only.
 
 ## 4.1.0

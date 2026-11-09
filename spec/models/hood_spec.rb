@@ -138,7 +138,19 @@ describe Hood, type: :model do
 
     it { is_expected.to validate_presence_of(:name) } # From Geopolitocracy
     it { is_expected.to validate_presence_of(:city) }
-    # Slug presence and uniqueness are covered by Geopolitocracy concern
+    it 'answers a taken slug with its message, not an E11000' do
+      Fabricate(:hood, name: 'Vila Madalena', city: city)
+      twin = Fabricate.build(:hood, name: 'Vila Madalená', city: city)
+      expect(twin).not_to be_valid
+      expect(twin.errors[:slug]).to eq(['is taken by another hood'])
+      I18n.with_locale(:pt) { expect(twin.tap(&:valid?).errors[:slug]).to eq(['já está em uso por outro bairro']) }
+    end
+
+    it 'says a taken name in pt as well' do
+      Fabricate(:hood, name: 'Centro', city: city)
+      twin = Fabricate.build(:hood, name: 'Centro', city: city)
+      I18n.with_locale(:pt) { expect(twin.tap(&:valid?).errors[:name]).to include('já existe nesta cidade') }
+    end
 
     context 'uniqueness of name scoped to city_id' do
       before { Fabricate(:hood, name: 'Duplicate Name Hood', city: city) }

@@ -281,7 +281,15 @@ describe City, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:nation) }
-    # Slug presence and uniqueness are covered by Geopolitocracy concern
+    # Another name, the same slug: slug_1 (unique) would refuse the save with
+    # an E11000, a 500 in any form. The validation says it first, in pt too.
+    it 'answers a taken slug with its message, not an E11000' do
+      Fabricate(:city, name: 'Guaíra', region: region_sp, nation: nation_br)
+      twin = Fabricate.build(:city, name: 'Guaira', region: region_sp, nation: nation_br)
+      expect(twin).not_to be_valid
+      expect(twin.errors[:slug]).to eq(['is taken by another city'])
+      I18n.with_locale(:pt) { expect(twin.tap(&:valid?).errors[:slug]).to eq(['já está em uso por outra cidade']) }
+    end
 
     it 'validates uniqueness of name scoped to region_id' do
       Fabricate(:city, name: 'Duplicate Name City', region: region_sp, nation: nation_br)

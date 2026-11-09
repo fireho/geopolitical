@@ -56,6 +56,32 @@ en:
         souls: Population
         postal: Postal
         phone: Phone
+    errors:
+      models:
+        nation:
+          attributes:
+            slug:
+              taken: must be unique
+        region:
+          attributes:
+            name:
+              taken: must be unique within its nation
+            abbr:
+              taken: must be unique within its nation if provided
+            slug:
+              taken: must be unique within its nation
+        city:
+          attributes:
+            name:
+              taken: must be unique within its region
+            slug:
+              taken: is taken by another city
+        hood:
+          attributes:
+            name:
+              taken: must be unique within its city
+            slug:
+              taken: is taken by another hood
   geopolitical:
     title: Geopolitical
     actions:

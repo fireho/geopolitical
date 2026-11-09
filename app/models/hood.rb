@@ -18,14 +18,11 @@ class Hood
   belongs_to :city
 
   validates :city, presence: true
-  validates :name, uniqueness: { scope: :city_id, message: 'must be unique within its city' }
-  # `abbr` (from Geopolitocracy) could also be validated for uniqueness within the city if used.
-  # validates :abbr,
-  #           uniqueness: { scope: :city_id, allow_nil: true, message: "must be unique within its city if provided" }
+  validates :name, uniqueness: { scope: :city_id }
+  validates :slug, uniqueness: true # slug_1 refuses a twin anyway; this says so before the E11000
 
   index({ city_id: 1, name: 1 }, { unique: true })
-  # index({ city_id: 1, abbr: 1 }, { unique: true, sparse: true }) # If abbr is used and needs to be unique
-  index({ slug: 1 }, { unique: true }) # Hood slugs are globally unique due to city_slug prefix
+  index({ slug: 1 }, { unique: true }) # The city slug prefixes it, so two names that slugify alike collide
 
   before_validation :ensure_slug_for_hood
 

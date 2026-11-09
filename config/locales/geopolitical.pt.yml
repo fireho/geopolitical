@@ -56,6 +56,32 @@ pt:
         souls: População
         postal: CEP
         phone: Telefone
+    errors:
+      models:
+        nation:
+          attributes:
+            slug:
+              taken: já está em uso
+        region:
+          attributes:
+            name:
+              taken: já existe neste país
+            abbr:
+              taken: já existe neste país
+            slug:
+              taken: já existe neste país
+        city:
+          attributes:
+            name:
+              taken: já existe nesta região
+            slug:
+              taken: já está em uso por outra cidade
+        hood:
+          attributes:
+            name:
+              taken: já existe nesta cidade
+            slug:
+              taken: já está em uso por outro bairro
   geopolitical:
     title: Geopolítico
     actions:

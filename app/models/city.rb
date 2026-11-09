@@ -47,7 +47,8 @@ class City
 
   before_validation :ensure_derived_fields_and_slug
 
-  validates :name, uniqueness: { scope: %i[nation_id region_id], message: 'must be unique within its region' }
+  validates :name, uniqueness: { scope: %i[nation_id region_id] }
+  validates :slug, uniqueness: true # slug_1 refuses a twin anyway; this says so before the E11000
   validates :nation, presence: true
   validate :region_inside_nation_if_region_present
 
@@ -108,8 +109,10 @@ class City
       self.slug = name
     end
 
-    # 3. Suffix the slug so it is unique planet-wide: the region abbr where there
-    #    is a region ("santos-sp"), the nation abbr otherwise ("singapore-sg").
+    # 3. Suffix the slug: the region abbr where there is a region ("santos-sp"),
+    #    the nation abbr otherwise ("singapore-sg"). Unique within a nation, not
+    #    across them: BR and AR both have a BA, so a second "salvador-ba" is a
+    #    taken slug (the validation's message), never a silent twin.
     suffix = region_abbr.presence || nation&.abbr
     return if suffix.blank? || slug.blank?
 
