@@ -59,7 +59,6 @@ class Nation
   #   @return [Mongoid::Relations::Targets::Enumerable<City>] The cities within this nation.
   has_many :cities,  dependent: :destroy
 
-  index({ name: 1 }) # Index for sorting by name, common operation
   index({ slug: 1 }, { unique: true }) # Slugs must be globally unique for nations
   index({ abbr: 1 }, { unique: true }) # abbr is upcased by its writer, so plain unique is case-insensitive
 

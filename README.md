@@ -179,6 +179,26 @@ Every model shares (via the `Geopolitocracy` concern):
 `name` & `alt` (localized), `abbr`, `nick`, `ascii`, `code`, `slug`,
 `souls`/`population`, `postal`, `phone`, `.search`, `.ordered`, `to_s`, `==`, `<=>`.
 
+The indexes, and the query each one is for (`Model.create_indexes` builds them):
+
+```
+nations  slug (u) · abbr (u)                    Nation['br'] is the _id
+regions  nation+name (u) · nation+abbr (u, when abbr) · nation+slug (u) · slug
+cities   slug (u) · nation+region+name (u) · region · souls · code · geom 2dsphere
+hoods    city+name (u) · slug (u)
+```
+
+A lookup by nation rides the unique compound it leads; a Region's abbr is
+always asked with its nation. `.search` is a slug prefix, `\A`, never `^`:
+bson sends a Ruby regexp multiline, and `^` there bounds no index.
+
+`name` is localized, so Mongoid asks for `name.<locale>` (`where`, `order_by`,
+the uniqueness check) and no index on the bare `name` hash could answer it.
+Only the unique ones key it: they referee two creates of the same name. A
+uniqueness the model validates is a unique index here, and a unique index
+here is a validation there: a clash is a 422 with its message, never an
+E11000.
+
 Names get titleized only when you shout or mumble: `'new york'` and
 `'NEW YORK'` become `"New York"`; `'McAllen'` stays `"McAllen"`.
 

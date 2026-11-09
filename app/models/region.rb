@@ -35,10 +35,11 @@ class Region
   validates :slug, uniqueness: { scope: :nation_id, message: 'must be unique within its nation' }
 
   index({ slug: 1 }) # For .search; global uniqueness is not required, see the compound index below
-  index({ abbr: 1 }, { sparse: true }) # Sparse index as abbr can be nil
   index({ nation_id: 1, name: 1 }, { unique: true }) # Enforce uniqueness of name within nation
   # Partial, not sparse: nation_id is always set, so a sparse compound index
-  # still indexes every abbr-less region and the second one collides.
+  # still indexes every abbr-less region and the second one collides. Every
+  # abbr lookup carries its nation (an abbr alone is ambiguous: BR and AR both
+  # have a BA), so this is the abbr index too, `$in` included.
   index({ nation_id: 1, abbr: 1 }, { unique: true, partial_filter_expression: { abbr: { '$gt' => '' } } })
   index({ nation_id: 1, slug: 1 }, { unique: true }) # Enforce uniqueness of slug within nation
 

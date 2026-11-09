@@ -76,13 +76,11 @@ module Geopolitocracy
     validates :slug, presence: true # Uniqueness will be handled by including models with appropriate scope
     # @!endgroup
 
-    # @!group Indexes
-    # NOTE: no slug or abbr index here — each model declares its own (unique where
-    # it can be). Mongoid keys a declaration on the fields alone, so a second
-    # `index({ abbr: 1 }, unique: true)` in a model would be silently ignored.
-    index({ name: 1 }) # For sorting and lookups by name
-    index({ code: 1 }, { sparse: true }) # Sparse as code can be nil
-    # @!endgroup
+    # No index here: each model declares the ones its queries read (README
+    # § The models). Mongoid keys a declaration on the fields alone, so one
+    # here would silently win over a model's own on the same key. `name` is
+    # localized: Mongoid asks name.<locale>, and no index on the bare hash
+    # answers that.
 
     before_validation :ensure_slug_is_generated
 
@@ -140,7 +138,7 @@ module Geopolitocracy
       if exact # matches the exact slug
         where(slug: parameterized_query)
       else
-        where(slug: /^#{Regexp.escape(parameterized_query)}/)
+        where(slug: /\A#{Regexp.escape(parameterized_query)}/) # \A: bson sends ^ multiline, unbounded
       end
     end
     # @!endgroup

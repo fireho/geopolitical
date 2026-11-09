@@ -56,11 +56,11 @@ class City
   scope :population, -> { order_by(souls: :desc) }
 
   index({ slug: 1 }, unique: true)
-  index({ name: 1, nation_id: 1 }) # For lookups by name within a nation
-  index({ nation_id: 1, region_id: 1, name: 1 }, { unique: true }) # Backs the name uniqueness validation
-  index({ nation_id: 1 }) # For finding all cities in a nation
+  # Backs the name uniqueness validation; its nation_id prefix is every lookup by nation.
+  index({ nation_id: 1, region_id: 1, name: 1 }, { unique: true })
   index({ region_id: 1 }, sparse: true) # For finding cities in a region, sparse if region is optional
   index({ souls: -1 }) # For sorting by population count
+  index({ code: 1 }, sparse: true) # The IBGE code: Geopolitical::Postal.city, fiscal documents
 
   # Validates that if a city is associated with a region, that region
   # belongs to the same nation as the city.
